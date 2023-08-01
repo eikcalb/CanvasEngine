@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug - DirectX|Win32">
+      <Configuration>Debug - DirectX</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug - OpenGL|Win32">
+      <Configuration>Debug - OpenGL</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release - DirectX|Win32">
+      <Configuration>Release - DirectX</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release - OpenGL|Win32">
+      <Configuration>Release - OpenGL</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{29972CCA-EEAC-48E5-AB22-93B6C302027B}</ProjectGuid>
+    <RootNamespace>ComponentAsteroidsEngine</RootNamespace>
+    <ProjectName>Engine</ProjectName>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - OpenGL|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - DirectX|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - DirectX|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - OpenGL|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug - OpenGL|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug - DirectX|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release - DirectX|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release - OpenGL|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - OpenGL|Win32'">
+    <IncludePath>C:\CSLib\inc;G:\CSLib\inc;$(DXSDK_DIR)include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>C:\CSLib\lib;G:\CSLib\lib;$(SolutionDir)$(Configuration)\;..\CSLib2013;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - DirectX|Win32'">
+    <IncludePath>C:\DirectX SDK\Include;C:\CSLib\inc;G:\DirectX SDK\Include;G:\CSLib\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>C:\DirectX SDK\Lib\x86;C:\CSLib\lib;G:\DirectX SDK\Lib\x86;G:\CSLib\lib;$(SolutionDir)$(Configuration)\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - DirectX|Win32'">
+    <IncludePath>C:\DirectX SDK\Include;C:\CSLib\inc;G:\DirectX SDK\Include;G:\CSLib\inc;$(DXSDK_DIR)include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>C:\DirectX SDK\Lib\x86;C:\CSLib\lib;G:\DirectX SDK\Lib\x86;G:\CSLib\lib;$(SolutionDir)$(Configuration)\;..\CSLib2013;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - OpenGL|Win32'">
+    <IncludePath>C:\CSLib\inc;G:\CSLib\inc;$(DXSDK_DIR)include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>C:\CSLib\lib;G:\CSLib\lib;$(SolutionDir)$(Configuration)\;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug - OpenGL|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>BUILD_OPENGL;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug - DirectX|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>BUILD_DIRECTX;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release - DirectX|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>BUILD_DIRECTX;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release - OpenGL|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>BUILD_OPENGL;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="CollisionComponent.cpp" />
+    <ClCompile Include="CollisionMessage.cpp" />
+    <ClCompile Include="CollisionSystem.cpp" />
+    <ClCompile Include="Colour.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObjectComponent.cpp" />
+    <ClCompile Include="InputController.cpp" />
+    <ClCompile Include="KeyPressMessage.cpp" />
+    <ClCompile Include="DeadObjectMessage.cpp" />
+    <ClCompile Include="LifeTimerComponent.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Message.cpp" />
+    <ClCompile Include="MouseInputMessage.cpp" />
+    <ClCompile Include="MultiMesh.cpp" />
+    <ClCompile Include="NetworkController.cpp" />
+    <ClCompile Include="ObserverSubject.cpp" />
+    <ClCompile Include="PhysicsComponent.cpp" />
+    <ClCompile Include="PhysicsSystem.cpp" />
+    <ClCompile Include="RenderComponent.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Renderer_DX.cpp" />
+    <ClCompile Include="Renderer_GL.cpp" />
+    <ClCompile Include="RenderSystem.cpp" />
+    <ClCompile Include="ResourceController.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderObject_GL.cpp" />
+    <ClCompile Include="ShaderProgram_GL.cpp" />
+    <ClCompile Include="System.cpp" />
+    <ClCompile Include="Task.cpp" />
+    <ClCompile Include="Thread.cpp" />
+    <ClCompile Include="ThreadController.cpp" />
+    <ClCompile Include="ThrustMessage.cpp" />
+    <ClCompile Include="UserInputComponent.cpp" />
+    <ClCompile Include="VBO.cpp" />
+    <ClCompile Include="VBO_DX.cpp" />
+    <ClCompile Include="VBO_GL.cpp" />
+    <ClCompile Include="Vector4.cpp" />
+    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="Window_DX.cpp" />
+    <ClCompile Include="Window_GL.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CollisionComponent.h" />
+    <ClInclude Include="CollisionMessage.h" />
+    <ClInclude Include="CollisionSystem.h" />
+    <ClInclude Include="Colour.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjectComponent.h" />
+    <ClInclude Include="InputController.h" />
+    <ClInclude Include="KeyPressMessage.h" />
+    <ClInclude Include="DeadObjectMessage.h" />
+    <ClInclude Include="LifeTimerComponent.h" />
+    <ClInclude Include="MathsHelper.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Message.h" />
+    <ClInclude Include="MouseInputMessage.h" />
+    <ClInclude Include="MultiMesh.h" />
+    <ClInclude Include="NetworkController.h" />
+    <ClInclude Include="Observer.h" />
+    <ClInclude Include="ObserverSubject.h" />
+    <ClInclude Include="PhysicsComponent.h" />
+    <ClInclude Include="PhysicsSystem.h" />
+    <ClInclude Include="RenderComponent.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Renderer_DX.h" />
+    <ClInclude Include="Renderer_GL.h" />
+    <ClInclude Include="RenderSystem.h" />
+    <ClInclude Include="ResourceController.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderObject_GL.h" />
+    <ClInclude Include="ShaderProgram_GL.h" />
+    <ClInclude Include="System.h" />
+    <ClInclude Include="Task.h" />
+    <ClInclude Include="Thread.h" />
+    <ClInclude Include="ThreadController.h" />
+    <ClInclude Include="ThrustMessage.h" />
+    <ClInclude Include="UserInputComponent.h" />
+    <ClInclude Include="VBO.h" />
+    <ClInclude Include="VBO_DX.h" />
+    <ClInclude Include="VBO_GL.h" />
+    <ClInclude Include="Vector4.h" />
+    <ClInclude Include="Vertex.h" />
+    <ClInclude Include="Window.h" />
+    <ClInclude Include="Window_DX.h" />
+    <ClInclude Include="Window_GL.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
