@@ -15,6 +15,7 @@ ThreadController::ThreadController()
 
 	for (int i = 0; i < (numCores * 2); i++)
 	{
+		// Create stub threads for reuse. This hack will reduce the time spent creating these.
 		mThreads.push_back(new Thread());
 	}
 }
@@ -53,6 +54,6 @@ void ThreadController::ProcessTasks()
 
 std::shared_ptr<ThreadController> ThreadController::Instance()
 {
-	static std::shared_ptr<ThreadController> instance{ new ThreadController() };
+	static std::shared_ptr<ThreadController> instance{};
 	return instance;
 }

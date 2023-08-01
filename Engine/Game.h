@@ -4,10 +4,7 @@
 #include <vector>
 #include <memory>
 
-// Systems
-#include "PhysicsSystem.h"
 #include "RenderSystem.h"
-#include "CollisionSystem.h"
 
 #include "SceneManager.h"
 #include <windows.h>
@@ -35,7 +32,6 @@ public:
 protected:
 	double								_currentTime;
 	double								_deltaTime;
-	bool								_keyStates[256];
 	bool								_quitFlag;
 	Renderer* _renderer;
 	Window* _window;

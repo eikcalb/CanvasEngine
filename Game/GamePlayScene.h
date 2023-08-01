@@ -1,6 +1,5 @@
 #pragma once
 #include "Scene.h"
-#include "CollisionSystem.h"
 
 // Game classes
 #include "Cube.h"
@@ -17,8 +16,6 @@ public:
 
 	// Data
 protected:
-	CollisionSystem						_collisionSystem;
-
 	// Matrices
 	glm::mat4							_IM;  // Identity matrix
 	glm::mat4							_MVM; // ModelView matrix

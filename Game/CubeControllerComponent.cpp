@@ -2,7 +2,6 @@
 #include "GameObject.h"
 #include "Game.h"
 #include "KeyPressMessage.h"
-#include "ThrustMessage.h"
 #include "Cube.h"
 #include <WinUser.h>
 

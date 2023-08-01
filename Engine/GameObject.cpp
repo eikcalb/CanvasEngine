@@ -7,11 +7,12 @@
 /******************************************************************************************************************/
 
 GameObject::GameObject(std::string type)
-	:	_angle(0),
-		_scale(1),
-		_position(0,0),
-		_alive(true),
-		_type(type)
+	: _angle(0),
+	_scale(1),
+	_position(0, 0),
+	_alive(true),
+	_type(type),
+	_deleteFlag(false)
 {
 }
 
@@ -91,13 +92,10 @@ void GameObject::RegisterListener(std::string msg, GameObjectComponent* goc)
 	if (i == _messageListeners.end())
 	{
 		_messageListeners[msg] = std::vector<Observer*>();
-		_messageListeners[msg].push_back(goc);
 	}
-	else
-	{
 		// Already have list; just add
 		_messageListeners[msg].push_back(goc);
-	}
+	
 }
 
 /******************************************************************************************************************/

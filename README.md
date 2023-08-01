@@ -8,4 +8,4 @@ https://github.com/microsoft/DirectXTK/wiki/Mouse-and-keyboard-input
 Mouse input - https://learn.microsoft.com/en-us/windows/win32/learnwin32/mouse-clicks
 Set thread Affinity - https://stackoverflow.com/a/56486809
 WinSock2 - https://www.gamedev.net/tutorials/programming/networking-and-multiplayer/winsock2-for-games-r1059/
-
+Architecture - https://deanb1996.wordpress.com/solo-project-multiplayer-multi-threaded-canvas-painting-game/

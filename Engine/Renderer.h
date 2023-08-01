@@ -5,6 +5,7 @@
 #include "GL\GLM\GLM.hpp"
 #include "GL\GLM\GTC\matrix_transform.hpp"
 #include "GL\GLM\GTC\type_ptr.hpp"
+#include "Hud.h"
 
 // Forward declarations
 class Game;
@@ -18,6 +19,7 @@ class Renderer
 	// Data
 public:
 	Colour										_clearColour;	// Screen clear colour
+	Hud										_hud;
 
 	// Structors
 public:
@@ -27,7 +29,8 @@ public:
 	// Gets/sets
 public:
 	Colour GetClearColour()				const	{ return _clearColour; }
-	void SetClearColour(Colour c)				{ _clearColour = c; }
+	void SetClearColour(Colour c) { _clearColour = c; }
+	Hud GetHudHelper() { return _hud; }
 
 	// Functions
 public:

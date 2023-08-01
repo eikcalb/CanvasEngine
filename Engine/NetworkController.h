@@ -9,6 +9,7 @@
 #include <sstream>
 #include "ResourceController.h"
 #include "ThreadController.h"
+#include <unordered_map>
 
 #pragma comment(lib, "Ws2_32.lib")
 

@@ -31,7 +31,7 @@ Window_DX::Window_DX(Game* game, int width, int height, HINSTANCE hInstance, int
 
 	_hWnd = CreateWindowEx(NULL,
 		L"WindowClass",
-		L"Asteroids DX",
+		L"Vox DX",
 		WS_OVERLAPPEDWINDOW,
 		300,
 		300,

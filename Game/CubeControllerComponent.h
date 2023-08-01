@@ -1,10 +1,6 @@
 #pragma once
 #include "UserInputComponent.h"
 
-
-class Bullet;
-
-
 class CubeControllerComponent
 	: public UserInputComponent
 {

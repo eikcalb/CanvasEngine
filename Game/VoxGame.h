@@ -33,17 +33,6 @@ enum GameState
 class VoxGame :
 	public Game
 {
-	// Constants and statics
-public:
-
-
-	// Data
-private:
-
-	// Meshes
-	MultiMesh							_numbers;
-	MultiMesh							_letters;
-
 	// Structors
 public:
 	VoxGame();

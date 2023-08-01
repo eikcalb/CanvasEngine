@@ -8,11 +8,6 @@ Cube::Cube(Mesh* mesh)
 {
 	new CubeControllerComponent(this);
 
-	CollisionComponent* cc = new CollisionComponent(this);
-	cc->SetCollisionRadius(mesh->CalculateMaxSize() * 0.9f);
-	cc->SetCollisionID(CollisionID::Cube_ID);
-	cc->SetCollisionMatrixFlag(CollisionID::Canvas_ID);
-
 	RenderComponent* rc = new RenderComponent(this);
 	rc->SetColour(Colour(0.5f, 0.5f, 1.0f, 1.0f));
 	rc->SetMesh(mesh);
@@ -36,21 +31,6 @@ void Cube::Update(double deltaTime)
 
 void Cube::OnMessage(Message* msg)
 {
-	if (msg->GetMessageType() == "collision")
-	{
-		CollisionMessage* col = (CollisionMessage*)msg;
-		if (col->GetCollidee() == this ||
-			col->GetCollider() == this)
-		{
-			RenderComponent* rc = (RenderComponent*)GetComponent("render");
-
-			// Change game state
-			Message msg("state=dead");
-			Game::TheGame->ListenToMessage(&msg);
-		}
-	}
-
-	GameObject::OnMessage(msg);
 }
 
 /******************************************************************************************************************/

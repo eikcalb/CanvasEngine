@@ -49,27 +49,27 @@ int WINAPI WinMain(HINSTANCE hInstance,
 using namespace gxbase;
 
 // Simple application class (all it does is contain our main window)
-class AsteroidsApp
+class VoxApp
 	: public App
 {
 private:
 	Window_GL win;
-	Game* game;
+	VoxGame* game;
 
 public:
-	AsteroidsApp()
-		: win(new AsteroidsGame(), SCREEN_WIDTH, SCREEN_HEIGHT)
+	VoxApp()
+		: win(dynamic_cast<Game*>(new VoxApp()), SCREEN_WIDTH, SCREEN_HEIGHT)
 	{
-		game = win.GetGame();
+		game = dynamic_cast<VoxGame*>(win.GetGame());
 	}
 
-	~AsteroidsApp()
+	~VoxApp()
 	{
 		delete game;
 	}
 };
 
 // This is the single instance of our application
-static AsteroidsApp asteroids;
+static VoxApp app;
 
 #endif

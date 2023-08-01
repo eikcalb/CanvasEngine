@@ -35,7 +35,7 @@ void UserInputComponent::Start()
 // Main update function (called every frame)
 void UserInputComponent::Update(double deltaTime)
 {
-
+	// Unused
 }
 
 /******************************************************************************************************************/

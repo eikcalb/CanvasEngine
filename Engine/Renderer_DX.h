@@ -53,7 +53,7 @@ public:
 
 	// Initialise the shaders
 	void InitialiseShaders();
-
+	void InitialiseHud();
 };
 
 #endif

@@ -25,9 +25,10 @@ GameObjectComponent::~GameObjectComponent()
 // Functions
 /******************************************************************************************************************/
 
-void GameObjectComponent::BroadcastMessage(Message* msg)
+void GameObjectComponent::OnMessage(Message* msg)
 {
-	Game::TheGame->BroadcastMessage(msg);
+
+	// Handle message received
 }
 
 /******************************************************************************************************************/

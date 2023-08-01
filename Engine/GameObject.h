@@ -96,5 +96,7 @@ public:
 
 	// Resets the game object to the start state (similar to Start(), but may be called more than once)
 	virtual void Reset();
+
+	virtual void BroadcastMessage(Message* msg) override {};
 };
 

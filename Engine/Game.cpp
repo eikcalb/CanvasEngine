@@ -12,7 +12,6 @@ Game::Game()
 	: _quitFlag(false),
 	_sceneManager(this)
 {
-	for (int i = 0; i < 256; i++) _keyStates[i] = false;
 	_currentTime = clock();
 
 	TheGame = this;
@@ -47,12 +46,11 @@ void Game::Initialise(Window* w)
 
 void Game::OnKeyboard(int key, bool down)
 {
-	_keyStates[key] = down;
-
 	// Create keypress message and send it to all objects
 	KeyPressMessage msg(key, down);
 
 	BroadcastMessage(&msg);
+	_inputController->BroadcastMessage(&msg);
 }
 
 void Game::OnMouse(LPARAM lParam, bool down)
@@ -62,7 +60,7 @@ void Game::OnMouse(LPARAM lParam, bool down)
 	// Create keypress message and send it to all objects
 	MouseInputMessage msg(glm::vec2(xPos, yPos), down);
 
-	BroadcastMessage(&msg);
+	_inputController->BroadcastMessage(&msg);
 }
 
 /******************************************************************************************************************/
@@ -79,9 +77,7 @@ void Game::Run()
 
 void Game::BroadcastMessage(Message* msg)
 {
-	ListenToMessage(msg);
-
-	_inputController->BroadcastMessage(msg);
+//	ListenToMessage(msg);
 }
 
 /******************************************************************************************************************/

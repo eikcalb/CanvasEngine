@@ -15,11 +15,12 @@
     <ClCompile Include="GamePlayScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Voxel.cpp" />
+    <ClCompile Include="Voxel.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VoxGame.h" />
-    <ClInclude Include="CollisionMatrix.h" />
     <ClInclude Include="Components.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -35,7 +36,9 @@
     <ClInclude Include="GamePlayScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Voxel.h" />
+    <ClInclude Include="Voxel.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag" />

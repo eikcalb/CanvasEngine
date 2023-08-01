@@ -72,7 +72,7 @@
     <LibraryPath>C:\CSLib\lib;G:\CSLib\lib;$(SolutionDir)$(Configuration)\;..\CSLib2013;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - DirectX|Win32'">
-    <IncludePath>C:\DirectX SDK\Include;C:\CSLib\inc;G:\DirectX SDK\Include;G:\CSLib\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>C:\DirectX SDK\Include;C:\CSLib\inc;G:\DirectX SDK\Include;G:\CSLib\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)imgui</IncludePath>
     <LibraryPath>C:\DirectX SDK\Lib\x86;C:\CSLib\lib;G:\DirectX SDK\Lib\x86;G:\CSLib\lib;$(SolutionDir)$(Configuration)\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - DirectX|Win32'">
@@ -80,7 +80,7 @@
     <LibraryPath>C:\DirectX SDK\Lib\x86;C:\CSLib\lib;G:\DirectX SDK\Lib\x86;G:\CSLib\lib;$(SolutionDir)$(Configuration)\;..\CSLib2013;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - OpenGL|Win32'">
-    <IncludePath>C:\CSLib\inc;G:\CSLib\inc;$(DXSDK_DIR)include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>C:\CSLib\inc;G:\CSLib\inc;$(DXSDK_DIR)include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)imgui</IncludePath>
     <LibraryPath>C:\CSLib\lib;G:\CSLib\lib;$(SolutionDir)$(Configuration)\;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug - OpenGL|Win32'">
@@ -90,6 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>BUILD_OPENGL;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -103,6 +104,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>BUILD_DIRECTX;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -117,6 +119,7 @@
       <SDLCheck>true</SDLCheck>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>BUILD_DIRECTX;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -133,6 +136,7 @@
       <SDLCheck>true</SDLCheck>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>BUILD_OPENGL;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -141,25 +145,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CollisionComponent.cpp" />
-    <ClCompile Include="CollisionMessage.cpp" />
-    <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="Colour.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectComponent.cpp" />
+    <ClCompile Include="Hud.cpp" />
     <ClCompile Include="InputController.cpp" />
     <ClCompile Include="KeyPressMessage.cpp" />
-    <ClCompile Include="DeadObjectMessage.cpp" />
-    <ClCompile Include="LifeTimerComponent.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="MouseInputMessage.cpp" />
     <ClCompile Include="MultiMesh.cpp" />
     <ClCompile Include="NetworkController.cpp" />
     <ClCompile Include="ObserverSubject.cpp" />
-    <ClCompile Include="PhysicsComponent.cpp" />
-    <ClCompile Include="PhysicsSystem.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Renderer_DX.cpp" />
@@ -175,7 +173,6 @@
     <ClCompile Include="Task.cpp" />
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="ThreadController.cpp" />
-    <ClCompile Include="ThrustMessage.cpp" />
     <ClCompile Include="UserInputComponent.cpp" />
     <ClCompile Include="VBO.cpp" />
     <ClCompile Include="VBO_DX.cpp" />
@@ -186,17 +183,13 @@
     <ClCompile Include="Window_GL.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CollisionComponent.h" />
-    <ClInclude Include="CollisionMessage.h" />
-    <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="Colour.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectComponent.h" />
+    <ClInclude Include="Hud.h" />
     <ClInclude Include="InputController.h" />
     <ClInclude Include="KeyPressMessage.h" />
-    <ClInclude Include="DeadObjectMessage.h" />
-    <ClInclude Include="LifeTimerComponent.h" />
     <ClInclude Include="MathsHelper.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Message.h" />
@@ -205,13 +198,12 @@
     <ClInclude Include="NetworkController.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="ObserverSubject.h" />
-    <ClInclude Include="PhysicsComponent.h" />
-    <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Renderer_DX.h" />
     <ClInclude Include="Renderer_GL.h" />
     <ClInclude Include="RenderSystem.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceController.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
@@ -222,7 +214,6 @@
     <ClInclude Include="Task.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="ThreadController.h" />
-    <ClInclude Include="ThrustMessage.h" />
     <ClInclude Include="UserInputComponent.h" />
     <ClInclude Include="VBO.h" />
     <ClInclude Include="VBO_DX.h" />
@@ -232,6 +223,9 @@
     <ClInclude Include="Window.h" />
     <ClInclude Include="Window_DX.h" />
     <ClInclude Include="Window_GL.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Engine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

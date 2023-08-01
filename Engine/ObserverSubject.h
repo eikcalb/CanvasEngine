@@ -15,6 +15,8 @@ typedef std::vector<Observer*>::iterator ObserverListIterator;
 class ObserverSubject
 {
 
+	// Message handler (called when message occurs)
+	virtual void BroadcastMessage(Message* msg) = 0;
 
 };
 

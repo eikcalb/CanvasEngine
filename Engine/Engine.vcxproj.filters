@@ -4,24 +4,12 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Message.cpp" />
-    <ClCompile Include="CollisionComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionMessage.cpp">
-      <Filter>Messages</Filter>
-    </ClCompile>
     <ClCompile Include="Colour.cpp">
       <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="DeadObjectMessage.cpp">
-      <Filter>Messages</Filter>
     </ClCompile>
     <ClCompile Include="GameObjectComponent.cpp" />
     <ClCompile Include="KeyPressMessage.cpp">
       <Filter>Messages</Filter>
-    </ClCompile>
-    <ClCompile Include="LifeTimerComponent.cpp">
-      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Common</Filter>
@@ -68,25 +56,13 @@
     <ClCompile Include="Window_GL.cpp">
       <Filter>OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="ThrustMessage.cpp">
-      <Filter>Messages</Filter>
-    </ClCompile>
     <ClCompile Include="UserInputComponent.cpp">
       <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsSystem.cpp">
-      <Filter>Systems</Filter>
     </ClCompile>
     <ClCompile Include="System.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
-    <ClCompile Include="PhysicsComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="RenderSystem.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionSystem.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
     <ClCompile Include="ObserverSubject.cpp">
@@ -122,30 +98,21 @@
     <ClCompile Include="Task.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="Hud.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="MathsHelper.h" />
     <ClInclude Include="Message.h" />
-    <ClInclude Include="CollisionComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionMessage.h">
-      <Filter>Messages</Filter>
-    </ClInclude>
     <ClInclude Include="Colour.h">
       <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="DeadObjectMessage.h">
-      <Filter>Messages</Filter>
     </ClInclude>
     <ClInclude Include="GameObjectComponent.h" />
     <ClInclude Include="KeyPressMessage.h">
       <Filter>Messages</Filter>
-    </ClInclude>
-    <ClInclude Include="LifeTimerComponent.h">
-      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Common</Filter>
@@ -195,25 +162,13 @@
     <ClInclude Include="Window_GL.h">
       <Filter>OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="ThrustMessage.h">
-      <Filter>Messages</Filter>
-    </ClInclude>
     <ClInclude Include="UserInputComponent.h">
       <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsSystem.h">
-      <Filter>Systems</Filter>
     </ClInclude>
     <ClInclude Include="System.h">
       <Filter>Systems</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="RenderSystem.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionSystem.h">
       <Filter>Systems</Filter>
     </ClInclude>
     <ClInclude Include="Observer.h">
@@ -252,6 +207,10 @@
     <ClInclude Include="Task.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Hud.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Components">
@@ -278,5 +237,8 @@
     <Filter Include="Common">
       <UniqueIdentifier>{a595350a-56b8-4d22-be55-8223f93d0bf4}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Engine.rc" />
   </ItemGroup>
 </Project>

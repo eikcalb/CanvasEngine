@@ -44,5 +44,5 @@ public:
 	virtual void End()						= 0;
 
 	// Broadcast a message to all objects
-	void BroadcastMessage(Message* msg)		;
+	virtual void OnMessage(Message* msg) override;
 };

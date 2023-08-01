@@ -23,7 +23,7 @@ void Window_GL::Initialise()
 {
 	SetSize(512, 512);
 	//SetDepthBits(24);
-	SetTitle("Asteroids GL");
+	SetTitle("Vox GL");
 
 	// Initialise GL
 	_renderer = new Renderer_GL();

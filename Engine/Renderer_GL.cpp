@@ -3,6 +3,9 @@
 #include "Renderer_GL.h"
 #include "GameObject.h"
 #include "Mesh.h"
+#include "GL\GLFW\glfw3.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 /******************************************************************************************************************/
 
@@ -29,6 +32,9 @@ void Renderer_GL::ClearScreen()
 void Renderer_GL::Destroy()
 {
 	delete _shader; // Will delete shader objects automatically through ref counting
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 }
 
 /******************************************************************************************************************/
@@ -73,6 +79,18 @@ void Renderer_GL::Initialise(int width, int height)
 	_shader->use();
 
 	_shader->setUniformMatrix("PM", 4, 1, false, glm::value_ptr(_PM));
+	InitialiseHud();
+}
+
+void Renderer_GL::InitialiseHud() {
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	(void)io;
+
+	// Setup platform/renderer bindings
+	ImGui_ImplGlfw_InitForOpenGL(glfwGetCurrentContext(), true);
+	ImGui_ImplOpenGL3_Init("#version 330");
 }
 
 /******************************************************************************************************************/

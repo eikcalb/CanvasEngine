@@ -6,6 +6,10 @@ Task::~Task()
 
 void Task::Run()
 {
+	if (IsDone()) {
+		return;
+	}
+
 	mFunction();
 	mIsDone = true;
 }

@@ -72,9 +72,6 @@ void GamePlayScene::Update(double deltaTime)
 {
 	Scene::Update(deltaTime);
 
-	_collisionSystem.Process(_gameObjects, deltaTime);
-
-	// Perform legacy update on game objects (in theory, should be phased out altogether)
 	for (int i = 0; i < (int)_gameObjects.size(); i++)
 	{
 		if (_gameObjects[i]->IsAlive())
@@ -98,7 +95,6 @@ void GamePlayScene::Render(RenderSystem* renderer)
 
 void GamePlayScene::Reset()
 {
-
 	for (int i = 0; i < (int)_gameObjects.size(); i++)
 	{
 		_gameObjects[i]->Reset();

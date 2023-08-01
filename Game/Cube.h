@@ -1,8 +1,5 @@
 #pragma once
-#include "CollisionMatrix.h"
-#include "CollisionMessage.h"
 #include "Components.h"
-#include "DeadObjectMessage.h"
 #include "Game.h"
 #include "GameObject.h"
 #include "Colour.h"
@@ -14,11 +11,6 @@ class Message;
 class Cube :
 	public GameObject
 {
-	// Constants
-public:
-	static const float MAX_SPEED;
-	static const float ACCELERATION;
-
 	// Data
 protected:
 	unsigned short weight = 1;

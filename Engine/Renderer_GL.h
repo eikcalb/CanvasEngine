@@ -1,7 +1,7 @@
 #pragma once
 #if BUILD_OPENGL
 #include "Renderer.h"
-
+#include "imgui_impl_glfw.h"
 #include "ShaderProgram_GL.h"
 #include "ShaderObject_GL.h"
 
@@ -32,6 +32,8 @@ public:
 	virtual void Draw(const Mesh* mesh, glm::mat4 MVM, const Colour& colour);
 	virtual void Initialise(int width, int height);
 	virtual void SwapBuffers();
+
+	void InitialiseHud();
 };
 
 #endif
