@@ -102,40 +102,34 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\Includes\imgui\imgui.cpp">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Includes\imgui\imgui_demo.cpp">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Includes\imgui\imgui_draw.cpp">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Includes\imgui\imgui_impl_dx11.cpp">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Includes\imgui\imgui_impl_glfw.cpp">
-      <Filter>Iimgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\imgui\imgui_impl_opengl2.cpp">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Includes\imgui\imgui_impl_opengl3.cpp">
-      <Filter>Iimgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\imgui\imgui_impl_wgpu.cpp">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Includes\imgui\imgui_impl_win32.cpp">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Includes\imgui\imgui_stdlib.cpp">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Includes\imgui\imgui_tables.cpp">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Includes\imgui\imgui_widgets.cpp">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -248,46 +242,40 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\Includes\imgui\imconfig.h">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Includes\imgui\imgui.h">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Includes\imgui\imgui_impl_dx11.h">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Includes\imgui\imgui_impl_glfw.h">
-      <Filter>Iimgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\imgui\imgui_impl_opengl2.h">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Includes\imgui\imgui_impl_opengl3.h">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Includes\imgui\imgui_impl_opengl3_loader.h">
-      <Filter>Iimgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\imgui\imgui_impl_wgpu.h">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Includes\imgui\imgui_impl_win32.h">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Includes\imgui\imgui_internal.h">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Includes\imgui\imgui_stdlib.h">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Includes\imgui\imstb_rectpack.h">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Includes\imgui\imstb_textedit.h">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Includes\imgui\imstb_truetype.h">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -315,7 +303,7 @@
     <Filter Include="Common">
       <UniqueIdentifier>{a595350a-56b8-4d22-be55-8223f93d0bf4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Iimgui">
+    <Filter Include="imgui">
       <UniqueIdentifier>{b8b4384c-3e82-4451-9ff5-72ea62837069}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -324,12 +312,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Includes\imgui\imgui.natstepfilter">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="..\Includes\imgui\imgui.natvis">
-      <Filter>Iimgui</Filter>
+      <Filter>imgui</Filter>
     </Natvis>
   </ItemGroup>
 </Project>

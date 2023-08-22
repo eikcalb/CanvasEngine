@@ -68,12 +68,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - OpenGL|Win32'">
-    <IncludePath>C:\CSLib\inc;G:\CSLib\inc;$(DXSDK_DIR)include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Includes\imgui</IncludePath>
-    <LibraryPath>C:\CSLib\lib;G:\CSLib\lib;$(SolutionDir)$(Configuration)\;..\CSLib2013;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+    <IncludePath>C:\CSLib\inc;G:\CSLib\inc;$(DXSDK_DIR)include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Includes\imgui;$(SolutionDir)Includes</IncludePath>
+    <LibraryPath>C:\CSLib\lib;G:\CSLib\lib;$(SolutionDir)$(Configuration)\;..\CSLib2013;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)Libraries</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - DirectX|Win32'">
-    <IncludePath>C:\DirectX SDK\Include;C:\CSLib\inc;G:\DirectX SDK\Include;G:\CSLib\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Includes\imgui</IncludePath>
-    <LibraryPath>C:\DirectX SDK\Lib\x86;C:\CSLib\lib;G:\DirectX SDK\Lib\x86;G:\CSLib\lib;$(SolutionDir)$(Configuration)\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+    <IncludePath>C:\DirectX SDK\Include;C:\CSLib\inc;G:\DirectX SDK\Include;G:\CSLib\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Includes\imgui;$(SolutionDir)Includes</IncludePath>
+    <LibraryPath>C:\DirectX SDK\Lib\x86;C:\CSLib\lib;G:\DirectX SDK\Lib\x86;G:\CSLib\lib;$(SolutionDir)$(Configuration)\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)Libraries</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - DirectX|Win32'">
     <IncludePath>C:\DirectX SDK\Include;C:\CSLib\inc;G:\DirectX SDK\Include;G:\CSLib\inc;$(DXSDK_DIR)include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Includes\imgui</IncludePath>
@@ -150,9 +150,7 @@
     <ClCompile Include="..\Includes\imgui\imgui_draw.cpp" />
     <ClCompile Include="..\Includes\imgui\imgui_impl_dx11.cpp" />
     <ClCompile Include="..\Includes\imgui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="..\Includes\imgui\imgui_impl_opengl2.cpp" />
     <ClCompile Include="..\Includes\imgui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="..\Includes\imgui\imgui_impl_wgpu.cpp" />
     <ClCompile Include="..\Includes\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="..\Includes\imgui\imgui_stdlib.cpp" />
     <ClCompile Include="..\Includes\imgui\imgui_tables.cpp" />
@@ -199,10 +197,8 @@
     <ClInclude Include="..\Includes\imgui\imgui.h" />
     <ClInclude Include="..\Includes\imgui\imgui_impl_dx11.h" />
     <ClInclude Include="..\Includes\imgui\imgui_impl_glfw.h" />
-    <ClInclude Include="..\Includes\imgui\imgui_impl_opengl2.h" />
     <ClInclude Include="..\Includes\imgui\imgui_impl_opengl3.h" />
     <ClInclude Include="..\Includes\imgui\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="..\Includes\imgui\imgui_impl_wgpu.h" />
     <ClInclude Include="..\Includes\imgui\imgui_impl_win32.h" />
     <ClInclude Include="..\Includes\imgui\imgui_internal.h" />
     <ClInclude Include="..\Includes\imgui\imgui_stdlib.h" />

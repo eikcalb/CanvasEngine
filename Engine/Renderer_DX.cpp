@@ -1,10 +1,10 @@
 #if BUILD_DIRECTX
 #include "imgui.h"
+#include "imGui_impl_win32.h"
+#include "imgui_impl_dx11.h"
 #include "Renderer_DX.h"
 #include "Mesh.h"
 #include "GameObject.h"
-#include "imgui_impl_dx11.h"
-#include "imGui_impl_win32.h"
 
 /******************************************************************************************************************/
 
@@ -198,7 +198,8 @@ void Renderer_DX::InitialiseHud() {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
-	(void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(_hWnd);

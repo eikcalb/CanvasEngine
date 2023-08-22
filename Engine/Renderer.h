@@ -17,8 +17,8 @@ class Mesh;
 class Renderer
 {
 	// Data
-public:
-	Colour										_clearColour;	// Screen clear colour
+protected:
+	Colour									_clearColour;	// Screen clear colour
 	Hud										_hud;
 
 	// Structors
@@ -30,7 +30,7 @@ public:
 public:
 	Colour GetClearColour()				const	{ return _clearColour; }
 	void SetClearColour(Colour c) { _clearColour = c; }
-	Hud GetHudHelper() { return _hud; }
+	Hud GetHud() { return _hud; }
 
 	// Functions
 public:

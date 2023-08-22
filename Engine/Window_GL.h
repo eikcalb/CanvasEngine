@@ -1,5 +1,7 @@
 #pragma once
 #if BUILD_OPENGL
+// #define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h>
 #include "Window.h"
 #include "GL\GXBase\GXBase.h"
 

@@ -33,13 +33,7 @@
     <ClCompile Include="..\Includes\imgui\imgui_impl_glfw.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\Includes\imgui\imgui_impl_opengl2.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
     <ClCompile Include="..\Includes\imgui\imgui_impl_opengl3.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\imgui\imgui_impl_wgpu.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Includes\imgui\imgui_impl_win32.cpp">
@@ -87,16 +81,10 @@
     <ClInclude Include="..\Includes\imgui\imgui_impl_glfw.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\Includes\imgui\imgui_impl_opengl2.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
     <ClInclude Include="..\Includes\imgui\imgui_impl_opengl3.h">
       <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Includes\imgui\imgui_impl_opengl3_loader.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\imgui\imgui_impl_wgpu.h">
       <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Includes\imgui\imgui_impl_win32.h">
