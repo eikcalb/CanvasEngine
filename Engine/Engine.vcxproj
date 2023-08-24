@@ -176,6 +176,7 @@
     <ClCompile Include="ResourceController.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="ScriptingController.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderObject_GL.cpp" />
     <ClCompile Include="ShaderProgram_GL.cpp" />
@@ -183,7 +184,6 @@
     <ClCompile Include="Task.cpp" />
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="ThreadController.cpp" />
-    <ClCompile Include="UserInputComponent.cpp" />
     <ClCompile Include="VBO.cpp" />
     <ClCompile Include="VBO_DX.cpp" />
     <ClCompile Include="VBO_GL.cpp" />
@@ -229,6 +229,7 @@
     <ClInclude Include="ResourceController.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ScriptingController.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderObject_GL.h" />
     <ClInclude Include="ShaderProgram_GL.h" />
@@ -236,7 +237,6 @@
     <ClInclude Include="Task.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="ThreadController.h" />
-    <ClInclude Include="UserInputComponent.h" />
     <ClInclude Include="VBO.h" />
     <ClInclude Include="VBO_DX.h" />
     <ClInclude Include="VBO_GL.h" />

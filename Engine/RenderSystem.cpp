@@ -28,7 +28,7 @@ void RenderSystem::Process(std::vector<GameObject*>& list, double _)
 	{
 		if (obj->IsAlive())
 		{
-			if (RenderComponent* rc = (RenderComponent*)obj->GetComponent("render"))
+			if (RenderComponent* rc = reinterpret_cast<RenderComponent*>(obj->GetComponent("render")))
 			{
 				_renderer->Draw(rc, _MVM);
 			}

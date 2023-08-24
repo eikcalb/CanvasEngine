@@ -1,8 +1,8 @@
 #pragma once
-#include "UserInputComponent.h"
+#include "RenderComponent.h"
 
 class CubeControllerComponent
-	: public UserInputComponent
+	: public RenderComponent
 {
 	// Constants
 public:

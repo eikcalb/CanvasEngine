@@ -1,11 +1,5 @@
 #include "Thread.h"
 
-void threadFunction(Thread* pThread)
-{
-	pThread->Run();
-};
-
-
 Thread::Thread()
 	:mTask(nullptr), mNeedsTask(true)
 {
@@ -20,7 +14,7 @@ Thread::~Thread()
 
 void Thread::Start()
 {
-	mThread = std::thread(threadFunction, this);
+	mThread = std::thread([](Thread* thread) { thread->Run(); }, this);
 }
 
 void Thread::SetTask(Task* pTask)

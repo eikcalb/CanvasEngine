@@ -15,6 +15,13 @@ Game::Game()
 	_currentTime = clock();
 
 	TheGame = this;
+
+	// Setup controllers.
+	// These controllers provide specific functionality to the application.
+	// Each controller exposes functions that solve a specific set of problems.
+	_inputController = InputController::Instance();
+	//_resourceController = ResourceController::Instance();
+	_threadController = ThreadController::Instance();
 }
 
 /******************************************************************************************************************/
@@ -37,9 +44,6 @@ void Game::Initialise(Window* w)
 	_window = w;
 	_renderer = w->GetRenderer();
 	_renderSystem.SetRenderer(_renderer);
-
-	_inputController = InputController::Instance();
-	_threadController = ThreadController::Instance();
 }
 
 /******************************************************************************************************************/

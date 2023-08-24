@@ -13,6 +13,7 @@ void Hud::Start() {
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
+	ImGui::Begin("Voxel Game Engine");
 #else if BUILD_OPENGL
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();

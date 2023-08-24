@@ -1,5 +1,4 @@
 #pragma once
-#include <string>
 #include <memory>
 #include <imgui.h>
 
@@ -16,7 +15,7 @@ protected:
     }
 
 public:
-    void LabelText(const std::string& labelText, const std::string& text) {
+    void LabelText(const char* labelText, const char* text) {
         ImGui::Text("%s:", labelText);
         ImGui::SameLine();
         ImGui::Text("%s", text);
@@ -38,6 +37,8 @@ public:
     void End();
 
     void Render() {
+        // This will close the ImGui window context
+        ImGui::End();
         ImGui::Render();
     }
 };

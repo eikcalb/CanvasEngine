@@ -12,7 +12,7 @@ const float CubeControllerComponent::ACCELERATION = 1.0f;
 /******************************************************************************************************************/
 
 CubeControllerComponent::CubeControllerComponent(GameObject* gob)
-	: UserInputComponent(gob)
+	: RenderComponent(gob)
 {
 }
 
