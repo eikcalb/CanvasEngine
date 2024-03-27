@@ -1,5 +1,4 @@
 #pragma once
-#include "windows.h"
 #include <iostream>
 #include <fstream>
 #include <list>
@@ -8,12 +7,8 @@
 #include <memory>
 #include <queue>
 #include <vector>
-#include <d3d11_1.h>
-#include <d3dcompiler.h>
-#include <directxmath.h>
 #include <string>
 #include <wrl/client.h>
-#include "VBO_DX.h"
 
 struct Peer{
 	std::string	ipAddress;
@@ -25,9 +20,11 @@ struct Config {
 	u_short						port;
 };
 
+static const char* CONFIG_ENV_VAR = "VOX_CONFIG_FILE";
+
 class ResourceController
 {
-	std::vector< std::pair< std::wstring, VBO*>> mGeometries{};
+	//std::vector< std::pair< std::wstring, VBO*>> mGeometries{};
 	//std::vector< std::pair< std::wstring, TextureObject*>> mTextures{};
 	//std::vector< std::pair< std::wstring, ShaderObject*>> mShaders{};
 protected:
@@ -44,16 +41,26 @@ public:
 	const Config& const LoadConfig(const std::string& pFilename);
 	const std::shared_ptr<Config> const getConfig() {
 		if (!mConfig) {
-			char modulePath[MAX_PATH];
-			GetModuleFileNameA(NULL, modulePath, MAX_PATH);
-			std::string executableDir = modulePath;
-			size_t lastBackslash = executableDir.find_last_of("\\/");
-			if (lastBackslash != std::string::npos) {
-				executableDir = executableDir.substr(0, lastBackslash + 1);
+			// Logic from Stackoverflow: https://stackoverflow.com/a/15916732
+			char* buf = nullptr;
+			size_t sz = 0;
+			if (_dupenv_s(&buf, &sz, CONFIG_ENV_VAR) == 0 && buf != nullptr)
+			{
+				LoadConfig(buf);
+				free(buf);
 			}
-			std::string absolutePath = executableDir + "./config.ini";
+			else {
+				char modulePath[MAX_PATH];
+				GetModuleFileNameA(NULL, modulePath, MAX_PATH);
+				std::string executableDir = modulePath;
+				size_t lastBackslash = executableDir.find_last_of("\\/");
+				if (lastBackslash != std::string::npos) {
+					executableDir = executableDir.substr(0, lastBackslash + 1);
+				}
+				std::string absolutePath = executableDir + "./config.ini";
 
-			LoadConfig(absolutePath);
+				LoadConfig(absolutePath);
+			}
 		}
 		return mConfig;
 	}

@@ -7,9 +7,11 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <unordered_map>
+#include "NetworkMessage.h"
 #include "ResourceController.h"
 #include "ThreadController.h"
-#include <unordered_map>
+#include "InputController.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -30,8 +32,9 @@ struct PeerBuffer
 class NetworkController
 {
 private:
-	std::shared_ptr<ThreadController> mThreadController = ThreadController::Instance();
-	std::shared_ptr<ResourceController> mResourceController = ResourceController::Instance();
+    std::shared_ptr<InputController> mInputController;
+    std::shared_ptr<ThreadController> mThreadController;
+	std::shared_ptr<ResourceController> mResourceController;
 
 	std::unordered_map<SOCKET, PeerBuffer>	peerBuffers;
 	std::queue<std::string>					messages;
@@ -46,6 +49,8 @@ private:
     std::mutex addMx;
     std::mutex peerMx;
 
+    bool isAlive = false;
+
 	//Private constructor for singleton pattern
 	NetworkController();
 
@@ -58,7 +63,7 @@ private:
 		FD_ZERO(&readSockets);
         FD_SET(mListenSocket, &readSockets);
 
-        while (true)
+        while (isAlive)
         {
             // Copy the socket set to prevent modification
             fd_set tempReadSockets = readSockets;
@@ -110,8 +115,9 @@ private:
             }
         }
 	}
-    inline void ProcessBacklog() {
-        while (true) {
+
+    void ProcessBacklog() {
+        while (isAlive) {
             SendMessages(backlog);
         }
     }
@@ -119,7 +125,7 @@ private:
 public:
 	static std::shared_ptr< NetworkController > Instance();
 
-	~NetworkController();
+    ~NetworkController();
 
 	//Singleton pattern
 	NetworkController(const NetworkController& NetworkController) = delete;

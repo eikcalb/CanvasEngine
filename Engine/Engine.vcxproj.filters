@@ -129,6 +129,9 @@
     <ClCompile Include="RenderComponent.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkMessage.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -273,11 +276,11 @@
     <ClInclude Include="RenderComponent.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="NetworkMessage.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Components">
-      <UniqueIdentifier>{f6dd21e3-100b-4bd2-8f2e-065c451e3919}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Messages">
       <UniqueIdentifier>{944181a1-37a3-43be-86fa-aa66aa2d1e7a}</UniqueIdentifier>
     </Filter>

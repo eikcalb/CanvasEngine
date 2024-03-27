@@ -11,6 +11,7 @@ private:
 	std::thread mThread;
 	Task* mTask;
 	bool mNeedsTask;
+	bool isAlive = false;
 
 	void SetThreadAffinity(const TaskType& type);
 public:

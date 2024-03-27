@@ -167,6 +167,7 @@
     <ClCompile Include="MouseInputMessage.cpp" />
     <ClCompile Include="MultiMesh.cpp" />
     <ClCompile Include="NetworkController.cpp" />
+    <ClCompile Include="NetworkMessage.cpp" />
     <ClCompile Include="ObserverSubject.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="MouseInputMessage.h" />
     <ClInclude Include="MultiMesh.h" />
     <ClInclude Include="NetworkController.h" />
+    <ClInclude Include="NetworkMessage.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="ObserverSubject.h" />
     <ClInclude Include="RenderComponent.h" />
@@ -251,6 +253,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Includes\imgui\imgui.natstepfilter" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="..\Includes\imgui\imgui.natvis" />

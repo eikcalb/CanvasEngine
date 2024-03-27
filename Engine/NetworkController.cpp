@@ -4,8 +4,16 @@ NetworkController::NetworkController()
 	:
 	peerBuffers(),
 	messages(),
-	backlog()
+	backlog(),
+	mListenSocket(),
+	mListenAddress()
 {
+	mInputController = InputController::Instance();
+	mThreadController = ThreadController::Instance();
+	mResourceController = ResourceController::Instance();
+
+	isAlive = true;
+
 	mPeers.reserve(5);
 }
 
@@ -70,6 +78,9 @@ void NetworkController::HandleIncomingMessage(const SOCKET& peerSocket)
 			{
 				std::lock_guard<std::mutex> lock(mx);
 				messages.push(message);
+				// Broadcast the message received. This is to allow consumers immediately get
+				// access to messages available, instead of querying the message queue.
+				mInputController->BroadcastMessage(new NetworkMessage(message));
 			}
 
 			// Update the position for the next message
@@ -151,6 +162,8 @@ void NetworkController::FindPeers()
 
 NetworkController::~NetworkController()
 {
+	isAlive = false;
+
 	for (SOCKET peerSocket : mPeers) {
 		closesocket(peerSocket);
 	}
@@ -216,7 +229,7 @@ std::queue<std::string> NetworkController::ReadMessages()
 	//Swaps the queue with an empty queue to empty the current queue and returns the queue containing messages
 	std::queue<std::string> messages;
 	std::lock_guard<std::mutex> lock(mx);
-	messages.swap(messages);
+	this->messages.swap(messages);
 	return messages;
 }
 

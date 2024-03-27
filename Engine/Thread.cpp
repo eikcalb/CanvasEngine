@@ -3,12 +3,14 @@
 Thread::Thread()
 	:mTask(nullptr), mNeedsTask(true)
 {
+	isAlive = true;
 	Start();
 }
 
 
 Thread::~Thread()
 {
+	isAlive = false;
 	mThread.detach();
 }
 
@@ -27,7 +29,7 @@ void Thread::Run()
 {
 	using namespace std::chrono_literals;
 
-	while (true)
+	while (isAlive)
 	{
 		if (mTask)
 		{
@@ -53,10 +55,10 @@ void Thread::SetThreadAffinity(const TaskType& type)
 
 	switch (type) {
 	case TaskType::GRAPHICS:
-		mask = 1 << 0;
+		mask = 1 << (int)TaskType::GRAPHICS;
 		break;
 	case TaskType::NETWORK:
-		mask = 1 << 1;
+		mask = 1 << (int)TaskType::NETWORK;
 		break;
 	}
 

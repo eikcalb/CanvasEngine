@@ -11,7 +11,7 @@
 #include <windowsx.h>
 #include "ThreadController.h"
 #include "InputController.h"
-//#include "ResourceController.h"
+#include "ResourceController.h"
 
 // Forward declarations
 class GameObject;
@@ -37,7 +37,7 @@ protected:
 	Renderer* _renderer;
 	Window* _window;
 	std::shared_ptr<InputController>	_inputController;
-	//std::shared_ptr<ResourceController>	_resourceController;
+	std::shared_ptr<ResourceController>	_resourceController;
 	std::shared_ptr<ThreadController>	_threadController;
 
 	// Meshes
