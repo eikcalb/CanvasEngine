@@ -1,55 +1,44 @@
 #include "ThreadController.h"
 
-ThreadController::ThreadController()
-{
-	int numCores = static_cast<int>(std::thread::hardware_concurrency());
-	if (numCores < 2) {
-		throw std::exception("Minimum processor count allowed is 2");
-	}
-
-	// Set the allowed processors to run on
-	DWORD_PTR processorAffinity = (1 << 0) | (1 << 1); // Processor 1 and processor 2
-	if (!SetProcessAffinityMask(GetCurrentProcess(), processorAffinity)) {
-		OutputDebugString(L"SetProcessAffinityMask failed, GLE=" + GetLastError());
-	}
-
-	for (int i = 0; i < (numCores * 2); i++)
-	{
-		// Create stub threads for reuse. This hack will reduce the time spent creating these.
-		mThreads.push_back(new Thread());
-	}
-}
-
 ThreadController::~ThreadController()
 {
-	for (auto& thread : mThreads)
+	Stop();
+
+	for (auto& thread : threads)
 	{
 		delete thread;
 	}
 }
 
-Task* const ThreadController::AddTask(std::function<void()> pFunction, const TaskType pType)
+/// <summary>
+/// Adds a task to be run on a thread. All threads are running and we will add a task to the
+/// next available thread. This approach is simple and an alternative would be to use a round
+/// robin implementation that threats each thread like a call center agent and moves to the
+/// next thread. With this current implementation, there might be situations of low thread use,
+/// wherein the lower index threads will be more utilized than the others when tasks finish
+/// quickly.
+/// 
+/// The Caveat here is that if tasks block each thread, then we will run out of threads.
+/// </summary>
+/// <param name="pFunction"></param>
+/// <param name="pType"></param>
+/// <param name="tag"></param>
+/// <returns></returns>
+Task* const ThreadController::AddTask(std::function<void()> pFunction, const TaskType pType, const std::string tag)
 {
-	Task* task = new Task(pFunction, pType);
-
-	mTasks.push(task);
-
-	return task;
-}
-
-void ThreadController::ProcessTasks()
-{
-	for (auto thread : mThreads)
+	Task* task = new Task(pFunction, pType, tag);
 	{
-		if (mTasks.size() > 0)
-		{
-			if (thread->NeedsTask())
-			{
-				thread->SetTask(mTasks.front());
-				mTasks.pop();
+		std::lock_guard lock(tasksMutex);
+
+		for (auto& thread : threads) {
+			if (thread->NeedsTask()) {
+				thread->SetTask(task);
+				break;
 			}
 		}
 	}
+
+	return task;
 }
 
 std::shared_ptr<ThreadController> ThreadController::Instance()

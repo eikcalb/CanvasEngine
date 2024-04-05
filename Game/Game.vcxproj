@@ -148,18 +148,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Includes\imgui\imconfig.h" />
-    <ClInclude Include="..\Includes\imgui\imgui.h" />
-    <ClInclude Include="..\Includes\imgui\imgui_impl_dx11.h" />
-    <ClInclude Include="..\Includes\imgui\imgui_impl_glfw.h" />
-    <ClInclude Include="..\Includes\imgui\imgui_impl_opengl3.h" />
-    <ClInclude Include="..\Includes\imgui\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="..\Includes\imgui\imgui_impl_win32.h" />
-    <ClInclude Include="..\Includes\imgui\imgui_internal.h" />
-    <ClInclude Include="..\Includes\imgui\imgui_stdlib.h" />
-    <ClInclude Include="..\Includes\imgui\imstb_rectpack.h" />
-    <ClInclude Include="..\Includes\imgui\imstb_textedit.h" />
-    <ClInclude Include="..\Includes\imgui\imstb_truetype.h" />
     <ClInclude Include="Voxel.h" />
     <ClInclude Include="VoxGame.h" />
     <ClInclude Include="Components.h" />
@@ -169,16 +157,6 @@
     <ClInclude Include="CubeControllerComponent.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Includes\imgui\imgui.cpp" />
-    <ClCompile Include="..\Includes\imgui\imgui_demo.cpp" />
-    <ClCompile Include="..\Includes\imgui\imgui_draw.cpp" />
-    <ClCompile Include="..\Includes\imgui\imgui_impl_dx11.cpp" />
-    <ClCompile Include="..\Includes\imgui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="..\Includes\imgui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="..\Includes\imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\Includes\imgui\imgui_stdlib.cpp" />
-    <ClCompile Include="..\Includes\imgui\imgui_tables.cpp" />
-    <ClCompile Include="..\Includes\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Voxel.cpp" />
     <ClCompile Include="VoxGame.cpp" />
     <ClCompile Include="DamageMessage.cpp" />
@@ -188,7 +166,6 @@
     <ClCompile Include="CubeControllerComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Includes\imgui\imgui.natstepfilter" />
     <None Include="shader.frag" />
     <None Include="shader.vert" />
   </ItemGroup>
@@ -196,9 +173,6 @@
     <None Include="shaders.hlsl">
       <FileType>Document</FileType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="..\Includes\imgui\imgui.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

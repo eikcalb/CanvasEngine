@@ -16,7 +16,7 @@
 #pragma comment(lib, "Ws2_32.lib")
 
 constexpr u_short BUFFER_SIZE	= 1024;
-constexpr u_short MAX_PEERS		= 4;
+constexpr u_short MAX_PEERS		= 8;
 
 struct PeerBuffer
 {
@@ -25,10 +25,20 @@ struct PeerBuffer
 
 	PeerBuffer() : length(0)
 	{
+        // Create buffer. This will instantiate the buffer.
 		memset(buffer, 0, sizeof(buffer));
 	}
 };
 
+/// <summary>
+/// Network controller contains logic for connectivity. The concept is to have a controller object
+/// that is configurable. Firstly, the connection establishment mechanism is modular and allow each
+/// implementation to spefify how connections are done. Second concept is to have a configuration
+/// which is used to specify how the network should be controlled. The final concept implemented
+/// is that there is no listener. Instead, there is a threadsafe queue that stores messages received
+/// and this allows consumers to read these messages and quicker than looping through a list of
+/// event listeners.
+/// </summary>
 class NetworkController
 {
 private:
@@ -48,6 +58,8 @@ private:
 	std::mutex mx;
     std::mutex addMx;
     std::mutex peerMx;
+
+    std::atomic<std::queue<std::byte[]>> messageQueue;
 
     bool isAlive = false;
 

@@ -1,4 +1,5 @@
 #include "ResourceController.h"
+#include "Utils.h"
 
 ResourceController::ResourceController()
 {
@@ -35,8 +36,15 @@ const Config& const ResourceController::LoadConfig(const std::string& pFilename)
 			// Parse key-value pairs
 			size_t equalsPos = line.find('=');
 			if (equalsPos != std::string::npos) {
-				const std::string key = line.substr(0, equalsPos);
+				std::string key =line.substr(0, equalsPos);
 				std::string value = line.substr(equalsPos + 1);
+
+				// If the key is empty, skip this line
+				Utils::TrimString(key);
+				Utils::TrimString(value);
+				if (key.empty()) {
+					continue;
+				}
 
 
 				if (currentSection == "peers") {
@@ -62,7 +70,6 @@ const Config& const ResourceController::LoadConfig(const std::string& pFilename)
 
 	mConfig = std::make_shared<Config>(iniData);
 	return iniData;
-
 }
 //
 //const TextureObject* const ResourceController::LoadTexture(const Renderer* const pRenderer, const std::wstring& pFilename)

@@ -17,6 +17,8 @@ struct Peer{
 
 struct Config {
 	std::map<std::string, Peer>	peers;
+	// This is the port used by a running instance of the application
+	// for networking.
 	u_short						port;
 };
 
@@ -44,6 +46,8 @@ public:
 			// Logic from Stackoverflow: https://stackoverflow.com/a/15916732
 			char* buf = nullptr;
 			size_t sz = 0;
+			// If a config file path is specified in the environment variable, use it.
+			// Otherwise, we fallback to using the config file in the application directory.
 			if (_dupenv_s(&buf, &sz, CONFIG_ENV_VAR) == 0 && buf != nullptr)
 			{
 				LoadConfig(buf);

@@ -1,24 +1,5 @@
 #include "Thread.h"
 
-Thread::Thread()
-	:mTask(nullptr), mNeedsTask(true)
-{
-	isAlive = true;
-	Start();
-}
-
-
-Thread::~Thread()
-{
-	isAlive = false;
-	mThread.detach();
-}
-
-void Thread::Start()
-{
-	mThread = std::thread([](Thread* thread) { thread->Run(); }, this);
-}
-
 void Thread::SetTask(Task* pTask)
 {
 	mTask = pTask;
@@ -27,10 +8,24 @@ void Thread::SetTask(Task* pTask)
 
 void Thread::Run()
 {
-	using namespace std::chrono_literals;
+	std::mutex mutex;
 
 	while (isAlive)
 	{
+		std::unique_lock<std::mutex> lock;
+		condition.wait(lock, [this] {
+			// If we have a signal to exit, we should stop waiting
+			if (!isAlive) {
+				return true;
+			}
+
+			// When there is a task, we will exit the wait.
+			return mTask != nullptr;
+			});
+
+		lock.unlock();
+
+		// Since we have a task, we will process it.
 		if (mTask)
 		{
 			SetThreadAffinity(mTask->TaskType());
@@ -39,7 +34,6 @@ void Thread::Run()
 			mTask = nullptr;
 			mNeedsTask = true;
 		}
-		std::this_thread::sleep_for(1s);
 	}
 }
 

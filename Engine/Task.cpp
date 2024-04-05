@@ -10,8 +10,10 @@ void Task::Run()
 		return;
 	}
 
+	std::cout << "Started running task: " << mTag;
 	mFunction();
 	mIsDone = true;
+	std::cout << "Finished running task: " << mTag;
 }
 
 const TaskType& Task::TaskType()
