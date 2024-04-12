@@ -91,6 +91,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>BUILD_OPENGL;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -120,6 +121,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>BUILD_DIRECTX;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -137,6 +139,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>BUILD_OPENGL;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -146,6 +149,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Colour.cpp" />
+    <ClCompile Include="Connection.cpp" />
+    <ClCompile Include="ConnectionMessage.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectComponent.cpp" />
@@ -158,7 +163,6 @@
     <ClCompile Include="MultiMesh.cpp" />
     <ClCompile Include="NetworkController.cpp" />
     <ClCompile Include="NetworkMessage.cpp" />
-    <ClCompile Include="ObserverSubject.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Renderer_DX.cpp" />
@@ -166,13 +170,13 @@
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="ResourceController.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="ScriptingController.cpp" />
+    <ClCompile Include="SceneController.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderObject_GL.cpp" />
     <ClCompile Include="ShaderProgram_GL.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="Task.cpp" />
+    <ClCompile Include="TCPConnection.cpp" />
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="ThreadController.cpp" />
     <ClCompile Include="VBO.cpp" />
@@ -185,9 +189,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Colour.h" />
+    <ClInclude Include="Connection.h" />
+    <ClInclude Include="ConnectionMessage.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectComponent.h" />
+    <ClInclude Include="TCPConnection.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Hud.h" />
     <ClInclude Include="InputController.h" />
@@ -209,8 +216,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceController.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="ScriptingController.h" />
+    <ClInclude Include="SceneController.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderObject_GL.h" />
     <ClInclude Include="ShaderProgram_GL.h" />

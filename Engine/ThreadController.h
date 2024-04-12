@@ -14,6 +14,16 @@
 /// of 4 will capture all logical processors in the 2 cores (0, 1, 2, 3). Thread
 /// affinity can be used to specify what particular processor we want a thread to
 /// work on.
+/// 
+/// An alternative would be to use IO completion ports:
+/// https://learn.microsoft.com/en-us/windows/win32/fileio/i-o-completion-ports,
+///  but that defeats the requirement for this software to control the frequency and
+/// affinity of the threads.
+/// 
+/// [EDIT]: Upon further research, it appears that using IOCP might work better while
+/// fulfilling the requirements of the application, but that implementation can be
+/// done in a separate class or a subclass. For this version of the application, we
+/// will not be using IOCP.
 /// </summary>
 class ThreadController
 {

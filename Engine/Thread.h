@@ -26,7 +26,11 @@ public:
 	{
 		isAlive = true;
 		mThread = std::thread([](Thread* thread) { thread->Run(); }, this);
-		std::cout << "Created new thread: " << mThread.get_id();
+
+		std::stringstream s;
+		s << "Created new thread: " << mThread.get_id() << std::endl;
+		auto ss = s.str();
+		OutputDebugString(std::wstring(ss.begin(), ss.end()).c_str());
 	}
 
 	~Thread()

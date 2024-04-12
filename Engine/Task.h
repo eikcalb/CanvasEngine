@@ -17,7 +17,7 @@ private:
 	std::function<void()> mFunction = nullptr;
 	std::string mTag;
 	TaskType mType;
-	bool mIsDone;
+	std::atomic<bool> mIsDone;
 
 protected:
 	void Run();
