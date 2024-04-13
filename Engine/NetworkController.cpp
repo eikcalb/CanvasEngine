@@ -44,6 +44,11 @@ void NetworkController::HandleIncomingMessages()
 					// Since the memory is a single entity, if multiple threads access it,
 					// will it not control and handle all requests accordingly?
 					const auto& input = peer.second->Receive();
+					if (input.size() <= 0) {
+						OutputDebugString(L"Received an empty message");
+						return;
+					}
+
 					auto queue = messageQueue.load();
 					NetworkMessageInfo nmi = { peer.second->GetID(), input };
 					auto newMessage = std::make_shared<NetworkMessage>(nmi, EVENT_TYPE_NEW_MESSAGE);

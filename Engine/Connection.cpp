@@ -38,18 +38,15 @@ PeerDetails PeerDetails::fromSocketAddrInet(sockaddr_in* sockAdr) {
     return { port, std::string(ipBuffer) };
 }
 
-void Connection::Send(byte* data) {
+void Connection::Send(const std::vector<byte>& data) {
+	const char* buffer = reinterpret_cast<const char*>(data.data());
+	int length = static_cast<int>(data.size());
 
-		for (SOCKET peer : mPeers) {
-			OutputDebugString(L"Sending message!");
-			if (send(peer, message.c_str(), message.length(), 0) == SOCKET_ERROR) {
-				OutputDebugString(L"Send failed with ");
-				OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
-			}
-			else {
-				OutputDebugString(L"Send succeeded!");
-			}
-		}
+	// Send data over the socket
+	if (send(socket, buffer, length, 0) == SOCKET_ERROR) {
+		// Handle send error
+		OutputDebugString(L"Send failed with ");
+		OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
 	}
 }
 

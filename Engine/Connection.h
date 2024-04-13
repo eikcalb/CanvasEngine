@@ -178,7 +178,7 @@ public:
 	/// 
 	/// This concept was chosen in order to create an efficient near-realtime system.
 	/// </summary>
-	void Send(byte* data);
+	void Send(const std::vector<byte>& data);
 
 protected:
 	
