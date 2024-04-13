@@ -48,8 +48,8 @@ protected:
 	ConnectionValidator validator;
 
 public:
-	static std::string EVENT_TYPE_STARTED;
-	static std::string EVENT_TYPE_NEW_CONNECTION;
+	static const std::string EVENT_TYPE_STARTED;
+	static const std::string EVENT_TYPE_NEW_CONNECTION;
 
 public:
 	ConnectionStrategy() :started(false) {}
@@ -101,21 +101,25 @@ struct CommunicationConfig {
 /// Ideally, this class should be able to handlevarious network configurations
 /// as it's sole responsibility is to send and receive data. Protocol specific
 /// details should be handled in the `ConnectionStrategy`.
+/// 
+/// This class allows for fault tolerance by possibly retrying requests that are
+/// out of order.
 /// </summary>
 class Connection : ObserverSubject
 {
 	// This will indicate the message sequence count and is used to help order
 	// the messages received by this connection.
-	u_long sequenceCount = 0;
+	std::atomic_ulong sequenceCount = 0;
 	byte buffer[BUFFER_SIZE];
 	/// <summary>
 	/// This is the socket associated with a connection.
 	/// </summary>
 	SOCKET socket;
+
 	std::shared_ptr<PeerDetails> info;
 
 public:
-	unsigned int bufferLength = 0;
+	static const byte SEPARATOR = '\n';
 
 	Connection() = default;
 
@@ -125,6 +129,18 @@ public:
 	}
 
 	~Connection() {
+		Disconnect();
+	}
+
+	inline const std::string GetID() const { return info->id + ":" + std::to_string(info->port); }
+	const SOCKET& GetSocket() const { return socket; }
+
+	inline void Disconnect() {
+		if (socket == INVALID_SOCKET) {
+			// Probably already disconnected.
+			return;
+		}
+
 		auto shutdownResult = shutdown(socket, SD_BOTH);
 		if (shutdownResult == SOCKET_ERROR) {
 			OutputDebugString(L"Failed to shutdown socket.");
@@ -132,13 +148,63 @@ public:
 
 		closesocket(socket);
 		socket = INVALID_SOCKET;
+		info.reset();
 
 		OutputDebugString(L"Destroyed connection: ID_");
 	}
 
-	inline std::string GetID() { return info->id + ":" + std::to_string(info->port); }
+	/// <summary>
+	/// Receive an incoming message from the associated socket. This works by calling `recv`
+	/// in a loop until there is no data left. We will make best effort to receive complete
+	/// input over the wire, but immediately the end of a message is received, we return
+	/// that message. This leaves a possibility for partial messages to be retained in the
+	/// buffer when the last message was complete, but contains some bytes for the next
+	/// message.In this scenario, it is up to users to parse these network messages and identify
+	/// the separator.
+	/// 
+	/// Implementers may extend this class and provide custom logic for reading
+	/// messages over the socket connection (IOCP?). Alternatively, implementers may decide
+	/// to only overwrite the `ParseMessage` function and handle the buffer content. In this
+	/// scenario, the implementer should return `true` when done and is a signal to allow the
+	/// application exit the `Receive` loop.
+	/// </summary>
+	virtual const std::vector<byte>& Receive();
+	/// <summary>
+	/// Sends a message to the connection. This is a fire and forget implementation.
+	/// Errors will be communicated, but this connection will not handle the errors
+	/// and will not attempt to retry sending the data provided. TCP is a good protocol
+	/// as it has a guarantee of delivery, unlike UDP. For UDP, the caller is responsible
+	/// for handling errors and retrying a send if necessary.
+	/// 
+	/// This concept was chosen in order to create an efficient near-realtime system.
+	/// </summary>
+	void Send(byte* data);
 
-	byte* Receive();
-	void Send(byte data[]);
+protected:
+	
+	/// <summary>
+	/// Parses the connection buffer and returns `true` to make the assumption that the
+	/// complete message has been parsed, preventing the function from being called again
+	/// if there is no guarantee that new data will be fetched for the new call.
+	/// 
+	/// By default, this will parse messages in the buffer by reading the buffer until there
+	/// is nothing left to be read without blocking the socket. The application aims to not
+	/// retrieve incomplete messages, hence it will continue reading messages until there
+	/// is nothing left to be read.
+	/// </summary>
+	virtual const bool ParseMessage(const int receiveCount, std::vector<byte>& bytes) {
+		// Loop through buffer and populate the `bytes` result.
+		for (auto i = 0; i < receiveCount; i++) {
+			bytes.emplace_back(buffer[i]);
+		}
+
+		// Here we are not doing anything complicated. Instead, we are just converting
+		// the byte sequence to a vector. this vector will be the messaqge received and
+		// the application should not expect more messages.
+		//
+		// This is a simple implementation. If the intention is to confirm messages are
+		// complete, then the buffer could be checked for a terminator and ask for a fresh
+		// buffer.
+		return true;
+	}
 };
-

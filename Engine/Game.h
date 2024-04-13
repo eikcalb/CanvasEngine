@@ -47,7 +47,7 @@ protected:
 	RenderSystem					_renderSystem;		// To handle rendering
 
 	// Scene Manager
-	SceneManager					_sceneManager;
+	SceneController					_sceneManager;
 
 	// Structors
 public:

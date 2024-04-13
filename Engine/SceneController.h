@@ -9,7 +9,7 @@ class GameObject;
 class Message;
 
 /// Handles the Scenes for a game
-class SceneManager
+class SceneController
 {
 	// Constants
 public:
@@ -21,8 +21,8 @@ protected:
 
 	// Structors
 public:
-	SceneManager(Game* _game);
-	~SceneManager();
+	SceneController(Game* _game);
+	~SceneController();
 
 
 	// Gets/Sets

@@ -1,5 +1,13 @@
 #include "Connection.h"
 
+#pragma region Static constant declarations
+
+const std::string ConnectionStrategy::EVENT_TYPE_STARTED = "network_started";
+const std::string ConnectionStrategy::EVENT_TYPE_NEW_CONNECTION = "network_new_connection";
+
+#pragma endregion
+
+
 PeerDetails PeerDetails::fromAddrInfo(addrinfo* adr) {
     std::string ipAddress;
     unsigned short port = 0;
@@ -30,10 +38,51 @@ PeerDetails PeerDetails::fromSocketAddrInet(sockaddr_in* sockAdr) {
     return { port, std::string(ipBuffer) };
 }
 
-std::string ConnectionStrategy::EVENT_TYPE_STARTED = "network_started";
-std::string ConnectionStrategy::EVENT_TYPE_NEW_CONNECTION = "network_new_connection";
+void Connection::Send(byte* data) {
 
+		for (SOCKET peer : mPeers) {
+			OutputDebugString(L"Sending message!");
+			if (send(peer, message.c_str(), message.length(), 0) == SOCKET_ERROR) {
+				OutputDebugString(L"Send failed with ");
+				OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
+			}
+			else {
+				OutputDebugString(L"Send succeeded!");
+			}
+		}
+	}
+}
 
-void Connection::Send(byte data[]) {
+const std::vector<byte>& Connection::Receive() {
+	bool done = false;
 
+	std::vector<byte> result{};
+	do {
+		const auto receiveCount = recv(socket, reinterpret_cast<char*>(buffer), sizeof(buffer), 0);
+		if (receiveCount == SOCKET_ERROR)
+		{
+			auto errorCode = WSAGetLastError();
+			if (errorCode != WSAEWOULDBLOCK)
+			{
+				// Error or connection closed ungracefully
+				OutputDebugString(L"Receive failed with ");
+				OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
+				throw std::exception("Connection error with peer!");
+			}
+		}
+		else if (receiveCount == 0)
+		{
+			// Connection closed by the peer
+			OutputDebugString(L"Connection gracefully closed with peer.");
+			done = true;
+			break;
+		}
+
+		sequenceCount++;
+		done = !ParseMessage(receiveCount, result);
+	} while (!done);
+
+	ZeroMemory(buffer, BUFFER_SIZE);
+
+	return result;
 }

@@ -5,14 +5,14 @@
 // Structors
 /******************************************************************************************************************/
 
-SceneManager::SceneManager(Game* game)
+SceneController::SceneController(Game* game)
 	: _game(game)
 {
 }
 
 /******************************************************************************************************************/
 
-SceneManager::~SceneManager()
+SceneController::~SceneController()
 {
 }
 
@@ -20,7 +20,7 @@ SceneManager::~SceneManager()
 // Functions
 /******************************************************************************************************************/
 
-void SceneManager::AddGameObject(GameObject* obj)
+void SceneController::AddGameObject(GameObject* obj)
 {
 	Scene* currentScene = GetCurrentScene();
 	if (currentScene)
@@ -31,7 +31,7 @@ void SceneManager::AddGameObject(GameObject* obj)
 
 /******************************************************************************************************************/
 
-std::vector<GameObject*>& SceneManager::GetGameObjects()
+std::vector<GameObject*>& SceneController::GetGameObjects()
 {
 	Scene* currentScene = GetCurrentScene();
 	if (currentScene)
@@ -44,7 +44,7 @@ std::vector<GameObject*>& SceneManager::GetGameObjects()
 
 /******************************************************************************************************************/
 
-void SceneManager::OnKeyboard(int key, bool down)
+void SceneController::OnKeyboard(int key, bool down)
 {
 	Scene* currentScene = GetCurrentScene();
 	if (currentScene)
@@ -55,7 +55,7 @@ void SceneManager::OnKeyboard(int key, bool down)
 
 /******************************************************************************************************************/
 
-void SceneManager::OnMessage(Message* msg)
+void SceneController::OnMessage(Message* msg)
 {
 	Scene* currentScene = GetCurrentScene();
 	if (currentScene)
@@ -67,7 +67,7 @@ void SceneManager::OnMessage(Message* msg)
 /******************************************************************************************************************/
 
 /// Update current scene
-void SceneManager::Update(double deltaTime)
+void SceneController::Update(double deltaTime)
 {
 	Scene* currentScene = GetCurrentScene();
 	if (currentScene)
@@ -79,7 +79,7 @@ void SceneManager::Update(double deltaTime)
 /******************************************************************************************************************/
 
 /// Render current scene
-void SceneManager::Render(RenderSystem* renderer)
+void SceneController::Render(RenderSystem* renderer)
 {
 	Scene* currentScene = GetCurrentScene();
 	if (currentScene)
@@ -90,7 +90,7 @@ void SceneManager::Render(RenderSystem* renderer)
 
 /******************************************************************************************************************/
 
-void SceneManager::PushScene(Scene* s)
+void SceneController::PushScene(Scene* s)
 {
 	_scenes.push(s);
 	s->SetSceneManager(this);

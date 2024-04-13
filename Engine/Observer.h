@@ -1,7 +1,5 @@
 #pragma once
 
-class Message;
-
 /// <summary>
 /// Abstract owner class for the Observer pattern
 /// This class should be inherited by objects that want to observe ObserverSubjects
@@ -13,6 +11,6 @@ class Observer
 {
 public:
 	/// Receive a message (called when notified of a message by the subject)
-	virtual void OnMessage(Message*) = 0;
+	virtual void OnMessage(Message<std::any>*) = 0;
 };
 

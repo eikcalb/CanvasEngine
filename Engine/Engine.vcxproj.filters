@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="Message.cpp" />
     <ClCompile Include="Colour.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -62,9 +61,6 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Pattern Classes</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>Pattern Classes</Filter>
-    </ClCompile>
     <ClCompile Include="MultiMesh.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -98,12 +94,24 @@
     <ClCompile Include="NetworkMessage.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
+    <ClCompile Include="SceneController.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="Connection.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPConnection.cpp" />
+    <ClCompile Include="Message.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="ConnectionMessage.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="MathsHelper.h" />
-    <ClInclude Include="Message.h" />
     <ClInclude Include="Colour.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -162,9 +170,6 @@
     <ClInclude Include="RenderSystem.h">
       <Filter>Systems</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>Pattern Classes</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Pattern Classes</Filter>
     </ClInclude>
@@ -208,6 +213,19 @@
     </ClInclude>
     <ClInclude Include="ObserverSubject.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneController.h">
+      <Filter>Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="Connection.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPConnection.h" />
+    <ClInclude Include="Message.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="ConnectionMessage.h">
+      <Filter>Messages</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

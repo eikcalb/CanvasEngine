@@ -4,14 +4,14 @@
 // Structors
 /******************************************************************************************************************/
 template <typename T>
-MessageBase<T>::MessageBase(std::string type)
+Message<T>::Message(std::string type)
 	: _type(type)
 {
 
 }
 
 template <typename T>
-MessageBase<T>::MessageBase(T data, std::string type)
+Message<T>::Message(T data, std::string type)
 	: _data(data), _type(type)
 {
 

@@ -3,7 +3,7 @@
 #include <any>
 
 template <typename T>
-class MessageBase
+class Message
 {
 	// Data
 protected:
@@ -12,17 +12,19 @@ protected:
 
 	// Structors
 public:
-	MessageBase(std::string type);
-	MessageBase(T data, std::string type);
-	virtual ~MessageBase() = default;
+	Message(std::string type);
+	Message(T data, std::string type);
+	virtual ~Message() = default;
 
 	T getData() { return _data };
 
 	// Gets/Sets
 public:
-	std::string GetMessageType()		const { return _type; }
+	std::string GetMessageType() const { return _type; }
 };
 
-class Message: MessageBase<std::any>
-{
+class BareMessage : public Message<std::any> {
+
+public:
+	BareMessage(std::string type) : Message(type) {};
 };

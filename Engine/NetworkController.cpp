@@ -1,241 +1,202 @@
 #include "NetworkController.h"
 
-NetworkController::NetworkController()
-	:
-	peerBuffers(),
-	messages(),
-	backlog(),
-	mListenSocket(),
-	mListenAddress()
+const std::string NetworkController::EVENT_TYPE_NEW_MESSAGE = "network_controller_new_message";
+
+void NetworkController::HandleIncomingMessages()
 {
-	mInputController = InputController::Instance();
-	mThreadController = ThreadController::Instance();
-	mResourceController = ResourceController::Instance();
+	// Here we will select the peer sockets and read their data individually.
+	fd_set readSockets = {};
 
-	isAlive = true;
+	do {
+		if (PeerCount() < 0) {
+			OutputDebugString(L"No peer connected yet!");
+			continue;
+		}
 
-	mPeers.reserve(5);
-}
+		FD_ZERO(&readSockets);
 
-void NetworkController::HandleIncomingMessage(const SOCKET& peerSocket)
-{
-	PeerBuffer& peerBuffer = peerBuffers[peerSocket];
-	int			bytesReceived = 0;
+		for (const auto& peer : peers) {
+			// Populate the file descriptor list.
+			FD_SET(peer.second->GetSocket(), &readSockets);
+		}
 
-	// Receive the incoming message
-	char		buffer[BUFFER_SIZE];
-	bytesReceived = recv(peerSocket, buffer, sizeof(buffer), 0);
-	if (bytesReceived == SOCKET_ERROR)
-	{
-		int errorCode = WSAGetLastError();
-		if (errorCode != WSAEWOULDBLOCK)
+		int socketCount = select(-1, &readSockets, nullptr, nullptr, nullptr);
+		if (socketCount == SOCKET_ERROR)
 		{
-			// Error or connection closed by the peer
-			OutputDebugString(L"Receive failed with ");
+			OutputDebugString(L"Failed to run select()");
 			OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
-			closesocket(peerSocket);
-			peerBuffers.erase(peerSocket);
-			return;
+			// If the listening socket failed to read, it is probably
+			// a problem of the underlying socket and it should be
+			// handled by the application.
+			// Further processing of the loop or future loops would make
+			// no sense.
+			throw std::runtime_error("Failed to read incoming message!");
 		}
-	}
-	else if (bytesReceived == 0)
-	{
-		// Error or connection closed by the peer
-		OutputDebugString(L"Receive failed with ");
-		OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
-		closesocket(peerSocket);
-		peerBuffers.erase(peerSocket);
-		return;
-	}
 
-	// Append the received data to the buffer
-	memcpy(peerBuffer.buffer + peerBuffer.length, buffer, bytesReceived);
-	peerBuffer.length += bytesReceived;
-
-	// This will read messages in the socket until a terminator is encountered.
-	// That will identify the end of a message stream and allow us start accepting
-	// a "new" line of messages.
-	size_t pos = 0;
-	while (pos < peerBuffer.length) {
-		// Check if we have a complete message in the buffer
-		size_t messageEnd = std::string::npos;
-		for (size_t i = pos; i < bytesReceived; ++i)
-		{
-			if (buffer[i] == '\n')
-			{
-				messageEnd = i;
-				break;
+		for (auto peer : GetPeerMap()) {
+			if (FD_ISSET(peer.second->GetSocket(), &readSockets)) {
+				mThreadController->AddTask([&] {
+					// This is an atomic operation (or probably not, looks unnecessary):
+					// https://studiofreya.com/cpp/volatile-and-atomic-variables-in-cpp/.
+					// TODO: Is this really required???
+					// Since only inserts are occuring, will the memory not be expanded
+					// when accessed at the same time?
+					// Since the memory is a single entity, if multiple threads access it,
+					// will it not control and handle all requests accordingly?
+					const auto& input = peer.second->Receive();
+					auto queue = messageQueue.load();
+					NetworkMessageInfo nmi = { peer.second->GetID(), input };
+					auto newMessage = std::make_shared<NetworkMessage>(nmi, EVENT_TYPE_NEW_MESSAGE);
+					queue.push(newMessage);
+					messageQueue.store(queue);
+					},
+					TaskType::NETWORK, "NC.HandleIncomingMessages receive message"
+				);
 			}
 		}
 
-		if (messageEnd != std::string::npos) {
-			// Extract the complete message
-			// This gets the message between the start of the buffer and until the end.
-			// `pos` here would be `0` for the first message in the buffer, if there are
-			// more messages in the buffer then `pos` will be set to the byte just after
-			// the previous message.
-			std::string message(peerBuffer.buffer + pos, messageEnd - pos);
-			{
-				std::lock_guard<std::mutex> lock(mx);
-				messages.push(message);
-				// Broadcast the message received. This is to allow consumers immediately get
-				// access to messages available, instead of querying the message queue.
-				mInputController->BroadcastMessage(new NetworkMessage(message));
-			}
-
-			// Update the position for the next message
-			pos = messageEnd + 1;
-		}
-		else
-		{
-			// This runs when the end of a message was not found. This could indicate a longer
-			// message or the second part of a previously parsed message. In this scenario,
-			// we want to parse the message and continue the loop until we get to it's end.
-			size_t remainingBytes = peerBuffer.length - pos;
-			memmove(peerBuffer.buffer, peerBuffer.buffer + pos, remainingBytes);
-			peerBuffer.length = remainingBytes;
-			break;
-		}
-	}
+	} while (isAlive);
 }
 
-void NetworkController::SendMessages(const std::queue<std::string> queue)
-{
-	std::queue<std::string> tempQueue = queue;
-	while (!tempQueue.empty())
-	{
-		const std::string& message = queue.front();
-		tempQueue.pop();
+void NetworkController::ProcessMessages() {
+	// This runs asynchronously, so we will check for new messages in each
+	// queue and process those messages.
+	do {
+		if (sendQueue.load().size() > 0) {
+			mThreadController->AddTask([&] {
+				auto queue = sendQueue.load();
+				OutputDebugString(L"Sending message to peers!");
 
-		for (SOCKET peer : mPeers) {
-			OutputDebugString(L"Sending message!");
-			if (send(peer, message.c_str(), message.length(), 0) == SOCKET_ERROR) {
-				OutputDebugString(L"Send failed with ");
-				OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
-			}
-			else {
+				while (!queue.empty()) {
+					const auto& message = queue.front();
+					for (auto& peerEntry : GetPeerMap()) {
+						peerEntry.second->Send(message);
+					}
+					queue.pop();
+				}
+
 				OutputDebugString(L"Send succeeded!");
-			}
-		}
-	}
-}
 
-void NetworkController::FindPeers()
-{
-	std::shared_ptr<Config>		config = mResourceController->getConfig();
-	std::map<std::string, Peer>	peers;
-
-	sockaddr_in address{};
-	address.sin_family = AF_INET;
-
-	for (auto const& peer : peers)
-	{
-		address.sin_port = htons(peer.second.port);
-		inet_pton(address.sin_family, peer.second.ipAddress.c_str(), &address.sin_addr);
-		if (inet_pton(AF_INET, peer.second.ipAddress.c_str(), &address.sin_addr) <= 0) {
-			OutputDebugString(L"Invalid IP address.");
-			return;
+				sendQueue.store(queue);
+				},
+				TaskType::NETWORK, "NC.ProcessMessages:Handle outgoing messages!"
+			);
 		}
 
-		SOCKET peerSocket = socket(AF_INET, SOCK_STREAM, 0);
-		if (peerSocket == INVALID_SOCKET)
-		{
-			OutputDebugString(L"Failed to create socket ");
-			OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
+		if (messageQueue.load().size() > 0) {
+			mThreadController->AddTask([&] {
+				auto queue = messageQueue.load();
+
+				while (!queue.empty()) {
+					auto& message = queue.front();
+					BroadcastMessage(dynamic_cast<Message<std::any>*>(message.get()));
+					queue.pop();
+				}
+				},
+				TaskType::NETWORK, "NC.ProcessMessages:Handle incoming messages!"
+			);
 		}
-		else if (connect(peerSocket, (sockaddr*)&address, sizeof(address)) == SOCKET_ERROR)
-		{
-			OutputDebugString(L"Connecting to peer failed with ");
-			OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
-			closesocket(peerSocket);
-		}
-		else
-		{
-			{
-				std::lock_guard<std::mutex> lock(peerMx);
-				mPeers.push_back(peerSocket);
-				OutputDebugString(L"Connected to peer!");
-			}
-		}
-	}
+	} while (isAlive);
 }
 
-NetworkController::~NetworkController()
+void NetworkController::SendMessage(const std::vector<byte> message)
 {
-	isAlive = false;
-
-	for (SOCKET peerSocket : mPeers) {
-		closesocket(peerSocket);
+	OutputDebugString(L"Sending message to peers!");
+	for (auto& peerEntry : GetPeerMap()) {
+		peerEntry.second->Send(message);
 	}
-	OutputDebugString(L"Peers disconnected!");
-	peerBuffers.clear();
-
-	WSACleanup();
+	OutputDebugString(L"Send succeeded!");
 }
 
-void NetworkController::InitWinSock()
+void NetworkController::Start()
 {
-	WSADATA wsaData;
-	if (WSAStartup(MAKEWORD(2, 0), &wsaData) != 0)
-	{
-		OutputDebugString(L"Failed to initialize Winsock");
+	// Start the  network controller by connecting to peers and listening
+	// for messages.
+	// @PersistentThreadCost = 1
+	mThreadController->AddTask([&] {
+		connectionStrategy->Connect();
+		},
+		TaskType::NETWORK, "NC.Start:Connect to peers!"
+	);
+
+
+	// While we are connecting to peers, we will listen to the sockets and
+	// trigger the peer connections to read data.
+	// @PersistentThreadCost = 4
+	if (communicationConfig->promiscuous) {
+		OutputDebugString(L"Running in promiscuous mode!");
+
+		mThreadController->AddTask([&] {
+			connectionStrategy->Start();
+			},
+			TaskType::NETWORK, "NC.Start:Listen for new connections!"
+		);
 	}
 
-	FindPeers();
+	mThreadController->AddTask([&] {
+		HandleIncomingMessages();
+		},
+		TaskType::NETWORK, "NC.Start:Handle incoming messages!"
+	);
 
-	mListenAddress.sin_family = AF_INET;
-	mListenAddress.sin_port = htons(mResourceController->getConfig()->port);
-	mListenAddress.sin_addr.s_addr = INADDR_ANY;
-
-	//Create listening socket
-	mListenSocket = socket(AF_INET, SOCK_STREAM, 0);
-	if (mListenSocket == INVALID_SOCKET)
-	{
-		OutputDebugString(L"Failed to create listening socket ");
-		OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
-		WSACleanup();
-
-		throw std::exception("Failed to create listening socket");
-	}
-	else if (bind(mListenSocket, reinterpret_cast<sockaddr*>(&mListenAddress), sizeof(mListenAddress)) == SOCKET_ERROR)
-	{
-		OutputDebugString(L"Bind failed with ");
-		OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
-		closesocket(mListenSocket);
-		WSACleanup();
-		throw std::exception("Failed to bind socket");
-	}
-	else if (listen(mListenSocket, std::min<short>(SOMAXCONN, MAX_PEERS)) == SOCKET_ERROR)
-	{
-		OutputDebugString(L"Listen failed with ");
-		OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
-		throw std::exception("Socket failed to listen");
-	}
-	else
-	{
-		mThreadController->AddTask([this]() {this->ListenToPeer(); }, TaskType::NETWORK);
-		mThreadController->AddTask([this]() {this->ProcessBacklog(); }, TaskType::NETWORK);
-	}
+	mThreadController->AddTask([&] {
+		ProcessMessages();
+		},
+		TaskType::NETWORK, "NC.Start:Process messages!"
+	);
 }
 
-void NetworkController::AddMessage(const std::string& pMessage)
-{
-	std::lock_guard<std::mutex> lock(addMx);
-	backlog.push(pMessage + '\n');
-}
-
-std::queue<std::string> NetworkController::ReadMessages()
-{
-	//Swaps the queue with an empty queue to empty the current queue and returns the queue containing messages
-	std::queue<std::string> messages;
-	std::lock_guard<std::mutex> lock(mx);
-	this->messages.swap(messages);
-	return messages;
-}
+//std::queue<std::string> NetworkController::ReadMessages()
+//{
+//	//Swaps the queue with an empty queue to empty the current queue and returns the queue containing messages
+//	std::queue<std::string> messages;
+//	std::lock_guard<std::mutex> lock(mx);
+//	this->messages.swap(messages);
+//	return messages;
+//}
 
 int NetworkController::PeerCount()
 {
-	return mPeers.size();
+	return peers.size();
+}
+
+void NetworkController::OnMessage(Message<std::any>* msg) {
+	// When a message is received, we want to handle it here.
+	const auto& msgType = msg->GetMessageType();
+	if (msgType == ConnectionStrategy::EVENT_TYPE_NEW_CONNECTION) {
+		// A new connection has been made. Here we will add the connection
+		// to our peer list.
+		const auto& connMsg = reinterpret_cast<ConnectionMessage*>(msg);
+		if (!connMsg) {
+			OutputDebugString(L"Invalid peer connection received!");
+			return;
+		}
+
+		auto peer = connMsg->getData();
+		// We lock here to ensure that while reading the connected peer list,
+		// an update does not occur, thereby leading to inconsistent state.
+		std::lock_guard lock(peerMx);
+
+		if (PeerCount() > MAX_PEERS) {
+			OutputDebugString(L"Connection has reached capacity!");
+			peer.reset();
+		}
+
+		// Check if the peer already exists.
+		if (peers.count(peer->GetID()) > 0) {
+			OutputDebugString(L"Connection already exists!");
+			peer.reset();
+		}
+
+		// Set the socket to non-bloaking.
+		u_long mode = 1;
+		ioctlsocket(peer->GetSocket(), FIONBIO, &mode);
+
+		// We add the new peer to our list of peers.
+		// TODO: use WSAEventSelect to reset a blocking select and listen to this new peer.
+		OutputDebugString(L"New connection received!");
+		peers[peer->GetID()] = peer;
+	}
 }
 
 std::shared_ptr<NetworkController> NetworkController::Instance()

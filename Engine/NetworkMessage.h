@@ -2,13 +2,20 @@
 #include <memory>
 #include "Message.h"
 
-class NetworkMessage : public Message
-{
-protected:
-	// This is the raw network data
-	std::string raw;
-public:
-	NetworkMessage(std::string raw);
-	virtual ~NetworkMessage();
+struct NetworkMessageInfo {
+	std::string			peerID;
+	std::vector<byte>	message;
 };
 
+
+class NetworkMessage : public Message<std::shared_ptr<NetworkMessageInfo>>
+{
+protected:
+public:
+	NetworkMessage(std::shared_ptr<NetworkMessageInfo> details, std::string type)
+		: Message(details, type)
+	{
+
+	}
+	virtual ~NetworkMessage();
+};

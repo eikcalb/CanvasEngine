@@ -52,7 +52,7 @@ public:
 		}
 
 		started = true;
-		Message msg{ EVENT_TYPE_STARTED };
+		BareMessage msg{ EVENT_TYPE_STARTED };
 		this->BroadcastMessage(&msg);
 	}
 

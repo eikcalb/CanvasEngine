@@ -3,7 +3,7 @@
 
 class GameObject;
 class RenderSystem;
-class SceneManager;
+class SceneController;
 class Message;
 
 /// Represents an abstract scene, i.e. mode of the game
@@ -14,7 +14,7 @@ public:
 
 	// Data
 protected:
-	SceneManager*					_sceneManager;
+	SceneController*					_sceneManager;
 	std::vector<GameObject*>		_gameObjects;		// The list of game objects
 
 	// Structors
@@ -30,8 +30,8 @@ public:
 	std::vector<GameObject*>& GetGameObjects()			{ return _gameObjects; }
 	void AddGameObject(GameObject* obj)					{ _gameObjects.push_back(obj); }
 
-	void SetSceneManager(SceneManager* s)				{ _sceneManager = s; }
-	SceneManager* GetSceneManager()				const	{ return _sceneManager; }
+	void SetSceneManager(SceneController* s)				{ _sceneManager = s; }
+	SceneController* GetSceneManager()				const	{ return _sceneManager; }
 
 
 	// Functions

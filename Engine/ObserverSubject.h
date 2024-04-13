@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 
-class Message;
 class Observer;
 
 typedef std::map<std::string, std::vector<Observer&> > MessageListenerMap;
@@ -29,7 +28,7 @@ protected:
 	MessageListenerMap listeners = {};
 
 	// Message handler (called when message occurs)
-	void BroadcastMessage(Message* msg) {
+	void BroadcastMessage(Message<std::any>* msg) {
 		const auto msgListeners = listeners[msg->GetMessageType()];
 		for (Observer& listener : msgListeners) {
 			listener.OnMessage(msg);
