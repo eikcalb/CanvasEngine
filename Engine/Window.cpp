@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-Window*	Window::TheWindow = 0;
+std::shared_ptr<Window>	Window::TheWindow = NULL;
 
 /******************************************************************************************************************/
 
@@ -13,7 +13,7 @@ Window::Window(Game* game, int width, int height)
 		_height(height)
 {
 	// Set static singleton
-	TheWindow = this;
+	TheWindow = std::shared_ptr<Window>(this);
 
 	// Reset RNG
 	srand(time(NULL));
@@ -24,6 +24,8 @@ Window::Window(Game* game, int width, int height)
 
 Window::~Window()
 {
+	delete _game;
+	delete _renderer;
 }
 
 /******************************************************************************************************************/

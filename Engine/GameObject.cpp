@@ -1,6 +1,4 @@
 #include "GameObject.h"
-#include "GameObjectComponent.h"
-#include "Message.h"
 
 /******************************************************************************************************************/
 // Structors
@@ -27,38 +25,37 @@ GameObject::~GameObject()
 // Component Functions
 /******************************************************************************************************************/
 
-bool GameObject::AddComponent(GameObjectComponent* goc)
+bool GameObject::AddBehavior(std::shared_ptr<Behavior> b)
 {
-	if (_components.find(goc->GetComponentType()) != _components.end())
+	if (_behaviors.find(b->GetTag()) != _behaviors.end())
 	{
 		// Error - already have this component!
 		return false;
 	}
-	_components[goc->GetComponentType()] = goc;
+	_behaviors[b->GetTag()] = b;
 
 	return true;
 }
 
 /******************************************************************************************************************/
 
-bool GameObject::RemoveComponent(GameObjectComponent* goc)
+bool GameObject::RemoveBehavior(std::shared_ptr<Behavior> b)
 {
-	return RemoveComponent(goc->GetComponentType());
+	return RemoveBehavior(b->GetTag());
 }
 
 /******************************************************************************************************************/
 
-bool GameObject::RemoveComponent(std::string type)
+bool GameObject::RemoveBehavior(std::string tag)
 {
-	ComponentMapIterator i = _components.find(type);
-	if (i != _components.end())
+	auto i = _behaviors.find(tag);
+	if (i != _behaviors.end())
 	{
 		// Remove it
-		_components.erase(i);
+		_behaviors.erase(i);
 
 		// Delete it
-		i->second->End();
-		delete i->second;
+		i->second.reset();
 
 		return true;
 	}
@@ -69,10 +66,10 @@ bool GameObject::RemoveComponent(std::string type)
 
 /******************************************************************************************************************/
 
-GameObjectComponent* GameObject::GetComponent(std::string type)
+std::shared_ptr<Behavior> GameObject::GetBehavior(std::string tag)
 {
-	ComponentMapIterator i = _components.find(type);
-	if (i != _components.end())
+	auto i = _behaviors.find(tag);
+	if (i != _behaviors.end())
 	{
 		// Return it
 		return i->second;
@@ -83,47 +80,6 @@ GameObjectComponent* GameObject::GetComponent(std::string type)
 }
 
 /******************************************************************************************************************/
-
-void GameObject::RegisterListener(std::string msg, GameObjectComponent* goc)
-{
-	MessageListenerMapIterator i = _messageListeners.find(msg);
-
-	// Make entry and add listener
-	if (i == _messageListeners.end())
-	{
-		_messageListeners[msg] = std::vector<Observer*>();
-	}
-		// Already have list; just add
-		_messageListeners[msg].push_back(goc);
-	
-}
-
-/******************************************************************************************************************/
-
-void GameObject::UnregisterListener(std::string msg, GameObjectComponent* goc)
-{
-	MessageListenerMapIterator i = _messageListeners.find(msg);
-
-	// Exists?
-	if (i != _messageListeners.end())
-	{
-		std::vector<Observer*>& list = i->second;
-
-		for (ObserverListIterator j = list.begin();
-			j != list.end();
-			++j)
-		{
-			if (*j == goc)
-			{
-				// Found it - so remove the listener
-				list.erase(j);
-				break;
-			}
-		}
-	}
-}
-
-/******************************************************************************************************************/
 // General Functions
 /******************************************************************************************************************/
 
@@ -131,12 +87,8 @@ void GameObject::UnregisterListener(std::string msg, GameObjectComponent* goc)
 void GameObject::Start()
 {
 	// Initialise all objects
-	for (ComponentMapIterator i = _components.begin();
-		i != _components.end();
-		++i)
-	{
-		i->second->Start();
-	}
+	//for (auto& i : _behaviors)
+	//{}
 }
 
 /******************************************************************************************************************/
@@ -145,54 +97,28 @@ void GameObject::Start()
 void GameObject::Update(double deltaTime)
 {
 	// Update all objects
-	for (ComponentMapIterator i = _components.begin();
-		i != _components.end();
-		++i)
+	for (auto& i : _behaviors)
 	{
-		i->second->Update(deltaTime);
+		i.second->Update(deltaTime);
 	}
 }
 
 /******************************************************************************************************************/
 
 // Message handler (called when message occurs)
-void GameObject::OnMessage(Message* msg)
+void GameObject::OnMessage(Message<std::any>* msg)
 {
-	// Dispatch message to all registered listeners
-	MessageListenerMapIterator i = _messageListeners.find(msg->GetMessageType());
-	
-	// If we have registered listeners for this message
-	if (i != _messageListeners.end())
-	{
-		std::vector<Observer*>& list = i->second;
-
-		for (ObserverListIterator j = list.begin();
-			j != list.end();
-			++j)
-		{
-			// Send listener the message
-			(*j)->OnMessage(msg);
-		}
-	}
+	// Mock implementation of a message listener.
+	// Subclasses should implement specific listener logic.
 }
 
 /******************************************************************************************************************/
 
 // Shutdown function -- called when object is destroyed (i.e., from destructor)
 void GameObject::End()
-{ 
-	// End all objects
-	for (ComponentMapIterator i = _components.begin();
-		i != _components.end();
-		++i)
-	{
-		GameObjectComponent* component = i->second;
-		component->End();
-		delete component;
-	}
-
-	// Clear list
-	_components.clear();
+{
+	// Clear behavior list
+	_behaviors.clear();
 }
 
 /******************************************************************************************************************/

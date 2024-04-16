@@ -2,22 +2,26 @@
 #include "Message.h"
 #include <GL/GLM/glm.hpp>
 
-class MouseInputMessage: public Message
+struct MouseMessageInfo {
+	glm::vec2			pos;
+	bool				clicked;
+};
+
+class MouseInputMessage: public Message<std::shared_ptr<MouseMessageInfo>>
 {
 	// Data
 protected:
-	glm::vec2	_pos;
-	bool		_clicked;
-
 	// Structors
 public:
-	MouseInputMessage(glm::vec2 pos, bool clicked);
-	virtual ~MouseInputMessage();
+	MouseInputMessage(std::shared_ptr<MouseMessageInfo> data)
+		: Message(data, "mouseinput")
+	{
 
+	}
 
 	// Gets/Sets
 public:
-	glm::vec2	GetPosition()	const { return _pos; }
-	bool		GetClicked()		const { return _clicked; }
+	glm::vec2	GetPosition()	const { return _data->pos; }
+	bool		GetClicked()		const { return _data->clicked; }
 };
 

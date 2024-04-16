@@ -148,12 +148,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Behavior.cpp" />
     <ClCompile Include="Colour.cpp" />
     <ClCompile Include="Connection.cpp" />
     <ClCompile Include="ConnectionMessage.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GameObjectComponent.cpp" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="InputController.cpp" />
     <ClCompile Include="KeyPressMessage.cpp" />
@@ -163,7 +163,6 @@
     <ClCompile Include="MultiMesh.cpp" />
     <ClCompile Include="NetworkController.cpp" />
     <ClCompile Include="NetworkMessage.cpp" />
-    <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Renderer_DX.cpp" />
     <ClCompile Include="Renderer_GL.cpp" />
@@ -174,6 +173,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderObject_GL.cpp" />
     <ClCompile Include="ShaderProgram_GL.cpp" />
+    <ClCompile Include="types.h" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="Task.cpp" />
     <ClCompile Include="TCPConnection.cpp" />
@@ -188,12 +188,13 @@
     <ClCompile Include="Window_GL.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Behavior.h" />
     <ClInclude Include="Colour.h" />
     <ClInclude Include="Connection.h" />
     <ClInclude Include="ConnectionMessage.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GameObjectComponent.h" />
+    <ClInclude Include="System.h" />
     <ClInclude Include="TCPConnection.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Hud.h" />
@@ -208,7 +209,6 @@
     <ClInclude Include="NetworkMessage.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="ObserverSubject.h" />
-    <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Renderer_DX.h" />
     <ClInclude Include="Renderer_GL.h" />
@@ -220,7 +220,6 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderObject_GL.h" />
     <ClInclude Include="ShaderProgram_GL.h" />
-    <ClInclude Include="System.h" />
     <ClInclude Include="Task.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="ThreadController.h" />

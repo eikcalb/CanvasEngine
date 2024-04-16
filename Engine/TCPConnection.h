@@ -161,8 +161,8 @@ public:
 				throw ex;
 			}
 
-			ConnectionMessage msg{ conn, EVENT_TYPE_NEW_CONNECTION };
-			BroadcastMessage(&msg);
+			ConnectionMessage* msg = new ConnectionMessage(conn, EVENT_TYPE_NEW_CONNECTION);
+			BroadcastMessage(msg);
 
 			freeaddrinfo(result);
 			freeaddrinfo(ptr);

@@ -1,4 +1,5 @@
 #pragma once
+#include <any>
 
 /// <summary>
 /// Abstract owner class for the Observer pattern

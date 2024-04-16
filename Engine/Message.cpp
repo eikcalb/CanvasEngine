@@ -14,7 +14,8 @@ template <typename T>
 Message<T>::Message(T data, std::string type)
 	: _data(data), _type(type)
 {
-
+	const auto clock = std::chrono::system_clock::now();
+	timestamp = std::chrono::duration_cast<std::chrono::seconds>(clock.time_since_epoch()).count()
 }
 
 /******************************************************************************************************************/

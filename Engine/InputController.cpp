@@ -2,32 +2,12 @@
 #include "KeyPressMessage.h"
 
 
-InputController::InputController() : listeners()
+InputController::InputController()
 {
 	for (int i = 0; i <= static_cast<int>(KEYS::OemClear); ++i)
 	{
 		KEYS key = static_cast<KEYS>(i);
 		mKeyStates[key] = false;
-	}
-}
-
-InputController::~InputController()
-{
-}
-
-void InputController::AddObserver(Observer* o)
-{
-	listeners.push_back(o);
-}
-
-void InputController::BroadcastMessage(Message* msg)
-{
-	if (auto keyMsg = dynamic_cast<KeyPressMessage*>(msg)) {
-
-	}
-	for (auto const& it : listeners)
-	{
-		it->OnMessage(msg);
 	}
 }
 

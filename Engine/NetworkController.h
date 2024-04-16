@@ -13,6 +13,7 @@
 #include "ConnectionMessage.h"
 #include "InputController.h"
 #include "NetworkMessage.h"
+#include "Observer.h"
 #include "ResourceController.h"
 #include "ThreadController.h"
 
@@ -35,7 +36,7 @@ typedef std::unordered_map<std::string, std::shared_ptr<Connection>> PeerMap;
 /// - When messages are received, add them to the `messageQueue`.
 /// - In a separate thread(s?), these messages will be dispatched (pushed) to consumers.
 /// </summary>
-class NetworkController : ObserverSubject, Observer
+class NetworkController : ObserverSubject, public Observer
 {
 private:
 	std::shared_ptr<InputController> mInputController;

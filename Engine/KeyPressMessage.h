@@ -2,22 +2,22 @@
 #include <string>
 #include "Message.h"
 
-class KeyPressMessage
-	: public Message
-{
-	// Data
-protected:
-	int		_key;
-	bool	_down;
+struct KeyPressMessageInfo {
+	int					key;
+	bool				down;
+};
 
-	// Structors
+class KeyPressMessage
+	: public Message<std::shared_ptr<KeyPressMessageInfo>>
+{
 public:
-	KeyPressMessage(int key, bool down);
-	virtual ~KeyPressMessage();
+	KeyPressMessage(std::shared_ptr<KeyPressMessageInfo> data)
+		: Message<std::shared_ptr<KeyPressMessageInfo>>(data, "keypress")
+	{}
 
 
 	// Gets/Sets
 public:
-	int GetKey()				const	{ return _key; }
-	bool GetDown()				const	{ return _down; }
+	int GetKey()				const { return _data->key; }
+	bool GetDown()				const { return _data->down; }
 };

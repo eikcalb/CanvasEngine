@@ -5,12 +5,11 @@
 #include "GL\GLM\GLM.hpp"
 #include "GL\GLM\GTC\matrix_transform.hpp"
 #include "GL\GLM\GTC\type_ptr.hpp"
-#include "Hud.h"
 
-// Forward declarations
-class Game;
-class RenderComponent;
-class Mesh;
+#include "Hud.h"
+#include "GameObject.h"
+#include "Mesh.h"
+
 
 // Platform independent renderer base class
 // Basically represents a graphics context and its active shaders
@@ -18,31 +17,31 @@ class Renderer
 {
 	// Data
 protected:
-	Colour									_clearColour;	// Screen clear colour
-	Hud										_hud;
+	Colour					_clearColour;	// Screen clear colour
+	std::shared_ptr<Hud>	_hud;
 
 	// Structors
 public:
-	Renderer()									;
-	virtual ~Renderer()							;
+	Renderer();
+	virtual ~Renderer();
 
 	// Gets/sets
 public:
-	Colour GetClearColour()				const	{ return _clearColour; }
+	Colour GetClearColour()				const { return _clearColour; }
 	void SetClearColour(Colour c) { _clearColour = c; }
-	Hud GetHud() { return _hud; }
+	std::shared_ptr<Hud> GetHud() { return _hud; }
 
 	// Functions
 public:
 	virtual void ClearScreen() = 0;
 
-	virtual void Draw(const Mesh* mesh, glm::mat4 MVM, const Colour& colour) = 0;
-	virtual void Draw(RenderComponent* gob, glm::mat4 MVM);
+	virtual void Draw(const std::shared_ptr<Mesh> mesh, glm::mat4 MVM, const Colour& colour) = 0;
+	virtual void Draw(std::shared_ptr<GameObject> gob, glm::mat4 MVM);
+
+	virtual void Initialise(int width, int height) = 0;
 
 	virtual void Destroy() = 0;
 
-	virtual void Initialise(int width, int height) = 0;
-	
 	virtual void SwapBuffers() = 0;
 };
 

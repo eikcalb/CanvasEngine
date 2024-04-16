@@ -1,49 +1,50 @@
 #pragma once
+#include <atomic>
 #include <vector>
 #include <string>
-#include "VBO.h"
+
 #include "Vertex.h"
-
-
+class VBO;
 class Renderer;
+
 
 class Mesh
 {
-	// Data
-private:
-	bool _locked;	// True once we've made the VBO; can no longer add vertices etc unless reset
-	VBO* _vbo;
-	std::vector<Vertex> _vertices;
-
 	// Constructors etc
 public:
 	Mesh();
 	~Mesh();
 
+	// Data
+protected:
+	std::atomic_bool _locked = false;	// True once we've made the VBO; can no longer add vertices etc unless reset
+	VBO* _vbo = nullptr;
+	std::vector<Vertex> _vertices;
+
 	// Gets/sets
 public:
-	VBO* GetVBO()			const	{ return _vbo; }
-	int NumVertices()		const	{ return (int)_vertices.size(); }
-	Vertex GetVertex(int i)	const	{ return _vertices[i]; }
-	Vertex& GetVertexRef(int i)		{ return _vertices[i]; }
+	VBO* GetVBO()			const { return _vbo; }
+	int NumVertices()		const { return (int)_vertices.size(); }
+	const Vertex GetVertex(int i)	const { return _vertices[i]; }
+	const Vertex& GetVertexRef(int i) const { return _vertices[i]; }
 
 	// Functions
 public:
-	VBO* CreateVBO(Renderer* r)					;
-	bool AddVertex(Vertex v)					;
-	bool Clear()								;
-	bool DeleteVertex(int i)					;
-	
+	VBO* CreateVBO(Renderer* r);
+	bool AddVertex(Vertex v);
+	bool Clear();
+	bool DeleteVertex(int i);
+
 	// Loads the Mesh from a file (returns true if loaded OK)
-	bool LoadFromFile(std::string filename)		;
+	bool LoadFromFile(std::string filename);
 
 	// Loads the Mesh from an existing stream (returns true if OK)
 	bool LoadFromStream(std::ifstream& in);
 
 	// Unlocks the mesh but also deletes the VBO
-	void Reset()								;
+	void Reset();
 
 	// Calculates max size of mesh in any direction
-	float CalculateMaxSize()					;
+	float CalculateMaxSize();
 };
 

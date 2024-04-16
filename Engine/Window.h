@@ -1,8 +1,5 @@
 #pragma once
-
-// Forward declarations
-class Game;
-class Renderer;
+#include "Game.h"
 
 
 // Generic window class
@@ -12,13 +9,13 @@ class Window
 	// Constants and statics
 public:
 	// Singleton (sort of)
-	static Window*							TheWindow;
+	static std::shared_ptr<Window>	TheWindow;
 
 	// Data
 public:
-	Game*									_game;
-	Renderer*								_renderer;
-	int										_width, _height;
+	Game*		_game;
+	Renderer*	_renderer;
+	int			_width, _height;
 
 
 	// Structors
@@ -29,13 +26,13 @@ public:
 
 	// Gets/sets
 public:
-	Game* GetGame()					const	{ return _game; }
-	Renderer* GetRenderer()			const	{ return _renderer; }
+	Game* GetGame()			const	{ return _game; }
+	Renderer* GetRenderer()	const	{ return _renderer; }
 
 
 	// Functions
 public:
-	virtual void Initialise()				= 0;
+	virtual void Initialise() = 0;
 	
 };
 

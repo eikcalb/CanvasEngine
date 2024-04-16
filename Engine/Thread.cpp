@@ -2,7 +2,7 @@
 
 void Thread::SetTask(Task* pTask)
 {
-	mTask = pTask;
+	mTask = std::shared_ptr<Task>(pTask);
 	mNeedsTask = false;
 }
 
@@ -12,7 +12,7 @@ void Thread::Run()
 
 	while (isAlive)
 	{
-		std::unique_lock<std::mutex> lock;
+		std::unique_lock<std::mutex> lock(mutex);
 		condition.wait(lock, [this] {
 			// If we have a signal to exit, we should stop waiting
 			if (!isAlive) {
@@ -26,15 +26,20 @@ void Thread::Run()
 		lock.unlock();
 
 		// Since we have a task, we will process it.
-		if (mTask)
+		if (isAlive && mTask)
 		{
 			SetThreadAffinity(mTask->TaskType());
 			mTask->Run();
 
+			mTask.reset();
 			mTask = nullptr;
 			mNeedsTask = true;
 		}
 	}
+
+	// This will trigger all pending threads waiting when the loop
+	// has been triggered to stop.
+	condition.notify_all();
 }
 
 bool Thread::NeedsTask()

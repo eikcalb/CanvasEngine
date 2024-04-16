@@ -33,6 +33,7 @@ public:
         return ImGui::InputFloat("", value, step, stepFast, format);
     }
 
+public:
     void Start();
     void End();
 

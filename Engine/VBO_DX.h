@@ -1,10 +1,11 @@
 #pragma once
 #if BUILD_DIRECTX
-
-#include <d3d11.h>
+#include <atlbase.h>
 #include <d3dx11.h>
 #include <d3dx10.h>
+
 #include "VBO.h"
+#include "Renderer_DX.h"
 
 // DirectX specific VBO class
 class VBO_DX :
@@ -12,7 +13,7 @@ class VBO_DX :
 {
 	// Data
 protected:
-	ID3D11Buffer* _vbo;
+	CComPtr<ID3D11Buffer> _vbo;
 
 	// Structors
 public:

@@ -1,4 +1,4 @@
-#include "SceneManager.h"
+#include "SceneController.h"
 #include "Scene.h"
 
 /******************************************************************************************************************/
@@ -14,13 +14,14 @@ SceneController::SceneController(Game* game)
 
 SceneController::~SceneController()
 {
+	delete _game;
 }
 
 /******************************************************************************************************************/
 // Functions
 /******************************************************************************************************************/
 
-void SceneController::AddGameObject(GameObject* obj)
+void SceneController::AddGameObject(std::shared_ptr<GameObject> obj)
 {
 	Scene* currentScene = GetCurrentScene();
 	if (currentScene)
@@ -31,14 +32,14 @@ void SceneController::AddGameObject(GameObject* obj)
 
 /******************************************************************************************************************/
 
-std::vector<GameObject*>& SceneController::GetGameObjects()
+std::vector<std::shared_ptr<GameObject>>& SceneController::GetGameObjects()
 {
 	Scene* currentScene = GetCurrentScene();
 	if (currentScene)
 	{
 		return currentScene->GetGameObjects();
 	}
-	auto empty = std::vector<GameObject*>();
+	auto empty = std::vector<std::shared_ptr<GameObject>>();
 	return empty;
 }
 
@@ -55,7 +56,7 @@ void SceneController::OnKeyboard(int key, bool down)
 
 /******************************************************************************************************************/
 
-void SceneController::OnMessage(Message* msg)
+void SceneController::OnMessage(Message<std::any>* msg)
 {
 	Scene* currentScene = GetCurrentScene();
 	if (currentScene)
@@ -90,10 +91,11 @@ void SceneController::Render(RenderSystem* renderer)
 
 /******************************************************************************************************************/
 
-void SceneController::PushScene(Scene* s)
+void SceneController::PushScene(std::shared_ptr<Scene> s)
 {
+	s->End();
 	_scenes.push(s);
-	s->SetSceneManager(this);
+	s->SetSceneManager(std::shared_ptr<SceneController>(this));
 	s->Initialise();
 }
 

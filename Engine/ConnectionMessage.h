@@ -7,7 +7,7 @@ class ConnectionMessage : public Message<std::shared_ptr<Connection>>
 protected:
 public:
 	ConnectionMessage(std::shared_ptr<Connection> connection, std::string type)
-		: Message(connection, type)
+		: Message<std::shared_ptr<Connection>>(connection, type)
 	{
 
 	}

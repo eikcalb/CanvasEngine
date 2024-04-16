@@ -1,73 +1,78 @@
-#pragma once
+﻿#pragma once
 #include <time.h>
 #include <map>
 #include <vector>
 #include <memory>
-
-#include "RenderSystem.h"
-
-#include "SceneManager.h"
 #include <windows.h>
 #include <windowsx.h>
-#include "ThreadController.h"
+
 #include "InputController.h"
+#include "NetworkController.h"
 #include "ResourceController.h"
+#include "RenderSystem.h"
+#include "SceneController.h"
+#include "ThreadController.h"
 
 // Forward declarations
 class GameObject;
 class Mesh;
-class Message;
 class Renderer;
 class Window;
 
 // Typedefs
-typedef std::map<std::string, Mesh*> MeshMap;
-typedef std::map<std::string, Mesh*>::iterator MeshMapIterator;
+typedef std::map<std::string, std::shared_ptr<Mesh>> MeshMap;
+typedef std::map<std::string, std::shared_ptr<Mesh>>::iterator MeshMapIterator;
 
 
-class Game
+class Game : ObserverSubject
 {
 public:
 	static Game* TheGame;
 
 protected:
+	std::string							_name;
+
 	double								_currentTime;
 	double								_deltaTime;
 	bool								_quitFlag;
-	Renderer* _renderer;
-	Window* _window;
+	Renderer*							_renderer;
+	Window*								_window;
+
 	std::shared_ptr<InputController>	_inputController;
+	std::shared_ptr<NetworkController>	_networkController; // ✅
 	std::shared_ptr<ResourceController>	_resourceController;
-	std::shared_ptr<ThreadController>	_threadController;
+	std::shared_ptr<ThreadController>	_threadController; // ✅
 
 	// Meshes
-	MeshMap							_meshes;			// The map of meshes
-
+	MeshMap			_meshes;// The map of meshes
 	// Systems
-	RenderSystem					_renderSystem;		// To handle rendering
-
+	std::shared_ptr<RenderSystem>	_renderSystem;// To handle rendering
 	// Scene Manager
-	SceneController					_sceneManager;
+	SceneController	_sceneManager;
 
-	// Structors
+	// TODO: introduce audio manager?
 public:
 	Game();
+	Game(const std::string name): Game() { _name = name; }
 	virtual ~Game();
 
 
 	// Gets/sets
 public:
+	const std::string GetName() const { return _name; }
+	void SetName(const std::string name) { _name = name; }
+
 	// Meshes
-	Mesh* GetMesh(std::string name);
-	void AddMesh(std::string name, Mesh* mesh) { _meshes[name] = mesh; }
+	std::shared_ptr<Mesh> GetMesh(std::string name);
+	void AddMesh(std::string name, std::shared_ptr<Mesh> mesh) { _meshes[name] = mesh; }
 
 	// Quit flag
-	bool GetQuitFlag()						const { return _quitFlag; }
+	bool GetQuitFlag() const { return _quitFlag; }
 	void SetQuitFlag(bool v) { _quitFlag = v; }
 
 	// Renderer
 	Renderer* GetRenderer()					const { return _renderer; }
-	InputController* GetInputController()					const { return _inputController.get(); }
+	InputController* GetInputController()	const { return _inputController.get(); }
 
 	// Functions
 public:
@@ -90,22 +95,6 @@ public:
 	// Main game loop (update)
 	virtual void Run();
 
-	// Message system
-	void BroadcastMessage(Message* msg);
-
 	// The game can respond to messages too
-	virtual void ListenToMessage(Message* msg) {}
+	virtual void ListenToMessage(Message<std::any>* msg) {}
 };
-
-
-inline Mesh* Game::GetMesh(std::string name)
-{
-	// Found
-	MeshMapIterator i = _meshes.find(name);
-	if (i != _meshes.end())
-	{
-		return i->second;
-	}
-	// Not found
-	return NULL;
-}

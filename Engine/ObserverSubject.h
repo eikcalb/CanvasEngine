@@ -3,11 +3,11 @@
 #include <string>
 #include <vector>
 
-class Observer;
+#include "Observer.h"
 
-typedef std::map<std::string, std::vector<Observer&> > MessageListenerMap;
-typedef std::map<std::string, std::vector<Observer&> >::iterator MessageListenerMapIterator;
-typedef std::vector<Observer&>::iterator ObserverListIterator;
+typedef std::map<std::string, std::vector<std::shared_ptr<Observer>> > MessageListenerMap;
+typedef std::map<std::string, std::vector<std::shared_ptr<Observer>> >::iterator MessageListenerMapIterator;
+typedef std::vector<std::shared_ptr<Observer>>::iterator ObserverListIterator;
 
 /// Owner class for the Observer pattern
 /// This class should be inherited by objects that want to be observed and pass messages to their Observers.
@@ -28,11 +28,42 @@ protected:
 	MessageListenerMap listeners = {};
 
 	// Message handler (called when message occurs)
-	void BroadcastMessage(Message<std::any>* msg) {
+	template<typename T>
+	void BroadcastMessage(Message<T>* msg) {
 		const auto msgListeners = listeners[msg->GetMessageType()];
-		for (Observer& listener : msgListeners) {
-			listener.OnMessage(msg);
+		for (auto& listener : msgListeners) {
+			listener->OnMessage(msg);
 		}
+	}
+
+	bool Observe(std::string type, std::shared_ptr<Observer> observer) {
+		// Accessing a map using the index form invokes the default constructor
+		// for the type specified if it does not exist.
+		auto& msgListeners = listeners[type];
+		auto i = std::find(msgListeners.begin(), msgListeners.end(), observer);
+
+		// Make entry and add listener
+		if (i == msgListeners.end())
+		{
+			msgListeners.push_back(observer);
+			return true;
+		}
+
+		return false;
+	}
+
+	bool UnObserve(std::string type, std::shared_ptr<Observer> observer) {
+		auto& msgListeners = listeners[type];
+		auto i = std::find(msgListeners.begin(), msgListeners.end(), observer);
+
+		// Exists?
+		if (i != msgListeners.end())
+		{
+			msgListeners.erase(i);
+			return true;
+		}
+
+		return false;
 	}
 };
 

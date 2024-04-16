@@ -1,7 +1,6 @@
 #pragma once
 #include <memory>
 #include "GL\GLM\GLM.hpp"
-#include "GameObjectComponent.h"
 #include "ObserverSubject.h"
 
 enum class KEYS
@@ -185,7 +184,6 @@ typedef  glm::vec4 MouseRay;
 class InputController : public ObserverSubject
 {
 protected:
-	std::vector<Observer*>	listeners;
 	std::map<KEYS, bool>	mKeyStates;
 	glm::vec2							mMousePosition = glm::vec2(0.0f);
 	int									mMouseWheelValue = 0;
@@ -193,16 +191,12 @@ protected:
 
 	InputController();
 public:
-	~InputController();
+	~InputController() = default;
 
 	static std::shared_ptr<InputController> Instance();
 
 	InputController(const InputController& InputController) = delete;
 	InputController& operator=(InputController const&) = delete;
-
-	// Broadcast a message to all objects
-	virtual void BroadcastMessage(Message* msg) override;
-	void AddObserver(Observer* o);
 
 	//Mouse
 	const int ScrollWheel() const;

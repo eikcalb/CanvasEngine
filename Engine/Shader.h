@@ -16,7 +16,6 @@ public:
 	virtual ~Shader(void);
 private: // Disable copying
 	Shader(const Shader&);
-	Shader operator=(const Shader&);
 
 	// Accessors
 public:

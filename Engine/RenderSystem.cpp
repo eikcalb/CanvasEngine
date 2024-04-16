@@ -1,6 +1,4 @@
 #include "RenderSystem.h"
-#include "GameObject.h"
-#include "RenderComponent.h"
 
 /******************************************************************************************************************/
 // Structors
@@ -21,17 +19,14 @@ RenderSystem::~RenderSystem()
 // Functions
 /******************************************************************************************************************/
 
-void RenderSystem::Process(std::vector<GameObject*>& list, double _)
+void RenderSystem::Process(std::vector<std::shared_ptr<GameObject>>& list, double _)
 {
 	if (_renderer == NULL) return;
-	for (GameObject* obj : list)
+	for (auto obj : list)
 	{
-		if (obj->IsAlive())
+		if (obj->IsAlive() && obj->ShouldDraw())
 		{
-			if (RenderComponent* rc = reinterpret_cast<RenderComponent*>(obj->GetComponent("render")))
-			{
-				_renderer->Draw(rc, _MVM);
-			}
+				_renderer->Draw(obj, _MVM);
 		}
 	}
 

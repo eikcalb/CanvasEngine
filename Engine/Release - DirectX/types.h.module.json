@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "Release - DirectX\\types.h.obj",
+            "outputs": [
+                "C:\\Users\\Onome Israel Agwa\\source\\repos\\700105-2223-lab-i-eikcalb\\Release - DirectX\\Engine.pdb",
+                "Release - DirectX\\",
+                "C:\\Users\\Onome Israel Agwa\\source\\repos\\700105-2223-lab-i-eikcalb\\Engine\\Release - DirectX\\types.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "types.h",
+                    "source-path": "c:\\users\\onome israel agwa\\source\\repos\\700105-2223-lab-i-eikcalb\\engine\\types.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

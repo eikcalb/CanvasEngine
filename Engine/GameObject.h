@@ -1,25 +1,25 @@
 #pragma once
 #include <map>
+#include <unordered_map>
 #include <vector>
-#include "Vector4.h"
+
+#include "Behavior.h"
+#include "Colour.h"
 #include "MathsHelper.h"
+#include "Mesh.h"
+#include "Observer.h"
 #include "ObserverSubject.h"
+#include "Vector4.h"
 
-// Forward references
-class GameObjectComponent;
-class Message;
+typedef std::unordered_map<std::string, std::shared_ptr<Behavior>> BehaviorMap;
 
-
-// Typedefs
-typedef std::map<std::string, GameObjectComponent*> ComponentMap;
-typedef std::map<std::string, GameObjectComponent*>::iterator ComponentMapIterator;
-typedef std::vector<GameObjectComponent*>::iterator ComponentListIterator;
-
-// Now new and improved to use a component-based architecture
-class GameObject: ObserverSubject
+class GameObject : public ObserverSubject, public Observer
 {
-	// Constants
-public:
+	// Render
+protected:
+	std::shared_ptr<Mesh>	_mesh;			// Vertex info
+	Colour	_colour;		// Colour of object
+	bool	_shouldDraw;	// Whether or not to draw
 
 
 	// Data
@@ -30,54 +30,54 @@ protected:
 	Vector4				_position;		// Position of object's origin
 	bool				_alive;			// Alive flag; when false, is not updated
 	bool				_deleteFlag;	// Set when you want this game object to be deleted by the game
-
-	// Components
-	ComponentMap		_components;
-
-	// Listener registration
-	MessageListenerMap	_messageListeners;
-
-
+	BehaviorMap			_behaviors;
 
 	// Constructors
 public:
+	GameObject() = default;
 	GameObject(std::string type);
 	virtual ~GameObject();
 
 	// Disable copy constructor + assignment operator
 private:
 	GameObject(const GameObject&);
-	GameObject& operator=(const GameObject&);
+	GameObject& operator=(const GameObject&) = default;
 
 
 	// Gets/sets
 public:
-	float GetAngle()													const	{ return _angle; }
-	void SetAngle(float v)														{ _angle = v;  }
+	std::shared_ptr<Mesh> GetMesh()							const { return _mesh; }
+	void SetMesh(std::shared_ptr<Mesh> m) { _mesh = m; }
 
-	float GetScale()													const	{ return _scale; }
-	void SetScale(float v)														{ _scale = v; }
+	Colour GetColour()						const { return _colour; }
+	void SetColour(Colour c) { _colour = c; }
 
-	Vector4 GetPosition()												const	{ return _position; }
-	void SetPosition(Vector4 v)													{ _position = v; }
+	bool ShouldDraw()						const { return _shouldDraw; }
+	void ShouldDraw(bool v) { _shouldDraw = v; }
 
-	bool IsAlive()														const	{ return _alive; }
-	void SetAlive(bool v)														{ _alive = v; }
+	float GetAngle()													const { return _angle; }
+	void SetAngle(float v) { _angle = v; }
 
-	bool ShouldBeDeleted()												const	{ return _deleteFlag; }
-	void SetDeleteFlag(bool v)													{ _deleteFlag = v; }
+	float GetScale()													const { return _scale; }
+	void SetScale(float v) { _scale = v; }
 
-	std::string GetType()												const	{ return _type; }
+	Vector4 GetPosition()												const { return _position; }
+	void SetPosition(Vector4 v) { _position = v; }
+
+	bool IsAlive()														const { return _alive; }
+	void SetAlive(bool v) { _alive = v; }
+
+	bool ShouldBeDeleted()												const { return _deleteFlag; }
+	void SetDeleteFlag(bool v) { _deleteFlag = v; }
+
+	std::string GetType()												const { return _type; }
 
 	// Component Functions
 public:
-	bool AddComponent(GameObjectComponent* goc)									;
-	bool RemoveComponent(GameObjectComponent* goc)								;
-	bool RemoveComponent(std::string componentType)								;
-	GameObjectComponent* GetComponent(std::string type)							;
-
-	void RegisterListener(std::string msg, GameObjectComponent* goc)			;
-	void UnregisterListener(std::string msg, GameObjectComponent* goc)			;
+	bool AddBehavior(std::shared_ptr<Behavior> goc);
+	bool RemoveBehavior(std::shared_ptr<Behavior> goc);
+	bool RemoveBehavior(std::string componentType);
+	std::shared_ptr<Behavior> GetBehavior(std::string tag);
 
 
 	// General Functions
@@ -88,15 +88,13 @@ public:
 	// Main update function (called every frame)
 	virtual void Update(double deltaTime);
 
-	// Message handler (called when message occurs)
-	virtual void OnMessage(Message* msg);
-
 	// Shutdown function -- called when object is destroyed (i.e., from destructor)
 	virtual void End();
 
+	// Message handler (called when message occurs)
+	virtual void OnMessage(Message<std::any>* msg) override;
+
 	// Resets the game object to the start state (similar to Start(), but may be called more than once)
 	virtual void Reset();
-
-	virtual void BroadcastMessage(Message* msg) override {};
 };
 

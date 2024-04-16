@@ -13,7 +13,7 @@ private:
 	/// <summary>
 	///  Represents the currently running task.
 	/// </summary>
-	Task* mTask;
+	std::shared_ptr<Task> mTask;
 	std::atomic<bool> mNeedsTask;
 	std::atomic<bool> isAlive = false;
 

@@ -1,8 +1,6 @@
 #if BUILD_DIRECTX
-#include "imgui.h"
-#include "imGui_impl_win32.h"
-#include "imgui_impl_dx11.h"
 #include "Renderer_DX.h"
+#include "VBO.h"
 #include "Mesh.h"
 #include "GameObject.h"
 
@@ -47,9 +45,9 @@ void Renderer_DX::Destroy()
 	}
 
 
-	ImGui_ImplDX11_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
+	//ImGui_ImplDX11_Shutdown();
+	//ImGui_ImplWin32_Shutdown();
+	//ImGui::DestroyContext();
 }
 
 /******************************************************************************************************************/
@@ -201,9 +199,9 @@ void Renderer_DX::InitialiseHud() {
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-	ImGui::StyleColorsDark();
-	ImGui_ImplWin32_Init(_hWnd);
-	ImGui_ImplDX11_Init(GetDevice(), GetContext());
+	//ImGui::StyleColorsDark();
+	//ImGui_ImplWin32_Init(_hWnd);
+	//ImGui_ImplDX11_Init(GetDevice(), GetContext());
 }
 
 /******************************************************************************************************************/

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <any>
+#include <chrono>
 
 template <typename T>
 class Message
@@ -10,8 +11,11 @@ protected:
 	std::string _type;
 	T			_data;
 
-	// Structors
 public:
+	unsigned long long timestamp;
+
+public:
+	Message() = default;
 	Message(std::string type);
 	Message(T data, std::string type);
 	virtual ~Message() = default;
@@ -23,8 +27,8 @@ public:
 	std::string GetMessageType() const { return _type; }
 };
 
-class BareMessage : public Message<std::any> {
 
+class BareMessage : public Message<std::any> {
 public:
 	BareMessage(std::string type) : Message(type) {};
 };

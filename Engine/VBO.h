@@ -1,7 +1,6 @@
 #pragma once
 #include "Vertex.h"
-
-class Renderer;
+#include "Renderer.h"
 
 // Abstract VBO class
 class VBO

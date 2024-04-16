@@ -1,4 +1,5 @@
 #include "Hud.h"
+#include "Game.h"
 
 #if BUILD_DIRECTX
 	#include "imgui_impl_dx11.h"
@@ -9,15 +10,17 @@
 #endif
 
 void Hud::Start() {
+	const auto& appName = Game::TheGame->GetName();
 #if BUILD_DIRECTX
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
-	ImGui::Begin("Voxel Game Engine");
+	ImGui::Begin(appName.c_str());
 #else if BUILD_OPENGL
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
+	ImGui::Begin(appName.c_str());
 #endif
 }
 

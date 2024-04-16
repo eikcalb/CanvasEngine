@@ -6,7 +6,6 @@
     <ClCompile Include="Colour.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjectComponent.cpp" />
     <ClCompile Include="KeyPressMessage.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
@@ -52,9 +51,6 @@
     <ClCompile Include="Window_GL.cpp">
       <Filter>OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="System.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
     <ClCompile Include="RenderSystem.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
@@ -88,9 +84,6 @@
     <ClCompile Include="Hud.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="RenderComponent.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="NetworkMessage.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
@@ -100,13 +93,22 @@
     <ClCompile Include="Connection.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="TCPConnection.cpp" />
     <ClCompile Include="Message.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
     <ClCompile Include="ConnectionMessage.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
+    <ClCompile Include="TCPConnection.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Behavior.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="System.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="types.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -115,7 +117,6 @@
     <ClInclude Include="Colour.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjectComponent.h" />
     <ClInclude Include="KeyPressMessage.h">
       <Filter>Messages</Filter>
     </ClInclude>
@@ -164,9 +165,6 @@
     <ClInclude Include="Window_GL.h">
       <Filter>OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="System.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
     <ClInclude Include="RenderSystem.h">
       <Filter>Systems</Filter>
     </ClInclude>
@@ -201,9 +199,6 @@
     <ClInclude Include="Hud.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="RenderComponent.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="NetworkMessage.h">
       <Filter>Messages</Filter>
     </ClInclude>
@@ -220,12 +215,20 @@
     <ClInclude Include="Connection.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="TCPConnection.h" />
     <ClInclude Include="Message.h">
       <Filter>Messages</Filter>
     </ClInclude>
     <ClInclude Include="ConnectionMessage.h">
       <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPConnection.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Behavior.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="System.h">
+      <Filter>Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
