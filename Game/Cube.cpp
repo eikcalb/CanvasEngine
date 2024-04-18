@@ -6,12 +6,12 @@
 Cube::Cube(Mesh* mesh)
 	: GameObject("cube")
 {
-	new CubeControllerComponent(this);
+	//new CubeControllerComponent(this);
 
-	RenderComponent* rc = new RenderComponent(this);
-	rc->SetColour(Colour(0.5f, 0.5f, 1.0f, 1.0f));
-	rc->SetMesh(mesh);
-	rc->ShouldDraw(true);
+	//RenderComponent* rc = new RenderComponent(this);
+	//rc->SetColour(Colour(0.5f, 0.5f, 1.0f, 1.0f));
+	//rc->SetMesh(mesh);
+	//rc->ShouldDraw(true);
 }
 
 /******************************************************************************************************************/
@@ -29,7 +29,7 @@ void Cube::Update(double deltaTime)
 
 /******************************************************************************************************************/
 
-void Cube::OnMessage(Message* msg)
+void Cube::OnMessage(Message<std::any>* msg)
 {
 }
 
@@ -37,11 +37,11 @@ void Cube::OnMessage(Message* msg)
 
 void Cube::Reset()
 {
-	RenderComponent* rc = (RenderComponent*)GetComponent("render");
-	rc->ShouldDraw(true);
+	//RenderComponent* rc = (RenderComponent*)GetComponent("render");
+	//rc->ShouldDraw(true);
 
-	CubeControllerComponent* sc = (CubeControllerComponent*)GetComponent("input");
-	sc->Reset();
+	//CubeControllerComponent* sc = (CubeControllerComponent*)GetComponent("input");
+	//sc->Reset();
 
 	_position = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 }
@@ -51,7 +51,7 @@ void  Cube::SetWeight(u_short weight) {
 }
 
 void  Cube::SetColor(Colour colour) {
-	RenderComponent* rc = (RenderComponent*)GetComponent("render");
+	//RenderComponent* rc = (RenderComponent*)GetComponent("render");
 	colour = colour;
 	rc->ShouldDraw(true);
 }

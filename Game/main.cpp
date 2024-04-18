@@ -17,6 +17,14 @@ static const int		SCREEN_HEIGHT = 712;
 #include <d3dx11.h>
 #include <d3dx10.h>
 
+#ifndef WIN_SOCK_NON_BLOCK
+	// This fixes the error of importing winsock2 multiple times.
+	#define WIN_SOCK_NON_BLOCK
+	#include <WinSock2.h>
+	#include <WS2tcpip.h>
+	#pragma comment(lib, "Ws2_32.lib")
+#endif // !WIN_SOCK_NON_BLOCK
+
 #include "Window_DX.h"
 
 // include the Direct3D Library file

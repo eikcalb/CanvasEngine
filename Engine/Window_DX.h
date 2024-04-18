@@ -4,8 +4,6 @@
 
 #pragma once
 #if BUILD_DIRECTX
-#include "Window.h"
-
 // include Windows and Direct3D headers
 #include <windows.h>
 #include <windowsx.h>
@@ -13,6 +11,9 @@
 #include <d3dx11.h>
 #include <d3dx10.h>
 #include <DirectXMath.h>
+
+#include "Window.h"
+#include "Game.h"
 
 // include the Direct3D Library file
 #pragma comment (lib, "d3d11.lib")

@@ -77,10 +77,10 @@ public:
 	// Functions
 public:
 	void AddGameObject(GameObject* obj) {
-		_sceneManager.AddGameObject(obj);
-		_inputController->AddObserver(reinterpret_cast<Observer*>(obj));
+		_sceneManager.AddGameObject(std::shared_ptr<GameObject>(obj));
+		_inputController->Observe(InputController::EVENT_INPUT, std::shared_ptr<GameObject>(obj));
 	}
-	std::vector<GameObject*>& GetGameObjects() { return _sceneManager.GetGameObjects(); }
+	std::vector<std::shared_ptr<GameObject>>& GetGameObjects() { return _sceneManager.GetGameObjects(); }
 
 	// Initialise game
 	virtual void Initialise(Window* w);

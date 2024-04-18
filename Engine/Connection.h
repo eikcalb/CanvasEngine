@@ -1,13 +1,15 @@
 #pragma once
 #include <functional>
 #include <memory>
-#include <WinSock2.h>
-#include <WS2tcpip.h>
+//#ifndef WIN_SOCK_NON_BLOCK
+//	// This fixes the error of importing winsock2 multiple times.
+//	#define WIN_SOCK_NON_BLOCK
+//	#include <WinSock2.h>
+//	#include <WS2tcpip.h>
+//	#pragma comment(lib, "Ws2_32.lib")
+//#endif // !WIN_SOCK_NON_BLOCK
 
-#include "Message.h"
 #include "ObserverSubject.h"
-
-#pragma comment(lib, "Ws2_32.lib")
 
 constexpr u_short BUFFER_SIZE = 1024;
 constexpr u_short MAX_PEERS = 8;

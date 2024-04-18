@@ -170,7 +170,6 @@
     <ClCompile Include="ResourceController.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneController.cpp" />
-    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderObject_GL.cpp" />
     <ClCompile Include="ShaderProgram_GL.cpp" />
     <ClCompile Include="types.h" />
@@ -217,7 +216,6 @@
     <ClInclude Include="ResourceController.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneController.h" />
-    <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderObject_GL.h" />
     <ClInclude Include="ShaderProgram_GL.h" />
     <ClInclude Include="Task.h" />

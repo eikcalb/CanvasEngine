@@ -1,8 +1,8 @@
 #include "InputController.h"
-#include "KeyPressMessage.h"
 
+const std::string InputController::EVENT_INPUT = "input_event";
 
-InputController::InputController()
+InputController::InputController(): ObserverSubject()
 {
 	for (int i = 0; i <= static_cast<int>(KEYS::OemClear); ++i)
 	{

@@ -5,6 +5,7 @@
 #include <d3dx11.h>
 #include <d3dx10.h>
 #include <DirectXMath.h>
+
 #include "Renderer.h"
 
 typedef struct UniformBuffer

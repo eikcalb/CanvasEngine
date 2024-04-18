@@ -1,12 +1,13 @@
 #pragma once
-#include "Components.h"
+#include <any>
+
+#include "Colour.h"
 #include "Game.h"
 #include "GameObject.h"
-#include "Colour.h"
-#include "CubeControllerComponent.h"
+#include "Message.h"
+
 
 class Mesh;
-class Message;
 
 class Cube :
 	public GameObject
@@ -24,7 +25,7 @@ public:
 	// Functions
 public:
 	virtual void Update(double deltaTime);
-	virtual void OnMessage(Message* msg);
+	virtual void OnMessage(Message<std::any>* msg);
 	virtual void Reset();
 
 	void SetWeight(u_short weight);

@@ -3,12 +3,6 @@
   <ItemGroup>
     <ClCompile Include="VoxGame.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="CubeControllerComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="DamageMessage.cpp">
-      <Filter>Messages</Filter>
-    </ClCompile>
     <ClCompile Include="Cube.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
@@ -18,48 +12,9 @@
     <ClCompile Include="Voxel.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="..\Includes\imgui\imgui.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\imgui\imgui_demo.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\imgui\imgui_draw.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\imgui\imgui_impl_dx11.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\imgui\imgui_impl_glfw.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\imgui\imgui_impl_opengl3.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\imgui\imgui_impl_win32.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\imgui\imgui_stdlib.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\imgui\imgui_tables.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\imgui\imgui_widgets.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VoxGame.h" />
-    <ClInclude Include="Components.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeControllerComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="DamageMessage.h">
-      <Filter>Messages</Filter>
-    </ClInclude>
     <ClInclude Include="Cube.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
@@ -69,50 +24,11 @@
     <ClInclude Include="Voxel.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="..\Includes\imgui\imconfig.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\imgui\imgui.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\imgui\imgui_impl_dx11.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\imgui\imgui_impl_glfw.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\imgui\imgui_impl_opengl3.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\imgui\imgui_impl_opengl3_loader.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\imgui\imgui_impl_win32.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\imgui\imgui_internal.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\imgui\imgui_stdlib.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\imgui\imstb_rectpack.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\imgui\imstb_textedit.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\imgui\imstb_truetype.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag" />
     <None Include="shader.vert" />
     <None Include="shaders.hlsl" />
-    <None Include="..\Includes\imgui\imgui.natstepfilter">
-      <Filter>imgui</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameObjects">
@@ -130,10 +46,5 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{906943ab-6c32-4d4f-ba47-bf26cf6d9829}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="..\Includes\imgui\imgui.natvis">
-      <Filter>imgui</Filter>
-    </Natvis>
   </ItemGroup>
 </Project>

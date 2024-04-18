@@ -36,6 +36,8 @@ Game::~Game()
 		i->second.reset();
 	}
 	_meshes.clear();
+	delete _renderer;
+	delete _window;
 }
 
 /******************************************************************************************************************/
@@ -44,7 +46,7 @@ void Game::Initialise(Window* w)
 {
 	_window = w;
 	_renderer = w->GetRenderer();
-	_renderSystem.SetRenderer(_renderer);
+	_renderSystem->SetRenderer(std::shared_ptr<Renderer>(_renderer));
 }
 
 inline std::shared_ptr<Mesh> Game::GetMesh(std::string name)
@@ -64,10 +66,11 @@ inline std::shared_ptr<Mesh> Game::GetMesh(std::string name)
 void Game::OnKeyboard(int key, bool down)
 {
 	// Create keypress message and send it to all objects
-	KeyPressMessage msg(key, down);
+	KeyPressMessageInfo data = { key, down };
+	Message<KeyPressMessage> msg(std::shared_ptr< KeyPressMessageInfo>(data));
 
 	//BroadcastMessage(&msg);
-	_inputController->BroadcastMessage(&msg);
+	_inputController->Notify(&msg);
 }
 
 void Game::OnMouse(LPARAM lParam, bool down)
@@ -75,9 +78,10 @@ void Game::OnMouse(LPARAM lParam, bool down)
 	int xPos = GET_X_LPARAM(lParam);
 	int yPos = GET_Y_LPARAM(lParam);
 	// Create keypress message and send it to all objects
-	MouseInputMessage msg(glm::vec2(xPos, yPos), down);
+	MouseMessageInfo data = { glm::vec2(xPos, yPos), down };
+	MouseInputMessage msg(std::shared_ptr<MouseMessageInfo>(data));
 
-	_inputController->BroadcastMessage(&msg);
+	_inputController->Notify(&msg);
 }
 
 /******************************************************************************************************************/

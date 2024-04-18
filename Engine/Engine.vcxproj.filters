@@ -15,9 +15,6 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderObject_GL.cpp">
       <Filter>OpenGL</Filter>
     </ClCompile>
@@ -124,9 +121,6 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="ShaderProgram_GL.h">

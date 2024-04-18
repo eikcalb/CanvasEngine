@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "GL\GLM\GLM.hpp"
+
 #include "ObserverSubject.h"
 
 enum class KEYS
@@ -191,6 +192,8 @@ protected:
 
 	InputController();
 public:
+    static const std::string EVENT_INPUT;
+
 	~InputController() = default;
 
 	static std::shared_ptr<InputController> Instance();
@@ -216,5 +219,10 @@ public:
 	{
         return !mKeyStates[button];
 	}
+    
+    template<typename T>
+    void Notify(T msg) {
+        BroadcastMessage<T>(msg);
+    };
 };
 

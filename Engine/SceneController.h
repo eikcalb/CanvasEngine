@@ -3,7 +3,8 @@
 #include <vector>
 
 #include "Scene.h"
-#include "Game.h"
+
+class Game;
 
 /// Handles the Scenes for a game
 class SceneController : public Observer
@@ -13,7 +14,7 @@ public:
 
 	// Data
 protected:
-	Game* _game;
+	std::shared_ptr<Game> _game;
 	std::stack<std::shared_ptr<Scene>>	_scenes;
 
 	// Structors
@@ -24,8 +25,8 @@ public:
 
 	// Gets/Sets
 public:
-	Scene* GetCurrentScene()	const { if (_scenes.size() > 0) return _scenes.top().get(); else return NULL; }
-	Game* GetGame()				const { return _game; }
+	std::shared_ptr<Scene> GetCurrentScene()	const { if (_scenes.size() > 0) return _scenes.top(); else return NULL; }
+	std::shared_ptr<Game> GetGame()				const { return _game; }
 
 	// Functions
 public:

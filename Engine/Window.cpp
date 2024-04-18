@@ -1,6 +1,4 @@
 #include "Window.h"
-#include <stdlib.h>
-#include <time.h>
 
 std::shared_ptr<Window>	Window::TheWindow = NULL;
 

@@ -21,7 +21,7 @@ void VoxGame::Initialise(Window* w)
 
 	//////////////
 	// Setup Meshes
-	Mesh* cube= new Mesh();
+	auto cube= std::shared_ptr<Mesh>();
 	cube->LoadFromFile("CubeMesh.txt");
 	AddMesh("cube", cube);
 
@@ -33,7 +33,7 @@ void VoxGame::Initialise(Window* w)
 		i->second->CreateVBO(_renderer);
 	}
 
-	_sceneManager.PushScene(new GamePlayScene());
+	_sceneManager.PushScene(std::make_shared<GamePlayScene>());
 }
 
 /******************************************************************************************************************/
@@ -52,18 +52,18 @@ void VoxGame::Render()
 	// Clear screen
 	_renderer->ClearScreen();
 
-	_renderer->GetHud().Start();
+	_renderer->GetHud()->Start();
 
 	//// Add this code for 3D (need to change ScoreDisplay to fit inside 3D window)
 	glm::mat4 MVM;
 	MVM = glm::perspectiveFov(45.0f, (float)_window->_width, (float)_window->_height, 0.1f, 100.0f);
 	MVM *= glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	_renderSystem.SetMVM(MVM);
+	_renderSystem->SetMVM(MVM);
 
-	_sceneManager.Render(&_renderSystem);
-	_renderer->GetHud().Render();
+	_sceneManager.Render(_renderSystem.get());
+	_renderer->GetHud()->Render();
 
-	_renderer->GetHud().End();
+	_renderer->GetHud()->End();
 
 	// Swap buffers
 	_renderer->SwapBuffers();

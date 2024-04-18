@@ -1,5 +1,6 @@
 #pragma once
 #include "Message.h"
+
 #include "Connection.h"
 
 class ConnectionMessage : public Message<std::shared_ptr<Connection>>

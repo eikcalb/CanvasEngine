@@ -1,6 +1,4 @@
 #pragma once
-#include <WinSock2.h>
-#include <Ws2tcpip.h>
 #include <memory>
 #include <iostream>
 #include <queue>
@@ -12,8 +10,10 @@
 #include "Connection.h"
 #include "ConnectionMessage.h"
 #include "InputController.h"
+#include "Message.h"
 #include "NetworkMessage.h"
 #include "Observer.h"
+#include "ObserverSubject.h"
 #include "ResourceController.h"
 #include "ThreadController.h"
 
@@ -38,7 +38,8 @@ typedef std::unordered_map<std::string, std::shared_ptr<Connection>> PeerMap;
 /// </summary>
 class NetworkController : ObserverSubject, public Observer
 {
-private:
+//private
+public:
 	std::shared_ptr<InputController> mInputController;
 	std::shared_ptr<ThreadController> mThreadController;
 	std::shared_ptr<ResourceController> mResourceController;
@@ -56,7 +57,7 @@ private:
 
 	std::atomic<IncomingMessagesQueue> messageQueue;
 	std::atomic<OutgoingMessagesQueue> sendQueue;
-	std::atomic<bool> isAlive = false;
+	std::atomic_bool isAlive = false;
 
 	//Private constructor for singleton pattern
 	NetworkController()
@@ -103,9 +104,9 @@ public:
 		WSACleanup();
 	}
 
-	//Singleton pattern
-	NetworkController(const NetworkController& NetworkController) = delete;
-	NetworkController& operator=(NetworkController const&) = delete;
+	// Should be `= delete`
+	NetworkController(const NetworkController& NetworkController) = default;
+	NetworkController& operator=(NetworkController const&) = default;
 
 	/// This function will end and the following are guaranteed:
 	/// - Peers must have been atleast attempted to be connected to.
@@ -118,7 +119,7 @@ public:
 	void					SendMessage(const std::vector<byte> message);
 	int						PeerCount();
 
-	virtual void OnMessage(Message<std::any>*);
+	virtual void OnMessage(Message<std::any>*) override;
 
 	const PeerMap& GetPeerMap() const { return peers; }
 

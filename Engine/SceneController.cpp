@@ -1,5 +1,4 @@
 #include "SceneController.h"
-#include "Scene.h"
 
 /******************************************************************************************************************/
 // Structors
@@ -14,7 +13,6 @@ SceneController::SceneController(Game* game)
 
 SceneController::~SceneController()
 {
-	delete _game;
 }
 
 /******************************************************************************************************************/
@@ -23,7 +21,7 @@ SceneController::~SceneController()
 
 void SceneController::AddGameObject(std::shared_ptr<GameObject> obj)
 {
-	Scene* currentScene = GetCurrentScene();
+	auto currentScene = GetCurrentScene();
 	if (currentScene)
 	{
 		currentScene->AddGameObject(obj);
@@ -34,7 +32,7 @@ void SceneController::AddGameObject(std::shared_ptr<GameObject> obj)
 
 std::vector<std::shared_ptr<GameObject>>& SceneController::GetGameObjects()
 {
-	Scene* currentScene = GetCurrentScene();
+	auto currentScene = GetCurrentScene();
 	if (currentScene)
 	{
 		return currentScene->GetGameObjects();
@@ -47,7 +45,7 @@ std::vector<std::shared_ptr<GameObject>>& SceneController::GetGameObjects()
 
 void SceneController::OnKeyboard(int key, bool down)
 {
-	Scene* currentScene = GetCurrentScene();
+	auto currentScene = GetCurrentScene();
 	if (currentScene)
 	{
 		currentScene->OnKeyboard(key, down);
@@ -58,7 +56,7 @@ void SceneController::OnKeyboard(int key, bool down)
 
 void SceneController::OnMessage(Message<std::any>* msg)
 {
-	Scene* currentScene = GetCurrentScene();
+	auto currentScene = GetCurrentScene();
 	if (currentScene)
 	{
 		currentScene->OnMessage(msg);
@@ -70,7 +68,7 @@ void SceneController::OnMessage(Message<std::any>* msg)
 /// Update current scene
 void SceneController::Update(double deltaTime)
 {
-	Scene* currentScene = GetCurrentScene();
+	auto currentScene = GetCurrentScene();
 	if (currentScene)
 	{
 		currentScene->Update(deltaTime);
@@ -82,7 +80,7 @@ void SceneController::Update(double deltaTime)
 /// Render current scene
 void SceneController::Render(RenderSystem* renderer)
 {
-	Scene* currentScene = GetCurrentScene();
+	auto currentScene = GetCurrentScene();
 	if (currentScene)
 	{
 		currentScene->Render(renderer);

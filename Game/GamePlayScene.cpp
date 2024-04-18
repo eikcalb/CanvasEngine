@@ -1,8 +1,6 @@
 #include "GamePlayScene.h"
-#include "SceneManager.h"
 #include "Game.h"
 #include "RenderSystem.h"
-#include "Cube.h"
 #include "Message.h"
 
 /******************************************************************************************************************/
@@ -28,15 +26,15 @@ void GamePlayScene::Initialise()
 {
 	_voxel = new VoxelCanvas;
 	
-	Cube* cube = nullptr;
-	for (int y = 0; y < VOXEL_HEIGHT; ++y) {
-		for (int x = 0; x < VOXEL_WIDTH; ++x) {
-			cube = new Cube(_sceneManager->GetGame()->GetMesh("cube"));
-			cube->Reset();
-			_voxel->SetVoxel(x, y, cube);
-			_gameObjects.push_back(cube);
-		}
-	}
+	//std::shared_ptr<Cube> cube = nullptr;
+	//for (int y = 0; y < VOXEL_HEIGHT; ++y) {
+	//	for (int x = 0; x < VOXEL_WIDTH; ++x) {
+	//		cube = std::make_shared<Cube>(_sceneManager->GetGame()->GetMesh("cube"));
+	//		cube->Reset();
+	//		_voxel->SetVoxel(x, y, cube.get());
+	//		_gameObjects.push_back(cube);
+	//	}
+	//}
 
 	// Start all objects to set them up
 	for (int i = 0; i < (int)_gameObjects.size(); i++)

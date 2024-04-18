@@ -2,7 +2,13 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <iostream>
+#include <fstream>
+
 #include "Mesh.h"
+#include "Renderer.h"
+#include "VBO.h"
+#include "Vector4.h"
 
 typedef std::map<std::string, Mesh* >::iterator		MeshIterator;
 

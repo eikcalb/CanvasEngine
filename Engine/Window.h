@@ -1,6 +1,9 @@
 #pragma once
-#include "Game.h"
-
+#include <memory>
+#include <stdlib.h>
+#include <time.h>
+#include "Renderer.h"
+class Game;
 
 // Generic window class
 // Handles window setup and input

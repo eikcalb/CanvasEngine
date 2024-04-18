@@ -1,6 +1,7 @@
 #pragma once
+#include <memory>
 #include <vector>
-#include "Game.h"
+class GameObject;
 
 // System class 
 // This provides the behaviours that act on the components

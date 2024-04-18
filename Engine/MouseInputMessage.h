@@ -1,6 +1,6 @@
 #pragma once
-#include "Message.h"
 #include <GL/GLM/glm.hpp>
+#include "Message.h"
 
 struct MouseMessageInfo {
 	glm::vec2			pos;

@@ -7,6 +7,7 @@
 #include "Colour.h"
 #include "MathsHelper.h"
 #include "Mesh.h"
+#include "Message.h"
 #include "Observer.h"
 #include "ObserverSubject.h"
 #include "Vector4.h"

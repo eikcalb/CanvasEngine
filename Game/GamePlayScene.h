@@ -2,7 +2,6 @@
 #include "Scene.h"
 
 // Game classes
-#include "Cube.h"
 #include "Voxel.h"
 
 const int WIDTH = 512;

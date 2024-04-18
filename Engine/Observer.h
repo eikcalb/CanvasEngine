@@ -1,5 +1,6 @@
 #pragma once
 #include <any>
+#include "Message.h"
 
 /// <summary>
 /// Abstract owner class for the Observer pattern
