@@ -117,11 +117,11 @@ LRESULT CALLBACK Window_DX::WindowProc(HWND hWnd, UINT message, WPARAM wParam, L
 void Window_DX::Initialise()
 {
 	// Initialise DirectX
-	_renderer = new Renderer_DX(_hWnd);
+	_renderer = std::make_shared<Renderer_DX>(_hWnd);
 	_renderer->Initialise(_width, _height);
 
 	// Setup Game
-	_game->Initialise(this);
+	_game->Initialise(std::shared_ptr<Window>(this));
 
 	MSG msg;
 	while (!_game->GetQuitFlag())

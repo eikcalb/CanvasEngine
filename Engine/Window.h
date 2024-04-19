@@ -18,9 +18,9 @@ public:
 
 	// Data
 public:
-	Game*		_game;
-	Renderer*	_renderer;
-	int			_width, _height;
+	std::shared_ptr<Game>		_game;
+	std::shared_ptr<Renderer>	_renderer;
+	int							_width, _height;
 
 
 	// Structors
@@ -31,8 +31,8 @@ public:
 
 	// Gets/sets
 public:
-	Game* GetGame()			const	{ return _game; }
-	Renderer* GetRenderer()	const	{ return _renderer; }
+	std::shared_ptr<Game> GetGame()			const	{ return _game; }
+	std::shared_ptr<Renderer> GetRenderer()	const	{ return _renderer; }
 
 
 	// Functions

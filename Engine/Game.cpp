@@ -6,7 +6,7 @@
 #include "NetworkController.h"
 //#pragma comment(lib, "Ws2_32.lib")
 
-Game* Game::TheGame = NULL;
+std::shared_ptr<Game> Game::TheGame = nullptr;
 
 /******************************************************************************************************************/
 
@@ -16,7 +16,7 @@ Game::Game()
 {
 	_currentTime = clock();
 
-	TheGame = this;
+	TheGame = std::shared_ptr<Game>(this);
 
 	// Setup controllers.
 	// These controllers provide specific functionality to the application.
@@ -38,13 +38,11 @@ Game::~Game()
 		i->second.reset();
 	}
 	_meshes.clear();
-	delete _renderer;
-	delete _window;
 }
 
 /******************************************************************************************************************/
 
-void Game::Initialise(Window* w)
+void Game::Initialise(std::shared_ptr<Window> w)
 {
 	_window = w;
 	_renderer = w->GetRenderer();

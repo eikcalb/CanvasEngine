@@ -41,7 +41,7 @@ public:
 public:
 
 	// Initialise the game
-	virtual void Initialise(Window* w);
+	virtual void Initialise(std::shared_ptr<Window> w);
 
 	// Keyboard input
 	virtual void OnKeyboard(int key, bool down);

@@ -48,7 +48,7 @@ public:
 
 
 	// Initialise window
-	virtual void Initialise();
+	virtual void Initialise() override;
 };
 
 

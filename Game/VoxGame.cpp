@@ -14,7 +14,7 @@ VoxGame::~VoxGame()
 
 /******************************************************************************************************************/
 
-void VoxGame::Initialise(Window* w)
+void VoxGame::Initialise(std::shared_ptr<Window> w)
 {
 	// Initialise parent
 	Game::Initialise(w);
@@ -30,7 +30,7 @@ void VoxGame::Initialise(Window* w)
 		i != _meshes.end();
 		++i)
 	{
-		i->second->CreateVBO(_renderer);
+		i->second->CreateVBO(_renderer.get());
 	}
 
 	_sceneManager.PushScene(std::make_shared<GamePlayScene>());
@@ -49,7 +49,6 @@ void VoxGame::OnKeyboard(int key, bool down)
 
 void VoxGame::Render()
 {
-	Game::Render();
 	// Clear screen
 	_renderer->ClearScreen();
 

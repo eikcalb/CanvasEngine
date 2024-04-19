@@ -31,7 +31,7 @@ typedef std::map<std::string, std::shared_ptr<Mesh>>::iterator MeshMapIterator;
 class Game : ObserverSubject
 {
 public:
-	static Game* TheGame;
+	static std::shared_ptr<Game> TheGame;
 
 protected:
 	std::string							_name;
@@ -39,8 +39,8 @@ protected:
 	double								_currentTime;
 	double								_deltaTime;
 	bool								_quitFlag;
-	Renderer*							_renderer;
-	Window*								_window;
+	std::shared_ptr<Renderer>			_renderer;
+	std::shared_ptr<Window>				_window;
 
 	std::shared_ptr<InputController>	_inputController;
 	std::shared_ptr<NetworkController>	_networkController; // ✅
@@ -75,8 +75,8 @@ public:
 	void SetQuitFlag(bool v) { _quitFlag = v; }
 
 	// Renderer
-	Renderer* GetRenderer()					const { return _renderer; }
-	InputController* GetInputController()	const { return _inputController.get(); }
+	std::shared_ptr<Renderer> GetRenderer() const { return _renderer; }
+	std::shared_ptr<InputController> GetInputController()	const { return _inputController; }
 
 	// Functions
 public:
@@ -87,7 +87,7 @@ public:
 	std::vector<std::shared_ptr<GameObject>>& GetGameObjects() { return _sceneManager.GetGameObjects(); }
 
 	// Initialise game
-	virtual void Initialise(Window* w);
+	virtual void Initialise(std::shared_ptr<Window> w);
 
 	// Keyboard input
 	virtual void OnKeyboard(int key, bool down);
