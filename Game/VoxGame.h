@@ -47,7 +47,7 @@ public:
 	virtual void OnKeyboard(int key, bool down);
 
 	// Render everything
-	virtual void Render();
+	virtual void Render() override;
 
 	// Main game loop
 	virtual void Run();

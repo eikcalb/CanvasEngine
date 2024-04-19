@@ -2,7 +2,7 @@
 
 /******************************************************************************************************************/
 
-VoxGame::VoxGame()
+VoxGame::VoxGame(): Game("Voxel Game")
 {
 }
 
@@ -49,6 +49,7 @@ void VoxGame::OnKeyboard(int key, bool down)
 
 void VoxGame::Render()
 {
+	Game::Render();
 	// Clear screen
 	_renderer->ClearScreen();
 
@@ -82,6 +83,7 @@ void VoxGame::Run()
 	// Check for exit
 	if (_sceneManager.GetCurrentScene() == NULL)
 	{
+		OutputDebugString(L"Cannot run the application when no scene is set!");
 		SetQuitFlag(true);
 	}
 

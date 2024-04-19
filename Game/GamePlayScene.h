@@ -4,8 +4,8 @@
 // Game classes
 #include "Voxel.h"
 
-const int WIDTH = 512;
-const int HEIGHT = 512;
+constexpr int WIDTH = 512;
+constexpr int HEIGHT = 512;
 
 class GamePlayScene :
 	public Scene
