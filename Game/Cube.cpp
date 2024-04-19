@@ -4,7 +4,7 @@
 /******************************************************************************************************************/
 
 Cube::Cube(Mesh* mesh)
-	: GameObject("cube")
+	: GameObject("Cube")
 {
 	//new CubeControllerComponent(this);
 
@@ -29,7 +29,7 @@ void Cube::Update(double deltaTime)
 
 /******************************************************************************************************************/
 
-void Cube::OnMessage(Message<std::any>* msg)
+void Cube::OnMessage(Message* msg)
 {
 }
 
@@ -37,11 +37,10 @@ void Cube::OnMessage(Message<std::any>* msg)
 
 void Cube::Reset()
 {
-	//RenderComponent* rc = (RenderComponent*)GetComponent("render");
-	//rc->ShouldDraw(true);
-
-	//CubeControllerComponent* sc = (CubeControllerComponent*)GetComponent("input");
-	//sc->Reset();
+	ShouldDraw(true);
+	for (auto& behavior : _behaviors) {
+		behavior.second->Reset();
+	}
 
 	_position = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 }
@@ -51,9 +50,9 @@ void  Cube::SetWeight(u_short weight) {
 }
 
 void  Cube::SetColor(Colour colour) {
-	//RenderComponent* rc = (RenderComponent*)GetComponent("render");
+	
 	colour = colour;
-	rc->ShouldDraw(true);
+	ShouldDraw(true);
 }
 
 /******************************************************************************************************************/

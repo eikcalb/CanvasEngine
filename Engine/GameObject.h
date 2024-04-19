@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include <memory>
+#include <semaphore>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -29,13 +30,15 @@ protected:
 
 	// Data
 protected:
-	std::string			_type;			// Type of the object
-	float				_angle;			// Angle of object in degrees
-	float				_scale;			// Scale of the object (1 = normal)
-	Vector4				_position;		// Position of object's origin
-	bool				_alive;			// Alive flag; when false, is not updated
-	bool				_deleteFlag;	// Set when you want this game object to be deleted by the game
-	BehaviorMap			_behaviors;
+	std::string				_type;			// Type of the object
+	std::atomic<float>		_angle;			// Angle of object in degrees
+	std::atomic<float>		_scale;			// Scale of the object (1 = normal)
+	Vector4					_position;		// Position of object's origin
+	std::atomic_bool		_alive;			// Alive flag; when false, is not updated
+	std::atomic_bool		_deleteFlag;	// Set when you want this game object to be deleted by the game
+	BehaviorMap				_behaviors;
+
+	std::binary_semaphore	_semPosition;
 
 	// Constructors
 public:
@@ -51,31 +54,35 @@ private:
 
 	// Gets/sets
 public:
-	std::shared_ptr<Mesh> GetMesh()							const { return _mesh; }
+	std::shared_ptr<Mesh> GetMesh() const { return _mesh; }
 	void SetMesh(std::shared_ptr<Mesh> m) { _mesh = m; }
 
-	Colour GetColour()						const { return _colour; }
+	Colour GetColour() const { return _colour; }
 	void SetColour(Colour c) { _colour = c; }
 
-	bool ShouldDraw()						const { return _shouldDraw; }
+	bool ShouldDraw() const { return _shouldDraw; }
 	void ShouldDraw(bool v) { _shouldDraw = v; }
 
-	float GetAngle()													const { return _angle; }
+	float GetAngle() const { return _angle; }
 	void SetAngle(float v) { _angle = v; }
 
-	float GetScale()													const { return _scale; }
+	float GetScale() const { return _scale; }
 	void SetScale(float v) { _scale = v; }
 
-	Vector4 GetPosition()												const { return _position; }
-	void SetPosition(Vector4 v) { _position = v; }
+	Vector4 GetPosition() const { return _position; }
+	void SetPosition(Vector4 v) {
+		_semPosition.acquire();
+		_position = v;
+		_semPosition.release();
+	}
 
-	bool IsAlive()														const { return _alive; }
+	bool IsAlive() const { return _alive; }
 	void SetAlive(bool v) { _alive = v; }
 
-	bool ShouldBeDeleted()												const { return _deleteFlag; }
+	bool ShouldBeDeleted() const { return _deleteFlag; }
 	void SetDeleteFlag(bool v) { _deleteFlag = v; }
 
-	std::string GetType()												const { return _type; }
+	std::string GetType() const { return _type; }
 
 	// Component Functions
 public:

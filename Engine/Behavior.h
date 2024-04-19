@@ -31,5 +31,6 @@ public:
 
 	// Main update function (called every frame)
 	virtual void Update(double deltaTime) = 0;
+	virtual void Reset() = 0;
 };
 

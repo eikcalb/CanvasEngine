@@ -1,6 +1,4 @@
 #pragma once
-#include <any>
-
 #include "Colour.h"
 #include "Game.h"
 #include "GameObject.h"
@@ -24,10 +22,11 @@ public:
 
 	// Functions
 public:
-	virtual void Update(double deltaTime);
-	virtual void OnMessage(Message<std::any>* msg);
-	virtual void Reset();
+	virtual void Update(double deltaTime) override;
+	virtual void OnMessage(Message* msg) override;
+	virtual void Reset() override;
 
+	unsigned short GetWeight(u_short weight) { return weight; };
 	void SetWeight(u_short weight);
 	void SetColor(Colour colour);
 };

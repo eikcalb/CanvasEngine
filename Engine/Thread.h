@@ -2,6 +2,7 @@
 #include <thread>
 #include <iostream>
 #include <chrono>
+#include <sstream>
 #include <windows.h>
 
 #include "Task.h"

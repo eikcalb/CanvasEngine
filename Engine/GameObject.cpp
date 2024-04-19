@@ -13,7 +13,8 @@ GameObject::GameObject(std::string type)
 	_alive(true),
 	_type(type),
 	_deleteFlag(false),
-	_shouldDraw(false)
+	_shouldDraw(false),
+	_semPosition(0)
 {
 }
 
