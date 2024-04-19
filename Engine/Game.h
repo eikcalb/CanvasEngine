@@ -39,16 +39,15 @@ protected:
 	double								_currentTime;
 	double								_deltaTime;
 	bool								_quitFlag;
-	std::shared_ptr<Renderer>			_renderer;
-	std::shared_ptr<Window>				_window;
 
 	std::shared_ptr<InputController>	_inputController;
 	std::shared_ptr<NetworkController>	_networkController; // ✅
 	std::shared_ptr<ResourceController>	_resourceController;
 	std::shared_ptr<ThreadController>	_threadController; // ✅
 
-	// Meshes
-	MeshMap			_meshes;// The map of meshes
+	MeshMap							_meshes;// The map of meshes
+	std::shared_ptr<Renderer>		_renderer;
+	std::shared_ptr<Window>			_window;
 	// Systems
 	std::shared_ptr<RenderSystem>	_renderSystem;// To handle rendering
 	// Scene Manager

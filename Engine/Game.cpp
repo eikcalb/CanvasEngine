@@ -4,7 +4,6 @@
 #include "KeyPressMessage.h"
 #include "MouseInputMessage.h"
 #include "NetworkController.h"
-//#pragma comment(lib, "Ws2_32.lib")
 
 std::shared_ptr<Game> Game::TheGame = nullptr;
 
@@ -17,6 +16,8 @@ Game::Game()
 	_currentTime = clock();
 
 	TheGame = std::shared_ptr<Game>(this);
+
+	_renderSystem = std::make_shared<RenderSystem>();
 
 	// Setup controllers.
 	// These controllers provide specific functionality to the application.
