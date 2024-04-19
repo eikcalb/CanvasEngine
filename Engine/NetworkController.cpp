@@ -2,6 +2,28 @@
 
 const std::string NetworkController::EVENT_TYPE_NEW_MESSAGE = "network_controller_new_message";
 
+NetworkController::NetworkController() : backlog(),
+messages(),
+messageQueue(),
+peers() {
+	mInputController = InputController::Instance();
+	mThreadController = ThreadController::Instance();
+	mResourceController = ResourceController::Instance();
+
+	isAlive = true;
+
+	peers.reserve(MAX_PEERS);
+
+	// Initialize winsock dll
+	WSADATA wsaData;
+	WORD winsockVersion = MAKEWORD(2, 2);
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != NO_ERROR)
+	{
+		OutputDebugString(L"Failed to initialize Winsock!");
+		OutputDebugString(L"Nothing network-relatred will work for this application!");
+	}
+}
+
 void NetworkController::HandleIncomingMessages()
 {
 	// Here we will select the peer sockets and read their data individually.
@@ -36,26 +58,24 @@ void NetworkController::HandleIncomingMessages()
 		for (auto peer : GetPeerMap()) {
 			if (FD_ISSET(peer.second->GetSocket(), &readSockets)) {
 				mThreadController->AddTask([&] {
-					// This is an atomic operation (or probably not, looks unnecessary):
-					// https://studiofreya.com/cpp/volatile-and-atomic-variables-in-cpp/.
-					// TODO: Is this really required???
-					// Since only inserts are occuring, will the memory not be expanded
-					// when accessed at the same time?
-					// Since the memory is a single entity, if multiple threads access it,
-					// will it not control and handle all requests accordingly?
+					// Here, we will fetch th enew message and add it to
+					// the message queue.
 					const auto& input = peer.second->Receive();
 					if (input.size() <= 0) {
 						OutputDebugString(L"Received an empty message");
 						return;
 					}
 
-					auto queue = messageQueue.load();
-					NetworkMessageInfo nmi = { peer.second->GetID(), input };
+					std::lock_guard lock(messageMx);
+					std::shared_ptr<NetworkMessageInfo> nmi = std::make_shared<NetworkMessageInfo>();
+					nmi->message = input;
+					nmi->peerID = peer.second->GetID();
+
 					auto newMessage = std::make_shared<NetworkMessage>(nmi, EVENT_TYPE_NEW_MESSAGE);
-					queue.push(newMessage);
-					messageQueue.store(queue);
+					messageQueue.push(newMessage);
 					},
-					TaskType::NETWORK, "NC.HandleIncomingMessages receive message"
+					TaskType::NETWORK,
+					"NC.HandleIncomingMessages receive message"
 				);
 			}
 		}
@@ -67,38 +87,41 @@ void NetworkController::ProcessMessages() {
 	// This runs asynchronously, so we will check for new messages in each
 	// queue and process those messages.
 	do {
-		if (sendQueue.load().size() > 0) {
+		if (sendQueue.size() > 0) {
 			mThreadController->AddTask([&] {
-				auto queue = sendQueue.load();
+				std::lock_guard lock(sendMx);
+
 				OutputDebugString(L"Sending message to peers!");
 
-				while (!queue.empty()) {
-					const auto& message = queue.front();
+				while (!sendQueue.empty()) {
+					const auto& message = sendQueue.front();
 					for (auto& peerEntry : GetPeerMap()) {
 						peerEntry.second->Send(message);
 					}
-					queue.pop();
+					sendQueue.pop();
 				}
 
 				OutputDebugString(L"Send succeeded!");
-
-				sendQueue.store(queue);
 				},
-				TaskType::NETWORK, "NC.ProcessMessages:Handle outgoing messages!"
+				TaskType::NETWORK,
+				"NC.ProcessMessages:Handle outgoing messages!"
 			);
 		}
 
-		if (messageQueue.load().size() > 0) {
+		if (messageQueue.size() > 0) {
 			mThreadController->AddTask([&] {
-				auto queue = messageQueue.load();
+				std::lock_guard lock(messageMx);
 
-				while (!queue.empty()) {
-					auto& message = queue.front();
-					BroadcastMessage(dynamic_cast<Message<std::any>*>(message.get()));
-					queue.pop();
+				OutputDebugString(L"Reading messages from peers!");
+
+				while (!messageQueue.empty()) {
+					auto& message = messageQueue.front();
+					BroadcastMessage(message.get());
+					messageQueue.pop();
 				}
 				},
-				TaskType::NETWORK, "NC.ProcessMessages:Handle incoming messages!"
+				TaskType::NETWORK,
+				"NC.ProcessMessages:Handle incoming messages!"
 			);
 		}
 	} while (isAlive);
@@ -165,7 +188,7 @@ int NetworkController::PeerCount()
 	return peers.size();
 }
 
-void NetworkController::OnMessage(Message<std::any>* msg) {
+void NetworkController::OnMessage(Message* msg) {
 	// When a message is received, we want to handle it here.
 	const auto& msgType = msg->GetMessageType();
 	if (msgType == ConnectionStrategy::EVENT_TYPE_NEW_CONNECTION) {
@@ -177,30 +200,30 @@ void NetworkController::OnMessage(Message<std::any>* msg) {
 			return;
 		}
 
-		auto peer = connMsg->getData();
+		ConnectionMessageInfo* peer = reinterpret_cast<ConnectionMessageInfo*>(connMsg->getData().get());
 		// We lock here to ensure that while reading the connected peer list,
 		// an update does not occur, thereby leading to inconsistent state.
 		std::lock_guard lock(peerMx);
 
 		if (PeerCount() > MAX_PEERS) {
 			OutputDebugString(L"Connection has reached capacity!");
-			peer.reset();
+			peer->conn.reset();
 		}
 
 		// Check if the peer already exists.
-		if (peers.count(peer->GetID()) > 0) {
+		if (peers.count(peer->conn->GetID()) > 0) {
 			OutputDebugString(L"Connection already exists!");
-			peer.reset();
+			peer->conn.reset();
 		}
 
 		// Set the socket to non-bloaking.
 		u_long mode = 1;
-		ioctlsocket(peer->GetSocket(), FIONBIO, &mode);
+		ioctlsocket(peer->conn->GetSocket(), FIONBIO, &mode);
 
 		// We add the new peer to our list of peers.
 		// TODO: use WSAEventSelect to reset a blocking select and listen to this new peer.
 		OutputDebugString(L"New connection received!");
-		peers[peer->GetID()] = peer;
+		peers[peer->conn->GetID()] = peer->conn;
 	}
 }
 

@@ -7,6 +7,7 @@
 #include <sstream>
 #include <unordered_map>
 
+// TODO: These imports could be better moved into the `.cpp` source file.
 #include "Connection.h"
 #include "ConnectionMessage.h"
 #include "InputController.h"
@@ -36,10 +37,9 @@ typedef std::unordered_map<std::string, std::shared_ptr<Connection>> PeerMap;
 /// - When messages are received, add them to the `messageQueue`.
 /// - In a separate thread(s?), these messages will be dispatched (pushed) to consumers.
 /// </summary>
-class NetworkController : ObserverSubject, public Observer
+class NetworkController : public ObserverSubject, public Observer
 {
-//private
-public:
+private:
 	std::shared_ptr<InputController> mInputController;
 	std::shared_ptr<ThreadController> mThreadController;
 	std::shared_ptr<ResourceController> mResourceController;
@@ -52,38 +52,16 @@ public:
 	std::shared_ptr<CommunicationConfig> communicationConfig;
 	std::shared_ptr<ConnectionStrategy> connectionStrategy;
 
-	//std::mutex messageMx;
+	std::mutex messageMx;
+	std::mutex sendMx;
 	std::mutex peerMx;
 
-	std::atomic<IncomingMessagesQueue> messageQueue;
-	std::atomic<OutgoingMessagesQueue> sendQueue;
+	IncomingMessagesQueue messageQueue;
+	OutgoingMessagesQueue sendQueue;
 	std::atomic_bool isAlive = false;
 
 	//Private constructor for singleton pattern
-	NetworkController()
-		:
-		backlog(),
-		messages(),
-		messageQueue(),
-		peers()
-	{
-		mInputController = InputController::Instance();
-		mThreadController = ThreadController::Instance();
-		mResourceController = ResourceController::Instance();
-
-		isAlive = true;
-
-		peers.reserve(MAX_PEERS);
-
-		// Initialize winsock dll
-		WSADATA wsaData;
-		WORD winsockVersion = MAKEWORD(2, 2);
-		if (WSAStartup(MAKEWORD(2, 2), &wsaData) != NO_ERROR)
-		{
-			OutputDebugString(L"Failed to initialize Winsock!");
-			OutputDebugString(L"Nothing network-relatred will work for this application!");
-		}
-	}
+	NetworkController();
 
 	void HandleIncomingMessages();
 	/// <summary>
@@ -105,8 +83,8 @@ public:
 	}
 
 	// Should be `= delete`
-	NetworkController(const NetworkController& NetworkController) = default;
-	NetworkController& operator=(NetworkController const&) = default;
+	NetworkController(const NetworkController& NetworkController) = delete;
+	NetworkController& operator=(NetworkController const&) = delete;
 
 	/// This function will end and the following are guaranteed:
 	/// - Peers must have been atleast attempted to be connected to.
@@ -119,7 +97,7 @@ public:
 	void					SendMessage(const std::vector<byte> message);
 	int						PeerCount();
 
-	virtual void OnMessage(Message<std::any>*) override;
+	virtual void OnMessage(Message*) override;
 
 	const PeerMap& GetPeerMap() const { return peers; }
 

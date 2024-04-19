@@ -1,6 +1,7 @@
 #include "InputController.h"
 
-const std::string InputController::EVENT_INPUT = "input_event";
+const std::string InputController::EVENT_KEY_INPUT = "input_key_event";
+const std::string InputController::EVENT_MOUSE_INPUT = "input_mouse_event";
 
 InputController::InputController(): ObserverSubject()
 {

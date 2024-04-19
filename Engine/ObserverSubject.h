@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "Message.h"
 #include "Observer.h"
 
 typedef std::map<std::string, std::vector<std::shared_ptr<Observer>> > MessageListenerMap;
@@ -28,8 +29,7 @@ protected:
 	MessageListenerMap listeners = {};
 
 	// Message handler (called when message occurs)
-	template<typename T>
-	void BroadcastMessage(Message<T>* msg) {
+	void BroadcastMessage(Message* msg) {
 		const auto msgListeners = listeners[msg->GetMessageType()];
 		for (auto& listener : msgListeners) {
 			listener->OnMessage(msg);

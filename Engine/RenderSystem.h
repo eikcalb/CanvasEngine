@@ -3,6 +3,8 @@
 #include "System.h"
 #include "Renderer.h"
 
+class GameObject;
+
 // Moves objects around based on PhysicsComponents
 class RenderSystem :
 	public System

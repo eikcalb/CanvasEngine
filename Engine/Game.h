@@ -7,7 +7,7 @@
 #include <windowsx.h>
 
 #include "InputController.h"
-#include "NetworkController.h"
+#include "Mesh.h"
 #include "ResourceController.h"
 #include "RenderSystem.h"
 #include "SceneController.h"
@@ -18,6 +18,7 @@ class GameObject;
 class Mesh;
 class Renderer;
 class Window;
+class NetworkController {};
 
 // Typedefs
 typedef std::map<std::string, std::shared_ptr<Mesh>> MeshMap;
@@ -78,7 +79,7 @@ public:
 public:
 	void AddGameObject(GameObject* obj) {
 		_sceneManager.AddGameObject(std::shared_ptr<GameObject>(obj));
-		_inputController->Observe(InputController::EVENT_INPUT, std::shared_ptr<GameObject>(obj));
+		_inputController->Observe(InputController::EVENT_KEY_INPUT, std::shared_ptr<GameObject>(obj));
 	}
 	std::vector<std::shared_ptr<GameObject>>& GetGameObjects() { return _sceneManager.GetGameObjects(); }
 
@@ -96,5 +97,5 @@ public:
 	virtual void Run();
 
 	// The game can respond to messages too
-	virtual void ListenToMessage(Message<std::any>* msg) {}
+	virtual void ListenToMessage(Message* msg) {}
 };

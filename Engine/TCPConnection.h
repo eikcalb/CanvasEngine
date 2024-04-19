@@ -2,6 +2,7 @@
 
 #include "Connection.h"
 #include "ConnectionMessage.h"
+#include "Message.h"
 #include "ResourceController.h"
 
 /// <summary>
@@ -52,7 +53,7 @@ public:
 		}
 
 		started = true;
-		BareMessage msg{ EVENT_TYPE_STARTED };
+		Message msg{ EVENT_TYPE_STARTED };
 		this->BroadcastMessage(&msg);
 	}
 
@@ -161,7 +162,13 @@ public:
 				throw ex;
 			}
 
-			ConnectionMessage* msg = new ConnectionMessage(conn, EVENT_TYPE_NEW_CONNECTION);
+			auto msgInfo = std::make_shared<ConnectionMessageInfo>();
+			msgInfo->conn = conn;
+
+			ConnectionMessage* msg = new ConnectionMessage(
+				msgInfo,
+				EVENT_TYPE_NEW_CONNECTION
+			);
 			BroadcastMessage(msg);
 
 			freeaddrinfo(result);
@@ -228,9 +235,15 @@ public:
 
 			auto conn = std::make_shared<Connection>(info, clientSocket);
 
+			auto msgInfo = std::make_shared<ConnectionMessageInfo>();
+			msgInfo->conn = conn;
+
+			ConnectionMessage* msg = new ConnectionMessage(
+				msgInfo,
+				EVENT_TYPE_NEW_CONNECTION
+			);
 			// Broadcast new connection to listeners.
-			ConnectionMessage msg{ conn, EVENT_TYPE_NEW_CONNECTION };
-			BroadcastMessage(&msg);
+			BroadcastMessage(msg);
 		} while (started);
 	}
 };

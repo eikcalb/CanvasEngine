@@ -1,5 +1,7 @@
 #include "GameObject.h"
 
+#include "Mesh.h"
+
 /******************************************************************************************************************/
 // Structors
 /******************************************************************************************************************/
@@ -10,7 +12,8 @@ GameObject::GameObject(std::string type)
 	_position(0, 0),
 	_alive(true),
 	_type(type),
-	_deleteFlag(false)
+	_deleteFlag(false),
+	_shouldDraw(false)
 {
 }
 
@@ -106,7 +109,7 @@ void GameObject::Update(double deltaTime)
 /******************************************************************************************************************/
 
 // Message handler (called when message occurs)
-void GameObject::OnMessage(Message<std::any>* msg)
+void GameObject::OnMessage(Message* msg)
 {
 	// Mock implementation of a message listener.
 	// Subclasses should implement specific listener logic.

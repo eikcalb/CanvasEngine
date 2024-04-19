@@ -1,21 +1,18 @@
 #include "Message.h"
+#include <chrono>
 
 /******************************************************************************************************************/
 // Structors
 /******************************************************************************************************************/
-template <typename T>
-Message<T>::Message(std::string type)
-	: _type(type)
-{
+Message::Message(std::string type)
+	: _type(type), timestamp(-1)
+{}
 
-}
-
-template <typename T>
-Message<T>::Message(T data, std::string type)
+Message::Message(std::shared_ptr<BaseMessageType> data, std::string type)
 	: _data(data), _type(type)
 {
 	const auto clock = std::chrono::system_clock::now();
-	timestamp = std::chrono::duration_cast<std::chrono::seconds>(clock.time_since_epoch()).count()
+	timestamp = std::chrono::duration_cast<std::chrono::seconds>(clock.time_since_epoch()).count();
 }
 
 /******************************************************************************************************************/

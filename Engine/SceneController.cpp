@@ -54,7 +54,7 @@ void SceneController::OnKeyboard(int key, bool down)
 
 /******************************************************************************************************************/
 
-void SceneController::OnMessage(Message<std::any>* msg)
+void SceneController::OnMessage(Message* msg)
 {
 	auto currentScene = GetCurrentScene();
 	if (currentScene)

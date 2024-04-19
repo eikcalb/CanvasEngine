@@ -5,7 +5,9 @@
 #include <d3dx10.h>
 
 #include "VBO.h"
-#include "Renderer_DX.h"
+#include "Vertex.h"
+
+class Renderer_DX;
 
 // DirectX specific VBO class
 class VBO_DX :

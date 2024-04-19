@@ -52,6 +52,6 @@ public:
 	virtual void Render(RenderSystem* renderer) = 0;
 
 	// Respond to messages
-	virtual void OnMessage(Message<std::any>* msg) override;
+	virtual void OnMessage(Message* msg) override;
 };
 

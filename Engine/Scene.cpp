@@ -37,7 +37,7 @@ void Scene::Update(double deltaTime)
 
 /******************************************************************************************************************/
 
-void Scene::OnMessage(Message<std::any>* msg)
+void Scene::OnMessage(Message* msg)
 {
 	for (int i = 0; i < (int)_gameObjects.size(); i++)
 	{

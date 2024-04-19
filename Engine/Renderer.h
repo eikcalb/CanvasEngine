@@ -1,15 +1,15 @@
 #pragma once
-#include "Colour.h"
 
 // GLM
 #include "GL\GLM\GLM.hpp"
 #include "GL\GLM\GTC\matrix_transform.hpp"
 #include "GL\GLM\GTC\type_ptr.hpp"
 
+#include "Colour.h"
 #include "Hud.h"
-#include "GameObject.h"
-#include "Mesh.h"
 
+class GameObject;
+class Mesh;
 
 // Platform independent renderer base class
 // Basically represents a graphics context and its active shaders

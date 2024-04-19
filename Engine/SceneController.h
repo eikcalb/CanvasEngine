@@ -38,7 +38,7 @@ public:
 	void OnKeyboard(int key, bool down);
 
 	/// Respond to messages
-	void OnMessage(Message<std::any>* msg) override;
+	void OnMessage(Message* msg) override;
 
 	/// Update current scene
 	void Update(double deltaTime);

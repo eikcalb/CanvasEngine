@@ -1,8 +1,8 @@
 #if BUILD_DIRECTX
 #include "Renderer_DX.h"
+
 #include "VBO.h"
 #include "Mesh.h"
-#include "GameObject.h"
 
 /******************************************************************************************************************/
 
@@ -52,7 +52,7 @@ void Renderer_DX::Destroy()
 
 /******************************************************************************************************************/
 
-void Renderer_DX::Draw(const Mesh* mesh, glm::mat4 MVM, const Colour& colour)
+void Renderer_DX::Draw(const std::shared_ptr<Mesh> mesh, glm::mat4 MVM, const Colour& colour)
 {
 	MVM = glm::transpose(MVM);
 

@@ -1,16 +1,20 @@
 #pragma once
 #include <map>
+#include <memory>
+#include <string>
 #include <unordered_map>
 #include <vector>
 
-#include "Behavior.h"
 #include "Colour.h"
+#include "Behavior.h"
 #include "MathsHelper.h"
-#include "Mesh.h"
 #include "Message.h"
 #include "Observer.h"
 #include "ObserverSubject.h"
 #include "Vector4.h"
+
+
+class Mesh;
 
 typedef std::unordered_map<std::string, std::shared_ptr<Behavior>> BehaviorMap;
 
@@ -93,7 +97,7 @@ public:
 	virtual void End();
 
 	// Message handler (called when message occurs)
-	virtual void OnMessage(Message<std::any>* msg) override;
+	virtual void OnMessage(Message* msg) override;
 
 	// Resets the game object to the start state (similar to Start(), but may be called more than once)
 	virtual void Reset();

@@ -1,4 +1,6 @@
 #include "Mesh.h"
+#include "VBO.h"
+#include "Renderer.h"
 
 #if BUILD_DIRECTX
 #include "VBO_DX.h"

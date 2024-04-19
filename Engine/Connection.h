@@ -1,4 +1,6 @@
 #pragma once
+#define WIN32_LEAN_AND_MEAN 
+
 #include <functional>
 #include <memory>
 //#ifndef WIN_SOCK_NON_BLOCK
@@ -6,10 +8,14 @@
 //	#define WIN_SOCK_NON_BLOCK
 //	#include <WinSock2.h>
 //	#include <WS2tcpip.h>
-//	#pragma comment(lib, "Ws2_32.lib")
+//	//#pragma comment(lib, "Ws2_32.lib")
 //#endif // !WIN_SOCK_NON_BLOCK
 
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+
 #include "ObserverSubject.h"
+#include "types.h"
 
 constexpr u_short BUFFER_SIZE = 1024;
 constexpr u_short MAX_PEERS = 8;

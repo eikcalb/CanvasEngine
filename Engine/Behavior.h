@@ -27,7 +27,7 @@ public:
 
 	std::string GetTag() { return _tag; }
 
-	virtual void OnMessage(Message<std::any> msg) = 0;
+	virtual void OnMessage(Message msg) = 0;
 
 	// Main update function (called every frame)
 	virtual void Update(double deltaTime) = 0;

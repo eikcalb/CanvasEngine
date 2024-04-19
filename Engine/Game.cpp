@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "KeyPressMessage.h"
 #include "MouseInputMessage.h"
+//#include "NetworkController.h"
 
 Game* Game::TheGame = NULL;
 
@@ -20,7 +21,7 @@ Game::Game()
 	// These controllers provide specific functionality to the application.
 	// Each controller exposes functions that solve a specific set of problems.
 	_inputController = InputController::Instance();
-	_networkController = NetworkController::Instance();
+	//_networkController = NetworkController::Instance();
 	//_resourceController = ResourceController::Instance();
 	_threadController = ThreadController::Instance();
 }
@@ -66,8 +67,10 @@ inline std::shared_ptr<Mesh> Game::GetMesh(std::string name)
 void Game::OnKeyboard(int key, bool down)
 {
 	// Create keypress message and send it to all objects
-	KeyPressMessageInfo data = { key, down };
-	Message<KeyPressMessage> msg(std::shared_ptr< KeyPressMessageInfo>(data));
+	auto data = std::make_shared< KeyPressMessageInfo>();
+	data->key = key;
+	data->down = down;
+	KeyPressMessage msg(data, InputController::EVENT_KEY_INPUT);
 
 	//BroadcastMessage(&msg);
 	_inputController->Notify(&msg);
@@ -78,8 +81,10 @@ void Game::OnMouse(LPARAM lParam, bool down)
 	int xPos = GET_X_LPARAM(lParam);
 	int yPos = GET_Y_LPARAM(lParam);
 	// Create keypress message and send it to all objects
-	MouseMessageInfo data = { glm::vec2(xPos, yPos), down };
-	MouseInputMessage msg(std::shared_ptr<MouseMessageInfo>(data));
+	auto data = std::make_shared< MouseMessageInfo>();
+	data->pos = glm::vec2(xPos, yPos);
+	data->clicked = down;
+	MouseInputMessage msg(std::shared_ptr<MouseMessageInfo>(data), InputController::EVENT_MOUSE_INPUT);
 
 	_inputController->Notify(&msg);
 }

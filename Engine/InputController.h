@@ -192,7 +192,8 @@ protected:
 
 	InputController();
 public:
-    static const std::string EVENT_INPUT;
+    static const std::string EVENT_KEY_INPUT;
+    static const std::string EVENT_MOUSE_INPUT;
 
 	~InputController() = default;
 
@@ -220,9 +221,8 @@ public:
         return !mKeyStates[button];
 	}
     
-    template<typename T>
-    void Notify(T msg) {
-        BroadcastMessage<T>(msg);
+    void Notify(Message* msg) {
+        BroadcastMessage(msg);
     };
 };
 

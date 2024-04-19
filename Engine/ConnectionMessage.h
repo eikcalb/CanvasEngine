@@ -3,12 +3,15 @@
 
 #include "Connection.h"
 
-class ConnectionMessage : public Message<std::shared_ptr<Connection>>
+struct ConnectionMessageInfo: public BaseMessageType {
+	std::shared_ptr<Connection> conn;
+};
+
+class ConnectionMessage : public Message
 {
-protected:
 public:
-	ConnectionMessage(std::shared_ptr<Connection> connection, std::string type)
-		: Message<std::shared_ptr<Connection>>(connection, type)
+	ConnectionMessage(std::shared_ptr<ConnectionMessageInfo> connInfo, std::string type)
+		: Message(connInfo, type)
 	{
 
 	}
