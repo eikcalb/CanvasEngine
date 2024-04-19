@@ -43,7 +43,7 @@ Game::~Game()
 
 /******************************************************************************************************************/
 
-void Game::Initialise(std::shared_ptr<Window>& w)
+void Game::Initialise(std::shared_ptr<Window> w)
 {
 	_window = w;
 	_renderer = w->GetRenderer();
