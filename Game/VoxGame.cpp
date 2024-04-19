@@ -21,7 +21,7 @@ void VoxGame::Initialise(std::shared_ptr<Window> w)
 
 	//////////////
 	// Setup Meshes
-	auto cube= std::shared_ptr<Mesh>();
+	auto cube= std::make_shared<Mesh>();
 	cube->LoadFromFile("CubeMesh.txt");
 	AddMesh("cube", cube);
 
