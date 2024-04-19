@@ -2,7 +2,9 @@
 #include <memory>
 #include <stdlib.h>
 #include <time.h>
+
 #include "Renderer.h"
+
 class Game;
 
 // Generic window class

@@ -1,5 +1,4 @@
 #include "Connection.h"
-#pragma comment(lib, "Ws2_32.lib")
 
 #pragma region Static constant declarations
 

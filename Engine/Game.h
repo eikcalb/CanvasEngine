@@ -1,4 +1,7 @@
 ﻿#pragma once
+//#pragma comment(lib, "Ws2_32.lib")
+#define WIN32_LEAN_AND_MEAN 
+
 #include <time.h>
 #include <map>
 #include <vector>
@@ -18,7 +21,7 @@ class GameObject;
 class Mesh;
 class Renderer;
 class Window;
-class NetworkController {};
+class NetworkController;
 
 // Typedefs
 typedef std::map<std::string, std::shared_ptr<Mesh>> MeshMap;

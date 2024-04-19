@@ -1,4 +1,6 @@
 #pragma once
+#define WIN32_LEAN_AND_MEAN
+
 #include <iostream>
 #include <fstream>
 #include <list>
@@ -8,6 +10,7 @@
 #include <queue>
 #include <vector>
 #include <string>
+#include <WinSock2.h>
 #include <wrl/client.h>
 
 struct Peer{

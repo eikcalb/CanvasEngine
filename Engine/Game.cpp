@@ -3,7 +3,8 @@
 #include "GameObject.h"
 #include "KeyPressMessage.h"
 #include "MouseInputMessage.h"
-//#include "NetworkController.h"
+#include "NetworkController.h"
+//#pragma comment(lib, "Ws2_32.lib")
 
 Game* Game::TheGame = NULL;
 

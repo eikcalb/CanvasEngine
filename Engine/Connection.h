@@ -1,16 +1,10 @@
 #pragma once
-#define WIN32_LEAN_AND_MEAN 
+#define WIN32_LEAN_AND_MEAN // Required to prevent winsock/WinSock2 redifinition
+#pragma comment(lib, "Ws2_32.lib")
 
 #include <functional>
 #include <memory>
-//#ifndef WIN_SOCK_NON_BLOCK
-//	// This fixes the error of importing winsock2 multiple times.
-//	#define WIN_SOCK_NON_BLOCK
-//	#include <WinSock2.h>
-//	#include <WS2tcpip.h>
-//	//#pragma comment(lib, "Ws2_32.lib")
-//#endif // !WIN_SOCK_NON_BLOCK
-
+#include <string>
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 

@@ -5,6 +5,8 @@
 #pragma once
 #if BUILD_DIRECTX
 // include Windows and Direct3D headers
+#define WIN32_LEAN_AND_MEAN
+
 #include <windows.h>
 #include <windowsx.h>
 #include <d3d11.h>
