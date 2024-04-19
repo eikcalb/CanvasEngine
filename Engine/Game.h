@@ -87,7 +87,7 @@ public:
 	std::vector<std::shared_ptr<GameObject>>& GetGameObjects() { return _sceneManager.GetGameObjects(); }
 
 	// Initialise game
-	virtual void Initialise(std::shared_ptr<Window> w);
+	virtual void Initialise(std::shared_ptr<Window>& w);
 
 	// Keyboard input
 	virtual void OnKeyboard(int key, bool down);

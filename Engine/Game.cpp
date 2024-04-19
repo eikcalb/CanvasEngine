@@ -42,11 +42,11 @@ Game::~Game()
 
 /******************************************************************************************************************/
 
-void Game::Initialise(std::shared_ptr<Window> w)
+void Game::Initialise(std::shared_ptr<Window>& w)
 {
 	_window = w;
 	_renderer = w->GetRenderer();
-	_renderSystem->SetRenderer(std::shared_ptr<Renderer>(_renderer));
+	_renderSystem->SetRenderer(_renderer);
 }
 
 inline std::shared_ptr<Mesh> Game::GetMesh(std::string name)

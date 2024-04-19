@@ -6,7 +6,7 @@
 /******************************************************************************************************************/
 
 RenderSystem::RenderSystem()
-	: _renderer(NULL)
+	: _renderer()
 {
 }
 
@@ -22,7 +22,7 @@ RenderSystem::~RenderSystem()
 
 void RenderSystem::Process(std::vector<std::shared_ptr<GameObject>>& list, double _)
 {
-	if (_renderer == NULL) return;
+	if (!_renderer) return;
 	for (auto obj : list)
 	{
 		if (obj->IsAlive() && obj->ShouldDraw())

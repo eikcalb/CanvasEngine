@@ -121,7 +121,7 @@ void Window_DX::Initialise()
 	_renderer->Initialise(_width, _height);
 
 	// Setup Game
-	_game->Initialise(std::shared_ptr<Window>(this));
+	_game->Initialise(this);
 
 	MSG msg;
 	while (!_game->GetQuitFlag())

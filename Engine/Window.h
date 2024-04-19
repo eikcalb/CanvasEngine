@@ -31,8 +31,8 @@ public:
 
 	// Gets/sets
 public:
-	std::shared_ptr<Game> GetGame()			const	{ return _game; }
-	std::shared_ptr<Renderer> GetRenderer()	const	{ return _renderer; }
+	std::shared_ptr<Game>& GetGame()			{ return _game; }
+	std::shared_ptr<Renderer>& GetRenderer()	{ return _renderer; }
 
 
 	// Functions
