@@ -28,7 +28,7 @@
 class ThreadController
 {
 private:
-	std::atomic<bool> should_stop;
+	std::atomic<bool> should_stop = false;
 	std::vector<Thread*> threads;
 
 	std::mutex tasksMutex;
@@ -59,6 +59,7 @@ private:
 		{
 			threads.emplace_back(new Thread());
 		}
+		OutputDebugString(L"Created thread count: " + threads.size());
 	}
 
 public:
