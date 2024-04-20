@@ -43,6 +43,7 @@ protected:
 	std::shared_ptr<InputController>	_inputController;
 	std::shared_ptr<NetworkController>	_networkController; // ✅
 	std::shared_ptr<ResourceController>	_resourceController;
+	std::shared_ptr<SceneController>	_sceneController;
 	std::shared_ptr<ThreadController>	_threadController; // ✅
 
 	MeshMap							_meshes;// The map of meshes
@@ -50,8 +51,6 @@ protected:
 	std::shared_ptr<Window>			_window;
 	// Systems
 	std::shared_ptr<RenderSystem>	_renderSystem;// To handle rendering
-	// Scene Manager
-	SceneController	_sceneManager;
 
 	// TODO: introduce audio manager?
 public:
@@ -76,14 +75,15 @@ public:
 	// Renderer
 	std::shared_ptr<Renderer> GetRenderer() const { return _renderer; }
 	std::shared_ptr<InputController> GetInputController()	const { return _inputController; }
+	std::shared_ptr<ThreadController> GetThreadController()	const { return _threadController; }
 
 	// Functions
 public:
 	void AddGameObject(GameObject* obj) {
-		_sceneManager.AddGameObject(std::shared_ptr<GameObject>(obj));
+		_sceneController->AddGameObject(std::shared_ptr<GameObject>(obj));
 		_inputController->Observe(InputController::EVENT_KEY_INPUT, std::shared_ptr<GameObject>(obj));
 	}
-	std::vector<std::shared_ptr<GameObject>>& GetGameObjects() { return _sceneManager.GetGameObjects(); }
+	std::vector<std::shared_ptr<GameObject>>& GetGameObjects() { return _sceneController->GetGameObjects(); }
 
 	// Initialise game
 	virtual void Initialise(std::shared_ptr<Window> w);

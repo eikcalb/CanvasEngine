@@ -17,7 +17,7 @@
 #include "Message.h"
 #include "MultiMesh.h"
 
-#include "GamePlayScene.h"
+#include "GameMenuScene.h"
 
 // Simple game state enum for the Asteroids game
 enum GameState

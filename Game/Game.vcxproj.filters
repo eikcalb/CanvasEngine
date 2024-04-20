@@ -12,6 +12,7 @@
     <ClCompile Include="Voxel.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="GameMenuScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VoxGame.h" />
@@ -24,6 +25,7 @@
     <ClInclude Include="Voxel.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="GameMenuScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag" />

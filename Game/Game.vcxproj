@@ -152,12 +152,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="GameMenuScene.h" />
     <ClInclude Include="Voxel.h" />
     <ClInclude Include="VoxGame.h" />
     <ClInclude Include="GamePlayScene.h" />
     <ClInclude Include="Cube.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameMenuScene.cpp" />
     <ClCompile Include="Voxel.cpp" />
     <ClCompile Include="VoxGame.cpp" />
     <ClCompile Include="GamePlayScene.cpp" />

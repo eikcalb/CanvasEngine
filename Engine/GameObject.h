@@ -91,7 +91,6 @@ public:
 	bool RemoveBehavior(std::string componentType);
 	std::shared_ptr<Behavior> GetBehavior(std::string tag);
 
-
 	// General Functions
 public:
 	// Setup function -- called to initialise object and its components. Should only be called once

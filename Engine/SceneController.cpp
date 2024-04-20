@@ -6,8 +6,7 @@
 // Structors
 /******************************************************************************************************************/
 
-SceneController::SceneController(Game* game)
-	: _game(game)
+SceneController::SceneController()
 {
 }
 
@@ -19,6 +18,10 @@ SceneController::~SceneController()
 
 /******************************************************************************************************************/
 // Functions
+/******************************************************************************************************************/
+
+std::shared_ptr<Game> SceneController::GetGame() const { return Game::TheGame; }
+
 /******************************************************************************************************************/
 
 void SceneController::AddGameObject(std::shared_ptr<GameObject> obj)
@@ -100,3 +103,9 @@ void SceneController::PushScene(std::shared_ptr<Scene> s)
 }
 
 /******************************************************************************************************************/
+
+std::shared_ptr<SceneController> SceneController::Instance()
+{
+	static std::shared_ptr<SceneController> instance{ new SceneController() };
+	return instance;
+}

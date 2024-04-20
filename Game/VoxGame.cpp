@@ -33,7 +33,7 @@ void VoxGame::Initialise(std::shared_ptr<Window> w)
 		i->second->CreateVBO(_renderer.get());
 	}
 
-	_sceneManager.PushScene(std::make_shared<GamePlayScene>());
+	_sceneController->PushScene(std::make_shared<GameMenuScene>());
 }
 
 /******************************************************************************************************************/
@@ -42,7 +42,7 @@ void VoxGame::OnKeyboard(int key, bool down)
 {
 	Game::OnKeyboard(key, down);
 
-	_sceneManager.OnKeyboard(key, down);
+	_sceneController->OnKeyboard(key, down);
 }
 
 /******************************************************************************************************************/
@@ -60,7 +60,7 @@ void VoxGame::Render()
 	MVM *= glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	_renderSystem->SetMVM(MVM);
 
-	_sceneManager.Render(_renderSystem.get());
+	_sceneController->Render(_renderSystem.get());
 	_renderer->GetHud()->Render();
 
 	_renderer->GetHud()->End();
@@ -77,10 +77,10 @@ void VoxGame::Run()
 	Game::Run();
 
 	// Update scenes
-	_sceneManager.Update(_deltaTime);
+	_sceneController->Update(_deltaTime);
 
 	// Check for exit
-	if (_sceneManager.GetCurrentScene() == NULL)
+	if (_sceneController->GetCurrentScene() == NULL)
 	{
 		OutputDebugString(L"Cannot run the application when no scene is set!");
 		SetQuitFlag(true);

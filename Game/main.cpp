@@ -45,11 +45,15 @@ int WINAPI WinMain(
 {
 	// Create the Game object
 	VoxGame game;
-
 	// Create a Window object
 	Window_DX application(&game, SCREEN_WIDTH, SCREEN_HEIGHT, hInstance, nCmdShow);
 
-	application.Initialise();
+	game.GetThreadController()->AddTask([&] {
+		application.Initialise();
+		},
+		TaskType::GRAPHICS,
+		"Main Game Rendering"
+	);
 }
 
 #else

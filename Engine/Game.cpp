@@ -10,8 +10,7 @@ std::shared_ptr<Game> Game::TheGame = nullptr;
 /******************************************************************************************************************/
 
 Game::Game()
-	: _quitFlag(false),
-	_sceneManager(this)
+	: _quitFlag(false)
 {
 	_currentTime = clock();
 
@@ -23,8 +22,9 @@ Game::Game()
 	// These controllers provide specific functionality to the application.
 	// Each controller exposes functions that solve a specific set of problems.
 	_inputController = InputController::Instance();
-	//_networkController = NetworkController::Instance();
-	//_resourceController = ResourceController::Instance();
+	_networkController = NetworkController::Instance();
+	_resourceController = ResourceController::Instance();
+	_sceneController = SceneController::Instance();
 	_threadController = ThreadController::Instance();
 }
 
@@ -38,7 +38,6 @@ Game::~Game()
 	{
 		i->second.reset();
 	}
-	_meshes.clear();
 }
 
 /******************************************************************************************************************/
@@ -72,7 +71,6 @@ void Game::OnKeyboard(int key, bool down)
 	data->down = down;
 	KeyPressMessage msg(data, InputController::EVENT_KEY_INPUT);
 
-	//BroadcastMessage(&msg);
 	_inputController->Notify(&msg);
 }
 
