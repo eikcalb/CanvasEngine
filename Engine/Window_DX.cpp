@@ -123,23 +123,34 @@ void Window_DX::Initialise()
 	// Setup Game
 	_game->Initialise(std::shared_ptr<Window>(this));
 
-	MSG msg;
-	while (!_game->GetQuitFlag())
-	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
+	_game->GetThreadController()->AddTask(
+		[&] {
+			MSG msg;
+			while (!_game->GetQuitFlag())
+			{
+				if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+				{
+					TranslateMessage(&msg);
+					DispatchMessage(&msg);
 
-			if (msg.message == WM_QUIT)
-				break;
-		}
+					if (msg.message == WM_QUIT)
+						break;
+				}
 
-		_game->Run();
+				_game->Run();
+			}
+
+			// Clean up DirectX
+			_renderer->Destroy();
+		},
+		TaskType::GRAPHICS,
+		"Graphics Thread"
+	);
+
+	// Wait for application to run
+	while (!_game->GetQuitFlag()) {
+		// NOOP - This loop will continue running until the game has been quit.
 	}
-
-	// Clean up DirectX
-	_renderer->Destroy();
 }
 
 /******************************************************************************************************************/

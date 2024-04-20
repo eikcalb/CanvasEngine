@@ -47,13 +47,12 @@ int WINAPI WinMain(
 	VoxGame game;
 	// Create a Window object
 	Window_DX application(&game, SCREEN_WIDTH, SCREEN_HEIGHT, hInstance, nCmdShow);
+	application.Initialise();
 
-	game.GetThreadController()->AddTask([&] {
-		application.Initialise();
-		},
-		TaskType::GRAPHICS,
-		"Main Game Rendering"
-	);
+	// Wait for application to run
+	while (!game.GetQuitFlag()) {
+		// NOOP - This loop will continue running until the game has been quit.
+	}
 }
 
 #else
