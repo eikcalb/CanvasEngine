@@ -73,6 +73,8 @@ void SceneController::OnMessage(Message* msg)
 /// Update current scene
 void SceneController::Update(double deltaTime)
 {
+	std::lock_guard<std::mutex> lk(_sceneMutex);
+
 	auto currentScene = GetCurrentScene();
 	if (currentScene)
 	{
@@ -96,9 +98,10 @@ void SceneController::Render(RenderSystem* renderer)
 
 void SceneController::PushScene(std::shared_ptr<Scene> s)
 {
+	std::lock_guard<std::mutex> lk(_sceneMutex);
+
 	s->End();
 	_scenes.push(s);
-	s->SetSceneManager(std::shared_ptr<SceneController>(this));
 	s->Initialise();
 }
 

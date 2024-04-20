@@ -76,7 +76,7 @@
     <LibraryPath>C:\DirectX SDK\Lib\x86;C:\CSLib\lib;G:\DirectX SDK\Lib\x86;G:\CSLib\lib;$(SolutionDir)$(Configuration)\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)Libraries</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - DirectX|Win32'">
-    <IncludePath>C:\DirectX SDK\Include;C:\CSLib\inc;G:\DirectX SDK\Include;G:\CSLib\inc;$(DXSDK_DIR)include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Includes\imgui</IncludePath>
+    <IncludePath>C:\DirectX SDK\Include;C:\CSLib\inc;G:\DirectX SDK\Include;G:\CSLib\inc;$(DXSDK_DIR)include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Includes\imgui;$(SolutionDir)Includes</IncludePath>
     <LibraryPath>C:\DirectX SDK\Lib\x86;C:\CSLib\lib;G:\DirectX SDK\Lib\x86;G:\CSLib\lib;$(SolutionDir)$(Configuration)\;..\CSLib2013;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - OpenGL|Win32'">
@@ -148,6 +148,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Includes\imgui\imgui.cpp" />
+    <ClCompile Include="..\Includes\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\Includes\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\Includes\imgui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="..\Includes\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\Includes\imgui\imgui_impl_opengl2.cpp" />
+    <ClCompile Include="..\Includes\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\Includes\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\Includes\imgui\imgui_stdlib.cpp" />
+    <ClCompile Include="..\Includes\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\Includes\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Behavior.cpp" />
     <ClCompile Include="Colour.cpp" />
     <ClCompile Include="Connection.cpp" />
@@ -187,6 +198,19 @@
     <ClCompile Include="Window_GL.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Includes\imgui\imconfig.h" />
+    <ClInclude Include="..\Includes\imgui\imgui.h" />
+    <ClInclude Include="..\Includes\imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="..\Includes\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="..\Includes\imgui\imgui_impl_opengl2.h" />
+    <ClInclude Include="..\Includes\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\Includes\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="..\Includes\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="..\Includes\imgui\imgui_internal.h" />
+    <ClInclude Include="..\Includes\imgui\imgui_stdlib.h" />
+    <ClInclude Include="..\Includes\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\Includes\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\Includes\imgui\imstb_truetype.h" />
     <ClInclude Include="Behavior.h" />
     <ClInclude Include="Colour.h" />
     <ClInclude Include="Connection.h" />
@@ -232,6 +256,13 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\Includes\imgui\.natvis" />
+    <Natvis Include="..\Includes\imgui\imgui.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Includes\imgui\imgui.natstepfilter" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

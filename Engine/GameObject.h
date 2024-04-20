@@ -24,8 +24,8 @@ class GameObject : public ObserverSubject, public Observer
 	// Render
 protected:
 	std::shared_ptr<Mesh>	_mesh;			// Vertex info
-	Colour	_colour;		// Colour of object
-	bool	_shouldDraw;	// Whether or not to draw
+	Colour					_colour;		// Colour of object
+	bool					_shouldDraw;	// Whether or not to draw
 
 
 	// Data

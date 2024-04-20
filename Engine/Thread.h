@@ -23,9 +23,10 @@ private:
 	void SetThreadAffinity(const TaskType& type);
 public:
 	Thread()
-		:mTask(nullptr), mNeedsTask(true)
+		: mNeedsTask(true)
 	{
 		isAlive = true;
+		mTask = nullptr;
 		mThread = std::thread([](Thread* thread) { thread->Run(); }, this);
 
 		std::stringstream s;
@@ -40,6 +41,7 @@ public:
 		mNeedsTask = false;
 		mTask = nullptr;
 		mThread.detach();
+		condition.notify_one();
 	}
 
 	void SetTask(Task* pTask);

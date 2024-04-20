@@ -4,6 +4,7 @@ void Thread::SetTask(Task* pTask)
 {
 	mTask = std::shared_ptr<Task>(pTask);
 	mNeedsTask = false;
+	condition.notify_one();
 }
 
 void Thread::Run()
@@ -13,17 +14,22 @@ void Thread::Run()
 	while (isAlive)
 	{
 		std::unique_lock<std::mutex> lock(mutex);
-		condition.wait(lock, [this] {
-			// If we have a signal to exit, we should stop waiting
-			if (!isAlive) {
-				return true;
-			}
+		//while (!isAlive && mTask == nullptr) {
+			condition.wait(lock, [&] {
+				// If we have a signal to exit, we should stop waiting
+				if (!isAlive) {
+					return true;
+				}
 
-			// When there is a task, we will exit the wait.
-			return mTask != nullptr;
-			});
-
-		lock.unlock();
+				// When there is a task, we will exit the wait.
+				if (mTask) {
+					return true;
+				}
+				else {
+					return false;
+				}
+				});
+		//}
 
 		// Since we have a task, we will process it.
 		if (isAlive && mTask)

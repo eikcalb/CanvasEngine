@@ -33,6 +33,8 @@ Game::Game()
 
 Game::~Game()
 {
+	// TODO: Need to fix this memory leak preventing smooth cleanup on shutdown
+
 	for (MeshMapIterator i = _meshes.begin();
 		i != _meshes.end();
 		++i)
@@ -50,7 +52,7 @@ void Game::Initialise(std::shared_ptr<Window> w)
 	_renderSystem->SetRenderer(_renderer);
 }
 
-inline std::shared_ptr<Mesh> Game::GetMesh(std::string name)
+ std::shared_ptr<Mesh> Game::GetMesh(std::string name)
 {
 	// Found
 	MeshMapIterator i = _meshes.find(name);
@@ -96,6 +98,6 @@ void Game::Run()
 	// https://en.cppreference.com/w/cpp/chrono/c/clock
 	double temp_time = clock();
 	_deltaTime = (temp_time - _currentTime) / CLOCKS_PER_SEC;
-	_currentTime = temp_time;
+	//_currentTime = temp_time;
 	// fps check will be `if (_deltaTime >= 1/fps)`
 }

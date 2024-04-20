@@ -28,6 +28,6 @@ public:
 
 	// Functions
 public:
-	virtual void Process(std::vector<std::shared_ptr<GameObject>>& list, double deltaTime) override;
+	virtual void Process(std::vector<std::shared_ptr<GameObject>>& list) override;
 };
 

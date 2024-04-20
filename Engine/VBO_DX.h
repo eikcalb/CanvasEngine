@@ -1,6 +1,5 @@
 #pragma once
 #if BUILD_DIRECTX
-#include <atlbase.h>
 #include <d3dx11.h>
 #include <d3dx10.h>
 
@@ -15,7 +14,7 @@ class VBO_DX :
 {
 	// Data
 protected:
-	CComPtr<ID3D11Buffer> _vbo;
+	ID3D11Buffer* _vbo;
 
 	// Structors
 public:

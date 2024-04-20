@@ -1,6 +1,6 @@
 #include "VoxGame.h"
 
-static const int		SCREEN_WIDTH  = 1080;
+static const int		SCREEN_WIDTH = 1080;
 static const int		SCREEN_HEIGHT = 712;
 
 
@@ -33,7 +33,7 @@ static const int		SCREEN_HEIGHT = 712;
 #pragma comment (lib, "d3dx10.lib")
 
 // a struct to define a single vertex
-struct VERTEX{ FLOAT X, Y, Z; D3DXCOLOR Color; };
+struct VERTEX { FLOAT X, Y, Z; D3DXCOLOR Color; };
 
 // the entry point for any Windows program
 int WINAPI WinMain(
@@ -45,9 +45,15 @@ int WINAPI WinMain(
 {
 	// Create the Game object
 	VoxGame game;
-	// Create a Window object
-	Window_DX application(&game, SCREEN_WIDTH, SCREEN_HEIGHT, hInstance, nCmdShow);
-	application.Initialise();
+	game.GetThreadController()->AddTask(
+		[&] {
+			// Create a Window object
+			Window_DX application(SCREEN_WIDTH, SCREEN_HEIGHT, hInstance, nCmdShow);
+			application.Initialise();
+		},
+		TaskType::GRAPHICS,
+		"Main Graphics Thread"
+	);
 
 	// Wait for application to run
 	while (!game.GetQuitFlag()) {

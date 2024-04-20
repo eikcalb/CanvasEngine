@@ -1,17 +1,17 @@
 #if BUILD_DIRECTX
 #include "Window_DX.h"
 
-//#include "imgui.h"
-//#include "imgui_impl_win32.h"
-//#include "imgui_impl_dx11.h"
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
 #include "Renderer_DX.h"
 #include "Game.h"
 
 
 /******************************************************************************************************************/
 
-Window_DX::Window_DX(Game* game, int width, int height, HINSTANCE hInstance, int nCmdShow)
-	: Window(game, width, height)
+Window_DX::Window_DX(int width, int height, HINSTANCE hInstance, int nCmdShow)
+	: Window(width, height)
 {
 
 	// Reset RNG
@@ -33,9 +33,11 @@ Window_DX::Window_DX(Game* game, int width, int height, HINSTANCE hInstance, int
 	RECT wr = { 0, 0, _width, _height };
 	AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
 
+	auto appName = Game::TheGame->GetName();
+
 	_hWnd = CreateWindowEx(NULL,
 		L"WindowClass",
-		L"Vox DX",
+		std::wstring(appName.begin(), appName.end()).c_str(),
 		WS_OVERLAPPEDWINDOW,
 		0,
 		0,
@@ -57,13 +59,15 @@ Window_DX::~Window_DX()
 
 /******************************************************************************************************************/
 
+//extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 // This is the main message handler for the program
 LRESULT CALLBACK Window_DX::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	//extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	//if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam)) {
-	//	return true;
-	//}
+	extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam)) {
+		return true;
+	}
 
 	switch (message)
 	{
@@ -75,13 +79,13 @@ LRESULT CALLBACK Window_DX::WindowProc(HWND hWnd, UINT message, WPARAM wParam, L
 		PostQuitMessage(0);
 		return 0;
 	}
-		break;
+	break;
 	case WM_LBUTTONDOWN:
 	case WM_RBUTTONDOWN:
 	case WM_MBUTTONDOWN:
 	case WM_XBUTTONDOWN:
 	{
-		TheWindow->GetGame()->OnMouse(lParam, true);
+		Game::TheGame->OnMouse(lParam, true);
 		break;
 	}
 	case WM_LBUTTONUP:
@@ -93,20 +97,20 @@ LRESULT CALLBACK Window_DX::WindowProc(HWND hWnd, UINT message, WPARAM wParam, L
 	case WM_INPUT:
 	case WM_MOUSEMOVE:
 	{
-		TheWindow->GetGame()->OnMouse(lParam, false);
+		Game::TheGame->OnMouse(lParam, false);
 		break;
 	}
 	case WM_KEYDOWN:
 	case WM_SYSKEYDOWN: {
-		TheWindow->GetGame()->OnKeyboard(wParam, true);
+		Game::TheGame->OnKeyboard(wParam, true);
 		break;
 	}
 	case WM_KEYUP:
 	case WM_SYSKEYUP: {
-		TheWindow->GetGame()->OnKeyboard(wParam, false);
+		Game::TheGame->OnKeyboard(wParam, false);
 		break;
 	}
-		break;
+					break;
 	}
 
 	return DefWindowProc(hWnd, message, wParam, lParam);
@@ -121,31 +125,27 @@ void Window_DX::Initialise()
 	_renderer->Initialise(_width, _height);
 
 	// Setup Game
-	_game->Initialise(std::shared_ptr<Window>(this));
+	Game::TheGame->Initialise(std::shared_ptr<Window>(this));
 
-	_game->GetThreadController()->AddTask(
-		[&] {
-			MSG msg;
-			while (!_game->GetQuitFlag())
-			{
-				if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-				{
-					TranslateMessage(&msg);
-					DispatchMessage(&msg);
+	MSG msg;
+	while (!Game::TheGame->GetQuitFlag())
+	{
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
 
-					if (msg.message == WM_QUIT)
-						break;
-				}
-
-				_game->Run();
+			if (msg.message == WM_QUIT) {
+				Game::TheGame->SetQuitFlag(true);
+				break;
 			}
+		}
 
-			// Clean up DirectX
-			_renderer->Destroy();
-		},
-		TaskType::GRAPHICS,
-		"Graphics Thread"
-	);
+		Game::TheGame->Run();
+	}
+
+	// Clean up DirectX
+	_renderer->Destroy();
 }
 
 /******************************************************************************************************************/

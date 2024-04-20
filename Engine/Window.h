@@ -18,26 +18,23 @@ public:
 
 	// Data
 public:
-	std::shared_ptr<Game>		_game;
 	std::shared_ptr<Renderer>	_renderer;
 	int							_width, _height;
 
 
 	// Structors
 public:
-	Window(Game* game, int width, int height);
+	Window(int width, int height);
 	virtual ~Window();
 
 
 	// Gets/sets
 public:
-	std::shared_ptr<Game>& GetGame()			{ return _game; }
 	std::shared_ptr<Renderer>& GetRenderer()	{ return _renderer; }
 
 
 	// Functions
 public:
 	virtual void Initialise() = 0;
-	
 };
 

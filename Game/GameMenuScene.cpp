@@ -3,8 +3,8 @@
 #include "Game.h"
 #include "RenderSystem.h"
 #include "Message.h"
-
 #include "Cube.h"
+#include "GamePlayScene.h"
 
 /******************************************************************************************************************/
 // Structors
@@ -27,8 +27,10 @@ GameMenuScene::~GameMenuScene()
 
 void GameMenuScene::Initialise()
 {
-
-	std::shared_ptr<Cube> cube = nullptr;
+	auto cubeMesh = Game::TheGame->GetMesh("cube");
+	std::shared_ptr<Cube> cube = std::make_shared<Cube>(cubeMesh);
+	cube->SetCanRotate(true);
+	AddGameObject(cube);
 	//for (int y = 0; y < VOXEL_HEIGHT; ++y) {
 	//	for (int x = 0; x < VOXEL_WIDTH; ++x) {
 	//		cube = std::make_shared<Cube>(_sceneManager->GetGame()->GetMesh("cube"));
@@ -53,14 +55,14 @@ void GameMenuScene::OnKeyboard(int key, bool down)
 	if (down) return; // Ignore key down events
 
 	// Switch key presses
-	switch (key)
+	switch (static_cast<KEYS>(key))
 	{
-	case 80: // P = pause
-		// Put code here to add a Pause screen
+	case KEYS::Space:
+		SceneController::Instance()->PushScene(std::make_shared<GamePlayScene>());
 		break;
 
-	case 27: // Escape
-		_sceneManager->PopScene();
+	case KEYS::Escape: // Escape
+		SceneController::Instance()->PopScene();
 		break;
 	}
 }
@@ -88,7 +90,13 @@ void GameMenuScene::Render(RenderSystem* renderer)
 {
 	glm::mat4 MVM;
 
-	renderer->Process(_gameObjects, 0);
+	const auto& r = renderer->GetRenderer()->GetHud();
+	r->Label("Application Started!");
+	r->Space();
+	r->Space();
+	r->Label("Press the spacebar to continue");
+
+	renderer->Process(_gameObjects);
 }
 
 /******************************************************************************************************************/

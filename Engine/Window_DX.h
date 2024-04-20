@@ -34,7 +34,7 @@ private:
 	// Structors
 public:
 	// Constructor
-	Window_DX(Game* game, int width, int height, HINSTANCE hInstance, int nCmdShow);
+	Window_DX(int width, int height, HINSTANCE hInstance, int nCmdShow);
 
 	// Destructor
 	virtual ~Window_DX();

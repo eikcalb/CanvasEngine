@@ -1,6 +1,9 @@
 #if BUILD_DIRECTX
 #include "Renderer_DX.h"
 
+#include <imgui_impl_dx11.h>
+#include <imgui_impl_win32.h>
+
 #include "VBO.h"
 #include "Mesh.h"
 
@@ -45,9 +48,9 @@ void Renderer_DX::Destroy()
 	}
 
 
-	//ImGui_ImplDX11_Shutdown();
-	//ImGui_ImplWin32_Shutdown();
-	//ImGui::DestroyContext();
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
 }
 
 /******************************************************************************************************************/
@@ -139,7 +142,7 @@ void Renderer_DX::Initialise(int width, int height)
 
 void Renderer_DX::SwapBuffers()
 {
-	_swapchain->Present(0, 0);
+	_swapchain->Present(1, 0); // Enabble vsync
 }
 
 /******************************************************************************************************************/
@@ -193,15 +196,12 @@ void Renderer_DX::InitialiseShaders()
 }
 
 void Renderer_DX::InitialiseHud() {
-	//IMGUI_CHECKVERSION();
-	//ImGui::CreateContext();
-	//ImGuiIO& io = ImGui::GetIO();
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
 
-	//ImGui::StyleColorsDark();
-	//ImGui_ImplWin32_Init(_hWnd);
-	//ImGui_ImplDX11_Init(GetDevice(), GetContext());
+	ImGui::StyleColorsLight();
+	ImGui_ImplWin32_Init(_hWnd);
+	ImGui_ImplDX11_Init(GetDevice(), GetContext());
 }
 
 /******************************************************************************************************************/

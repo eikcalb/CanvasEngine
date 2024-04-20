@@ -6,47 +6,96 @@
     <ClCompile Include="Cube.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="GamePlayScene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="Voxel.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="GameMenuScene.cpp" />
+    <ClCompile Include="GamePlayScene.cpp" />
+    <ClCompile Include="..\Includes\imgui\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Includes\imgui\imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Includes\imgui\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Includes\imgui\imgui_impl_dx11.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Includes\imgui\imgui_impl_win32.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Includes\imgui\imgui_stdlib.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Includes\imgui\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Includes\imgui\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VoxGame.h" />
     <ClInclude Include="Cube.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="GamePlayScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="Voxel.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="GameMenuScene.h" />
+    <ClInclude Include="GamePlayScene.h" />
+    <ClInclude Include="..\Includes\imgui\imconfig.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Includes\imgui\imgui.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Includes\imgui\imgui_impl_dx11.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Includes\imgui\imgui_impl_win32.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Includes\imgui\imgui_internal.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Includes\imgui\imgui_stdlib.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Includes\imgui\imstb_rectpack.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Includes\imgui\imstb_textedit.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Includes\imgui\imstb_truetype.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag" />
     <None Include="shader.vert" />
     <None Include="shaders.hlsl" />
+    <None Include="..\Includes\imgui\imgui.natstepfilter">
+      <Filter>imgui</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameObjects">
       <UniqueIdentifier>{9816dac6-343c-46e8-969c-e64f41503e2c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Messages">
-      <UniqueIdentifier>{3794c4d0-7aee-45d1-b390-0a76f66ba664}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Components">
-      <UniqueIdentifier>{51ea686e-2807-4253-8011-310ebf85db22}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scenes">
-      <UniqueIdentifier>{13d12b4b-91ac-4b27-812d-93acca3388ff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="imgui">
-      <UniqueIdentifier>{906943ab-6c32-4d4f-ba47-bf26cf6d9829}</UniqueIdentifier>
+      <UniqueIdentifier>{e0745b08-52eb-442f-9387-7dae8109db42}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\Includes\imgui\.natvis">
+      <Filter>imgui</Filter>
+    </Natvis>
+    <Natvis Include="..\Includes\imgui\imgui.natvis">
+      <Filter>imgui</Filter>
+    </Natvis>
   </ItemGroup>
 </Project>

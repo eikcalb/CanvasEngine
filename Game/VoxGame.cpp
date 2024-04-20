@@ -2,7 +2,7 @@
 
 /******************************************************************************************************************/
 
-VoxGame::VoxGame(): Game("Voxel Game")
+VoxGame::VoxGame() : Game("Voxel Game")
 {
 }
 
@@ -21,7 +21,7 @@ void VoxGame::Initialise(std::shared_ptr<Window> w)
 
 	//////////////
 	// Setup Meshes
-	auto cube= std::make_shared<Mesh>();
+	auto cube = std::make_shared<Mesh>();
 	cube->LoadFromFile("CubeMesh.txt");
 	AddMesh("cube", cube);
 
@@ -75,19 +75,26 @@ void VoxGame::Run()
 {
 	// Run parent method to get delta time etc
 	Game::Run();
+	// Get delta time:
+// https://en.cppreference.com/w/cpp/chrono/c/clock
+	double temp_time = clock();
+	_deltaTime = (temp_time - _currentTime) / CLOCKS_PER_SEC;
 
-	// Update scenes
-	_sceneController->Update(_deltaTime);
+	if (_deltaTime >= 1 / GetFPS()) {
+		// Update scenes
+		_sceneController->Update(_deltaTime);
 
-	// Check for exit
-	if (_sceneController->GetCurrentScene() == NULL)
-	{
-		OutputDebugString(L"Cannot run the application when no scene is set!");
-		SetQuitFlag(true);
+		// Check for exit
+		if (_sceneController->GetCurrentScene() == NULL)
+		{
+			OutputDebugString(L"Cannot run the application when no scene is set!");
+			SetQuitFlag(true);
+		}
+
+		// Draw
+		Render();
+		_currentTime = temp_time;
 	}
-
-	// Draw
-	Render();
 }
 
 /******************************************************************************************************************/

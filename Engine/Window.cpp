@@ -6,9 +6,8 @@ std::shared_ptr<Window>	Window::TheWindow = NULL;
 
 /******************************************************************************************************************/
 
-Window::Window(Game* game, int width, int height)
+Window::Window(int width, int height)
 	:	_renderer(0),
-		_game(game),
 		_width(width),
 		_height(height)
 {

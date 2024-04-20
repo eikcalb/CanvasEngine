@@ -119,21 +119,7 @@ bool Mesh::LoadFromFile(std::string filename)
 	ifstream in(filename);
 	if (in)
 	{
-		int numVertices;
-		in >> numVertices;
-		for (int i = 0; i < numVertices; i++)
-		{
-			Vertex v;
-			in >> v.x;
-			in >> v.y;
-			in >> v.z;
-			in >> v.r;
-			in >> v.g;
-			in >> v.b;
-			in >> v.a;
-			AddVertex(v);
-		}
-		return true;
+		return LoadFromStream(in);
 	}
 	else
 	{

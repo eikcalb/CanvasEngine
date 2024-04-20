@@ -1,5 +1,6 @@
 #pragma once
 #include <stack>
+#include <mutex>
 #include <vector>
 
 #include "Scene.h"
@@ -15,6 +16,7 @@ public:
 	// Data
 protected:
 	std::stack<std::shared_ptr<Scene>>	_scenes;
+	std::mutex							_sceneMutex;
 
 	// Structors
 	SceneController();
@@ -27,7 +29,14 @@ public:
 	SceneController(const SceneController& SceneController) = delete;
 	SceneController& operator=(SceneController const&) = delete;
 
-	std::shared_ptr<Scene> GetCurrentScene()	const { if (_scenes.size() > 0) return _scenes.top(); else return NULL; }
+	std::shared_ptr<Scene> GetCurrentScene()	const {
+		if (!_scenes.empty() && _scenes.size() > 0) {
+			return _scenes.top();
+		}
+		else {
+			return NULL;
+		}
+	}
 	std::shared_ptr<Game> GetGame() const;
 
 	// Functions
@@ -49,7 +58,10 @@ public:
 	void Render(RenderSystem* renderer);
 
 	/// Pop the top scene. If no scenes remain, we should quit.
-	void PopScene() { _scenes.pop(); }
+	void PopScene() {
+		std::lock_guard<std::mutex> lk(_sceneMutex);
+		_scenes.pop();
+	}
 
 	/// Push a new scene
 	void PushScene(std::shared_ptr<Scene> s);

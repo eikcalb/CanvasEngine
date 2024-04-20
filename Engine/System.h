@@ -21,6 +21,6 @@ public:
 
 	// Functions
 public:
-	virtual void Process(std::vector<std::shared_ptr<GameObject>>& list, double deltaTime) = 0;
+	virtual void Process(std::vector<std::shared_ptr<GameObject>>& list) = 0;
 };
 

@@ -16,7 +16,6 @@ public:
 
 	// Data
 protected:
-	std::shared_ptr<SceneController>				_sceneManager;
 	std::vector<std::shared_ptr<GameObject>>		_gameObjects;		// The list of game objects
 
 	// Structors
@@ -31,11 +30,6 @@ public:
 	// Game objects
 	std::vector<std::shared_ptr<GameObject>>& GetGameObjects() { return _gameObjects; }
 	void AddGameObject(std::shared_ptr<GameObject> obj) { _gameObjects.push_back(obj); }
-
-	void SetSceneManager(std::shared_ptr<SceneController> s) { _sceneManager = s; }
-	std::shared_ptr<SceneController> GetSceneManager() 
-		const { return _sceneManager; }
-
 
 	// Functions
 public:

@@ -1,17 +1,15 @@
 #include "Cube.h"
 
+#include "MathsHelper.h"
 
 /******************************************************************************************************************/
 
-Cube::Cube(Mesh* mesh)
+Cube::Cube(std::shared_ptr<Mesh> mesh)
 	: GameObject("Cube")
 {
-	//new CubeControllerComponent(this);
-
-	//RenderComponent* rc = new RenderComponent(this);
-	//rc->SetColour(Colour(0.5f, 0.5f, 1.0f, 1.0f));
-	//rc->SetMesh(mesh);
-	//rc->ShouldDraw(true);
+	SetColour(Colour::Yellow());
+	SetMesh(mesh);
+	ShouldDraw(true);
 }
 
 /******************************************************************************************************************/
@@ -25,6 +23,10 @@ Cube::~Cube()
 void Cube::Update(double deltaTime)
 {
 	GameObject::Update(deltaTime);
+
+	if (canRotate) {
+		SetAngle(GetAngle() + 90 * deltaTime);
+	}
 }
 
 /******************************************************************************************************************/
@@ -53,6 +55,10 @@ void  Cube::SetColor(Colour colour) {
 	
 	colour = colour;
 	ShouldDraw(true);
+}
+
+void Cube::SetCanRotate(bool rotate) {
+	canRotate = rotate;
 }
 
 /******************************************************************************************************************/

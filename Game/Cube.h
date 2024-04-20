@@ -13,11 +13,12 @@ class Cube :
 	// Data
 protected:
 	unsigned short weight = 1;
+	bool canRotate = false;
 	Colour colour = Colour();
 
 	// Structors
 public:
-	Cube(Mesh* mesh);
+	Cube(std::shared_ptr<Mesh> mesh);
 	virtual ~Cube();
 
 	// Functions
@@ -29,5 +30,6 @@ public:
 	unsigned short GetWeight(u_short weight) { return weight; };
 	void SetWeight(u_short weight);
 	void SetColor(Colour colour);
+	void SetCanRotate(bool rotate);
 };
 

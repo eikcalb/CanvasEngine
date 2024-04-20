@@ -38,7 +38,8 @@ protected:
 
 	double								_currentTime;
 	double								_deltaTime;
-	bool								_quitFlag;
+	double								_fps = 60;
+	std::atomic_bool					_quitFlag;
 
 	std::shared_ptr<InputController>	_inputController;
 	std::shared_ptr<NetworkController>	_networkController; // ✅
@@ -63,6 +64,9 @@ public:
 public:
 	const std::string GetName() const { return _name; }
 	void SetName(const std::string name) { _name = name; }
+
+	const float GetFPS() const { return _fps; }
+	void SetFPS(float fps) { _fps = fps; }
 
 	// Meshes
 	std::shared_ptr<Mesh> GetMesh(std::string name);

@@ -59,7 +59,7 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 		break;
 
 	case 27: // Escape
-		_sceneManager->PopScene();
+		SceneController::Instance()->PopScene();
 		break;
 	}
 }
@@ -87,7 +87,7 @@ void GamePlayScene::Render(RenderSystem* renderer)
 {
 	glm::mat4 MVM;
 
-	renderer->Process(_gameObjects, 0);
+	renderer->Process(_gameObjects);
 }
 
 /******************************************************************************************************************/
