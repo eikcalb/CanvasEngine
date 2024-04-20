@@ -146,11 +146,6 @@ void Window_DX::Initialise()
 		TaskType::GRAPHICS,
 		"Graphics Thread"
 	);
-
-	// Wait for application to run
-	while (!_game->GetQuitFlag()) {
-		// NOOP - This loop will continue running until the game has been quit.
-	}
 }
 
 /******************************************************************************************************************/
