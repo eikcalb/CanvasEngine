@@ -43,6 +43,6 @@ Task* const ThreadController::AddTask(std::function<void()> pFunction, const Tas
 
 std::shared_ptr<ThreadController> ThreadController::Instance()
 {
-	static std::shared_ptr<ThreadController> instance{};
+	static std::shared_ptr<ThreadController> instance{ new ThreadController() };
 	return instance;
 }

@@ -4,6 +4,8 @@
 #include "RenderSystem.h"
 #include "Message.h"
 
+#include "Cube.h"
+
 /******************************************************************************************************************/
 // Structors
 /******************************************************************************************************************/
@@ -26,7 +28,7 @@ GameMenuScene::~GameMenuScene()
 void GameMenuScene::Initialise()
 {
 
-	//std::shared_ptr<Cube> cube = nullptr;
+	std::shared_ptr<Cube> cube = nullptr;
 	//for (int y = 0; y < VOXEL_HEIGHT; ++y) {
 	//	for (int x = 0; x < VOXEL_WIDTH; ++x) {
 	//		cube = std::make_shared<Cube>(_sceneManager->GetGame()->GetMesh("cube"));
