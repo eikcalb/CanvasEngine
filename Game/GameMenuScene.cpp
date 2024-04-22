@@ -1,4 +1,7 @@
-#include "GameMenuScene.h"
+﻿#include "GameMenuScene.h"
+
+#define WIN32_LEAN_AND_MEAN // Required to prevent winsock/WinSock2 redifinition
+#include <D3Dcommon.h>
 
 #include "Game.h"
 #include "RenderSystem.h"
@@ -31,14 +34,6 @@ void GameMenuScene::Initialise()
 	std::shared_ptr<Cube> cube = std::make_shared<Cube>(cubeMesh);
 	cube->SetCanRotate(true);
 	AddGameObject(cube);
-	//for (int y = 0; y < VOXEL_HEIGHT; ++y) {
-	//	for (int x = 0; x < VOXEL_WIDTH; ++x) {
-	//		cube = std::make_shared<Cube>(_sceneManager->GetGame()->GetMesh("cube"));
-	//		cube->Reset();
-	//		_voxel->SetVoxel(x, y, cube.get());
-	//		_gameObjects.push_back(cube);
-	//	}
-	//}
 
 	// Start all objects to set them up
 	for (int i = 0; i < (int)_gameObjects.size(); i++)
@@ -91,10 +86,12 @@ void GameMenuScene::Render(RenderSystem* renderer)
 	glm::mat4 MVM;
 
 	const auto& r = renderer->GetRenderer()->GetHud();
+	renderer->GetRenderer()->SetTopology(D3D_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
 	r->Label("Application Started!");
 	r->Space();
 	r->Space();
 	r->Label("Press the spacebar to continue");
+	r->Label("Or press \"esc\" to quit");
 
 	renderer->Process(_gameObjects);
 }

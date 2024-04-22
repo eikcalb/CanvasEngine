@@ -20,6 +20,10 @@ struct PeerDetails{
 
 	static PeerDetails fromAddrInfo(addrinfo* adr);
 	static PeerDetails fromSocketAddrInet(sockaddr_in* sockAdr);
+
+	std::string GetIDString() {
+		return id + ':' + std::to_string(port);
+	}
 };
 
 /// <summary>

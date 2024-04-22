@@ -217,6 +217,7 @@
     <ClInclude Include="ConnectionMessage.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="ShaderObject_GL.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="TCPConnection.h" />
     <ClInclude Include="Utils.h" />
@@ -240,7 +241,6 @@
     <ClInclude Include="ResourceController.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneController.h" />
-    <ClInclude Include="ShaderObject_GL.h" />
     <ClInclude Include="ShaderProgram_GL.h" />
     <ClInclude Include="Task.h" />
     <ClInclude Include="Thread.h" />

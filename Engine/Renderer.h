@@ -1,5 +1,8 @@
 #pragma once
 
+#define WIN32_LEAN_AND_MEAN // Required to prevent winsock/WinSock2 redifinition
+#include <D3Dcommon.h>
+
 // GLM
 #include "GL\GLM\GLM.hpp"
 #include "GL\GLM\GTC\matrix_transform.hpp"
@@ -20,6 +23,9 @@ protected:
 	Colour					_clearColour;	// Screen clear colour
 	std::shared_ptr<Hud>	_hud;
 
+public:
+	D3D_PRIMITIVE_TOPOLOGY topology = D3D_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINELIST;
+
 	// Structors
 public:
 	Renderer();
@@ -29,6 +35,7 @@ public:
 public:
 	Colour GetClearColour()				const { return _clearColour; }
 	void SetClearColour(Colour c) { _clearColour = c; }
+	void SetTopology(D3D_PRIMITIVE_TOPOLOGY tgy) { topology = tgy; }
 	std::shared_ptr<Hud> GetHud() { return _hud; }
 
 	// Functions

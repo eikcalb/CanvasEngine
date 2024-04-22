@@ -9,7 +9,7 @@
 /// Initiates a connection to peers using TCP. As this is a connection
 /// oriented protocol, peer discovery has to come from a predefined list.
 /// </summary>
-class TCPConnection : ConnectionStrategy
+class TCPConnection : public ConnectionStrategy
 {
 protected:
 	SOCKET		listenSocket;
@@ -95,14 +95,16 @@ public:
 
 		for (auto const& peer : config->peers) {
 			std::shared_ptr<Connection> conn;
-
 			if (getaddrinfo(peer.second.ipAddress.c_str(),
 				std::to_string(peer.second.port).c_str(),
 				&hints,
 				&result) != NO_ERROR) {
 				OutputDebugString(L"Failed to get address info ");
 				OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
-				throw std::exception("Failed to get address info");
+				// This probably indicates a problem with the networking infrastructure.
+				// The application should not continue as it is unlikely that it will
+				// ever succeed.
+				throw std::runtime_error("Failed to get address info");
 			}
 
 			try {
@@ -156,10 +158,13 @@ public:
 			catch (std::exception ex) {
 				freeaddrinfo(result);
 				freeaddrinfo(ptr);
-				delete result;
-				delete ptr;
+				//delete result;
+				//delete ptr;
 
-				throw ex;
+				// These errors are irrecoverable, but thwy do not depict an error
+				// state of the application. Rather ther occur when a connection
+				// attempt fails and we can just skip that connection.
+				continue;
 			}
 
 			auto msgInfo = std::make_shared<ConnectionMessageInfo>();
@@ -196,7 +201,7 @@ public:
 			FD_ZERO(&readSockets);
 			FD_SET(listenSocket, &readSockets);
 
-			int socketCount = select(-1, &readSockets, nullptr, nullptr, nullptr);
+			int socketCount = select(-1/* unused on Windows */, &readSockets, nullptr, nullptr, nullptr);
 			if (socketCount == SOCKET_ERROR)
 			{
 				OutputDebugString(L"Failed to run select()");

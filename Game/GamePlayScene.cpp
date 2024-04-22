@@ -1,5 +1,8 @@
 #include "GamePlayScene.h"
 
+#define WIN32_LEAN_AND_MEAN // Required to prevent winsock/WinSock2 redifinition
+#include <D3Dcommon.h>
+
 #include "Game.h"
 #include "RenderSystem.h"
 #include "Message.h"
@@ -86,6 +89,10 @@ void GamePlayScene::Update(double deltaTime)
 void GamePlayScene::Render(RenderSystem* renderer)
 {
 	glm::mat4 MVM;
+
+	const auto& r = renderer->GetRenderer()->GetHud();
+	renderer->GetRenderer()->SetTopology(D3D_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	r->LabelText("User ID", ResourceController::Instance()->GetConfig()->id.c_str());
 
 	renderer->Process(_gameObjects);
 }

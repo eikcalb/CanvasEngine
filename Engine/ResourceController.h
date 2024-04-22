@@ -23,6 +23,7 @@ struct Config {
 	// This is the port used by a running instance of the application
 	// for networking.
 	u_short						port;
+	std::string					id;
 };
 
 static const char* CONFIG_ENV_VAR = "VOX_CONFIG_FILE";
@@ -33,7 +34,7 @@ class ResourceController
 	//std::vector< std::pair< std::wstring, TextureObject*>> mTextures{};
 	//std::vector< std::pair< std::wstring, ShaderObject*>> mShaders{};
 protected:
-	std::shared_ptr<Config> mConfig{};
+	std::shared_ptr<Config> mConfig = nullptr;
 
 	ResourceController();
 
@@ -44,7 +45,7 @@ public:
 	ResourceController& operator=(ResourceController const&) = delete;
 
 	const Config& const LoadConfig(const std::string& pFilename);
-	const std::shared_ptr<Config> const getConfig() {
+	const std::shared_ptr<Config> const GetConfig() {
 		if (!mConfig) {
 			// Logic from Stackoverflow: https://stackoverflow.com/a/15916732
 			char* buf = nullptr;
@@ -64,7 +65,7 @@ public:
 				if (lastBackslash != std::string::npos) {
 					executableDir = executableDir.substr(0, lastBackslash + 1);
 				}
-				std::string absolutePath = executableDir + "./config.ini";
+				std::string absolutePath = executableDir + "config.ini";
 
 				LoadConfig(absolutePath);
 			}

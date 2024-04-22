@@ -98,4 +98,7 @@
       <Filter>imgui</Filter>
     </Natvis>
   </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="..\config.ini" />
+  </ItemGroup>
 </Project>

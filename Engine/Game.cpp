@@ -5,6 +5,7 @@
 #include "KeyPressMessage.h"
 #include "MouseInputMessage.h"
 #include "NetworkController.h"
+#include "TCPConnection.h"
 
 std::shared_ptr<Game> Game::TheGame = nullptr;
 
@@ -50,6 +51,25 @@ void Game::Initialise(std::shared_ptr<Window> w)
 	_window = w;
 	_renderer = w->GetRenderer();
 	_renderSystem->SetRenderer(_renderer);
+
+	// Initialize network.
+	CommunicationConfig cc{};
+	cc.promiscuous = true; // Allow listening to a specific port for connections.
+	auto cs = new TCPConnection(_resourceController->GetConfig());
+	cs->SetConnectionValidator([&](PeerDetails* peerAddressInfo) {
+		auto& peerMap = _networkController->GetPeerMap();
+		// We will check if the peer has already been connected to.
+		if (peerMap.count(peerAddressInfo->GetIDString()) <= 0) {
+			// Only if the peer identity does not already exist will we approve a connection.
+			return true;
+		}
+
+		return false;
+	});
+
+	_networkController->SetCommunicationConfig(&cc);
+	_networkController->SetConnectionStrategy(cs);
+	_networkController->Start();
 }
 
  std::shared_ptr<Mesh> Game::GetMesh(std::string name)

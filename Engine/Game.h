@@ -41,10 +41,10 @@ protected:
 	double								_fps = 60;
 	std::atomic_bool					_quitFlag;
 
-	std::shared_ptr<InputController>	_inputController;
+	std::shared_ptr<InputController>	_inputController; // ✅
 	std::shared_ptr<NetworkController>	_networkController; // ✅
-	std::shared_ptr<ResourceController>	_resourceController;
-	std::shared_ptr<SceneController>	_sceneController;
+	std::shared_ptr<ResourceController>	_resourceController; // ✅
+	std::shared_ptr<SceneController>	_sceneController; // ✅
 	std::shared_ptr<ThreadController>	_threadController; // ✅
 
 	MeshMap							_meshes;// The map of meshes

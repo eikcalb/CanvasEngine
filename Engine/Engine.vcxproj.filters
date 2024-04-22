@@ -15,9 +15,6 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderObject_GL.cpp">
-      <Filter>OpenGL</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderProgram_GL.cpp">
       <Filter>OpenGL</Filter>
     </ClCompile>
@@ -139,6 +136,9 @@
     <ClCompile Include="..\Includes\imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderObject_GL.cpp">
+      <Filter>OpenGL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -157,9 +157,6 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="ShaderProgram_GL.h">
-      <Filter>OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderObject_GL.h">
       <Filter>OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="Renderer_GL.h">
@@ -295,6 +292,9 @@
     </ClInclude>
     <ClInclude Include="..\Includes\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderObject_GL.h">
+      <Filter>OpenGL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

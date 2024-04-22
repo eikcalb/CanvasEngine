@@ -30,8 +30,8 @@ void NetworkController::HandleIncomingMessages()
 	fd_set readSockets = {};
 
 	do {
-		if (PeerCount() < 0) {
-			OutputDebugString(L"No peer connected yet!");
+		if (PeerCount() <= 0) {
+			// OutputDebugString(L"No peer connected yet!\r\n");
 			continue;
 		}
 
@@ -173,15 +173,6 @@ void NetworkController::Start()
 		TaskType::NETWORK, "NC.Start:Process messages!"
 	);
 }
-
-//std::queue<std::string> NetworkController::ReadMessages()
-//{
-//	//Swaps the queue with an empty queue to empty the current queue and returns the queue containing messages
-//	std::queue<std::string> messages;
-//	std::lock_guard<std::mutex> lock(mx);
-//	this->messages.swap(messages);
-//	return messages;
-//}
 
 int NetworkController::PeerCount()
 {

@@ -184,6 +184,17 @@
     <ClCompile Include="Cube.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <CopyFileToFolders Include="..\config.ini">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release - DirectX|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release - DirectX|Win32'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug - OpenGL|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug - OpenGL|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug - DirectX|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug - DirectX|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release - OpenGL|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release - OpenGL|Win32'">true</DeploymentContent>
+    </CopyFileToFolders>
     <None Include="..\Includes\imgui\imgui.natstepfilter" />
     <None Include="shader.frag" />
     <None Include="shader.vert" />
