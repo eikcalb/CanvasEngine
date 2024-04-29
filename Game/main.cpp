@@ -59,6 +59,9 @@ int WINAPI WinMain(
 	while (!game.GetQuitFlag()) {
 		// NOOP - This loop will continue running until the game has been quit.
 	}
+
+	// Shutdown controllers.
+	game.GetThreadController().reset();
 }
 
 #else

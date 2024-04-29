@@ -36,12 +36,12 @@ Game::~Game()
 {
 	// TODO: Need to fix this memory leak preventing smooth cleanup on shutdown
 
-	for (MeshMapIterator i = _meshes.begin();
-		i != _meshes.end();
-		++i)
-	{
-		i->second.reset();
-	}
+	//for (MeshMapIterator i = _meshes.begin();
+	//	i != _meshes.end();
+	//	++i)
+	//{
+	//	i->second.reset();
+	//}
 }
 
 /******************************************************************************************************************/

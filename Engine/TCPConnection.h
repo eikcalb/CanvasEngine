@@ -61,14 +61,16 @@ public:
 		started = false;
 		auto shutdownResult = shutdown(listenSocket, SD_BOTH);
 		if (shutdownResult == SOCKET_ERROR) {
-			OutputDebugString(L"Failed to shutdown listener socket.");
+			OutputDebugString(L"Failed to shutdown listener socket.\r\n");
 		}
 
 		closesocket(listenSocket);
 		listenSocket = INVALID_SOCKET;
 
-		OutputDebugString(L"Destroyed connection: TCPConnection!");
+		OutputDebugString(L"Destroyed connection: TCPConnection!\r\n");
 	}
+
+	std::shared_ptr<Connection> ConnectToPeer(const Peer& peer) noexcept;
 
 	virtual std::vector<std::shared_ptr<Connection>> Connect() {
 		if (!validator) {
@@ -80,106 +82,16 @@ public:
 		std::vector<std::shared_ptr<Connection>> peersConn;
 		peersConn.reserve(MAX_PEERS);
 
-		struct addrinfo* result = NULL,
-			* ptr = NULL,
-			hints;
-
-		ZeroMemory(&hints, sizeof(hints));
-		hints.ai_family = AF_INET;
-		hints.ai_socktype = SOCK_STREAM;
-		hints.ai_protocol = IPPROTO_TCP;
-
 		if (config->peers.size() > MAX_PEERS) {
 			throw std::exception(("Peers registered must be less than " + std::to_string(MAX_PEERS)).c_str());
 		}
 
 		for (auto const& peer : config->peers) {
-			std::shared_ptr<Connection> conn;
-			if (getaddrinfo(peer.second.ipAddress.c_str(),
-				std::to_string(peer.second.port).c_str(),
-				&hints,
-				&result) != NO_ERROR) {
-				OutputDebugString(L"Failed to get address info ");
-				OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
-				// This probably indicates a problem with the networking infrastructure.
-				// The application should not continue as it is unlikely that it will
-				// ever succeed.
-				throw std::runtime_error("Failed to get address info");
+			// Connect to peer.
+			auto newConn = ConnectToPeer(peer.second);
+			if (newConn) {
+				peersConn.emplace_back(newConn);
 			}
-
-			try {
-				// First address:
-				// https://learn.microsoft.com/en-us/windows/win32/winsock/creating-a-socket-for-the-client
-				ptr = result;
-
-				/*sockaddr_in address{};
-				address.sin_family = AF_INET;
-				address.sin_port = htons(peer.second.port);
-				if (inet_pton(AF_INET, peer.second.ipAddress.c_str(), &address.sin_addr) <= 0) {
-					OutputDebugString(L"Invalid IP address specified ");
-					OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
-					return;
-				}*/
-
-				// Given the address, we will now check if the connection is allowed.
-				std::shared_ptr<PeerDetails> info = std::make_shared<PeerDetails>(PeerDetails::fromAddrInfo(ptr));
-				if (!this->validator(info.get())) {
-					// If the connection is not allowed, we will skip and move on to
-					// the next peer. This gives implementers the choice of throwing errors
-					// inside the validator, thereby exiting the connection attempt if one
-					// peer cannot be connected.
-					// Although technically this is allowed by sockets, it's similar to
-					// having separate tabs open to the same website. We do not want this
-					// scenario as I can not begin to think of the inconsistencies that
-					// will arise from doing this.
-					OutputDebugString(L"Peer connection is not allowed!");
-					continue;
-				}
-
-				SOCKET clientSocket = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
-				if (clientSocket == INVALID_SOCKET)
-				{
-					OutputDebugString(L"Failed to create client socket ");
-					OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
-					throw std::exception("Failed to create client socket");
-				}
-
-				if (connect(clientSocket, ptr->ai_addr, ptr->ai_addrlen) == SOCKET_ERROR) {
-					OutputDebugString(L"Failed to connect client socket ");
-					OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
-					closesocket(clientSocket);
-					clientSocket = INVALID_SOCKET;
-					throw std::exception("Failed to connect client socket");
-				}
-
-				conn = std::make_shared<Connection>(info, clientSocket);
-				peersConn.emplace_back(conn);
-			}
-			catch (std::exception ex) {
-				freeaddrinfo(result);
-				freeaddrinfo(ptr);
-				//delete result;
-				//delete ptr;
-
-				// These errors are irrecoverable, but thwy do not depict an error
-				// state of the application. Rather ther occur when a connection
-				// attempt fails and we can just skip that connection.
-				continue;
-			}
-
-			auto msgInfo = std::make_shared<ConnectionMessageInfo>();
-			msgInfo->conn = conn;
-
-			ConnectionMessage* msg = new ConnectionMessage(
-				msgInfo,
-				EVENT_TYPE_NEW_CONNECTION
-			);
-			BroadcastMessage(msg);
-
-			freeaddrinfo(result);
-			freeaddrinfo(ptr);
-			delete result;
-			delete ptr;
 		}
 
 		return peersConn;
@@ -204,7 +116,7 @@ public:
 			int socketCount = select(-1/* unused on Windows */, &readSockets, nullptr, nullptr, nullptr);
 			if (socketCount == SOCKET_ERROR)
 			{
-				OutputDebugString(L"Failed to run select()");
+				OutputDebugString(L"Failed to run select()!\r\n");
 				OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
 				// If the listening socket failed to read, it is probably
 				// a problem of the underlying socket and it should be
@@ -218,7 +130,7 @@ public:
 				// If the only socket in the list is not set and the select
 				// returned, then I am not certain what was read. At this point,
 				// exit the loop and give the application a chance to recover.
-				OutputDebugString(L"Listening socket is in an unrecognized state!");
+				OutputDebugString(L"Listening socket is in an unrecognized state!\r\n");
 				throw std::runtime_error("Unrecognized state encountered!");
 			}
 
@@ -226,13 +138,13 @@ public:
 			int addrSize = sizeof(clientAddr);
 			SOCKET clientSocket = accept(listenSocket, reinterpret_cast<sockaddr*>(&clientAddr), &addrSize);
 			if (clientSocket == INVALID_SOCKET) {
-				OutputDebugString(L"Invalid socket accepted!");
+				OutputDebugString(L"Invalid socket accepted!\r\n");
 				continue;
 			}
 
 			std::shared_ptr<PeerDetails> info = std::make_shared<PeerDetails>(PeerDetails::fromSocketAddrInet(&clientAddr));
 			if (!validator(info.get())) {
-				OutputDebugString(L"Validation failed for connection!");
+				OutputDebugString(L"Validation failed for connection!\r\n");
 				closesocket(clientSocket);
 				clientSocket = INVALID_SOCKET;
 				continue;

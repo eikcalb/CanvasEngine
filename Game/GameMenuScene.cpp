@@ -83,8 +83,6 @@ void GameMenuScene::Update(double deltaTime)
 /// Render current scene
 void GameMenuScene::Render(RenderSystem* renderer)
 {
-	glm::mat4 MVM;
-
 	const auto& r = renderer->GetRenderer()->GetHud();
 	renderer->GetRenderer()->SetTopology(D3D_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
 	r->Label("Application Started!");

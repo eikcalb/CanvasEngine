@@ -23,7 +23,7 @@ const Config& const ResourceController::LoadConfig(const std::string& pFilename)
 
 	while (std::getline(file, line)) {
 		// Skip empty lines and comments
-		if (line.empty() || line[0] == ';') {
+		if (line.empty() || line[0] == ';' || (line.length() > 2 && line[0] == '/' && line[1] == '/')) {
 			continue;
 		}
 
@@ -36,7 +36,7 @@ const Config& const ResourceController::LoadConfig(const std::string& pFilename)
 			// Parse key-value pairs
 			size_t equalsPos = line.find('=');
 			if (equalsPos != std::string::npos) {
-				std::string key =line.substr(0, equalsPos);
+				std::string key = line.substr(0, equalsPos);
 				std::string value = line.substr(equalsPos + 1);
 
 				// If the key is empty, skip this line
