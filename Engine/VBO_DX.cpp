@@ -56,7 +56,6 @@ void VBO_DX::Draw(Renderer* renderer)
 
 	// draw the vertex buffer to the back buffer
 	rendererDX->GetContext()->Draw(_numVertices, 0);
-
 }
 
 /******************************************************************************************************************/

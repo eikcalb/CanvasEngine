@@ -162,6 +162,7 @@
     <ClInclude Include="..\Includes\imgui\imstb_textedit.h" />
     <ClInclude Include="..\Includes\imgui\imstb_truetype.h" />
     <ClInclude Include="GameMenuScene.h" />
+    <ClInclude Include="Line.h" />
     <ClInclude Include="Voxel.h" />
     <ClInclude Include="VoxGame.h" />
     <ClInclude Include="GamePlayScene.h" />
@@ -177,6 +178,7 @@
     <ClCompile Include="..\Includes\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\Includes\imgui\imgui_widgets.cpp" />
     <ClCompile Include="GameMenuScene.cpp" />
+    <ClCompile Include="Line.cpp" />
     <ClCompile Include="Voxel.cpp" />
     <ClCompile Include="VoxGame.cpp" />
     <ClCompile Include="GamePlayScene.cpp" />

@@ -1,11 +1,11 @@
-#include "Cube.h"
+#include "Line.h"
 
 #include "MathsHelper.h"
 
 /******************************************************************************************************************/
 
-Cube::Cube(std::shared_ptr<Mesh> mesh)
-	: GameObject("Cube")
+Line::Line(std::shared_ptr<Mesh> mesh)
+	: GameObject("Line")
 {
 	SetColour(Colour::White());
 	SetMesh(mesh);
@@ -14,13 +14,13 @@ Cube::Cube(std::shared_ptr<Mesh> mesh)
 
 /******************************************************************************************************************/
 
-Cube::~Cube()
+Line::~Line()
 {
 }
 
 /******************************************************************************************************************/
 
-void Cube::Update(double deltaTime)
+void Line::Update(double deltaTime)
 {
 	GameObject::Update(deltaTime);
 
@@ -31,13 +31,13 @@ void Cube::Update(double deltaTime)
 
 /******************************************************************************************************************/
 
-void Cube::OnMessage(Message* msg)
+void Line::OnMessage(Message* msg)
 {
 }
 
 /******************************************************************************************************************/
 
-void Cube::Reset()
+void Line::Reset()
 {
 	ShouldDraw(true);
 	for (auto& behavior : _behaviors) {
@@ -47,17 +47,17 @@ void Cube::Reset()
 	_position = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-void  Cube::SetWeight(u_short weight) {
+void Line::SetWeight(u_short weight) {
 	weight = weight;
 }
 
-void  Cube::SetColor(Colour colour) {
+void Line::SetColor(Colour colour) {
 
 	colour = colour;
 	ShouldDraw(true);
 }
 
-void Cube::SetCanRotate(bool rotate) {
+void Line::SetCanRotate(bool rotate) {
 	canRotate = rotate;
 }
 

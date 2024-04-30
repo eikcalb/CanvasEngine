@@ -4,10 +4,10 @@
 #include <D3Dcommon.h>
 
 #include "Game.h"
-#include "RenderSystem.h"
-#include "Message.h"
-#include "Cube.h"
 #include "GamePlayScene.h"
+#include "Line.h"
+#include "Message.h"
+#include "RenderSystem.h"
 
 /******************************************************************************************************************/
 // Structors
@@ -30,10 +30,10 @@ GameMenuScene::~GameMenuScene()
 
 void GameMenuScene::Initialise()
 {
-	auto cubeMesh = Game::TheGame->GetMesh("cube");
-	std::shared_ptr<Cube> cube = std::make_shared<Cube>(cubeMesh);
-	cube->SetCanRotate(true);
-	AddGameObject(cube);
+	auto lineMesh = Game::TheGame->GetMesh("line");
+	std::shared_ptr<Line> line = std::make_shared<Line>(lineMesh);
+	line->SetCanRotate(true);
+	AddGameObject(line);
 
 	// Start all objects to set them up
 	for (int i = 0; i < (int)_gameObjects.size(); i++)

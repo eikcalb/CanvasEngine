@@ -21,9 +21,9 @@ void VoxGame::Initialise(std::shared_ptr<Window> w)
 
 	//////////////
 	// Setup Meshes
-	auto cube = std::make_shared<Mesh>();
-	cube->LoadFromFile("CubeMesh.txt");
-	AddMesh("cube", cube);
+	auto lineMesh = std::make_shared<Mesh>();
+	lineMesh->LoadFromFile("CubeMesh.txt");
+	AddMesh("line", lineMesh);
 
 	// Create VBOs
 	for (MeshMapIterator i = _meshes.begin();
