@@ -210,6 +210,11 @@
     <Natvis Include="..\Includes\imgui\.natvis" />
     <Natvis Include="..\Includes\imgui\imgui.natvis" />
   </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="CubeMesh.txt">
+      <DeploymentContent>true</DeploymentContent>
+    </CopyFileToFolders>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
