@@ -107,5 +107,6 @@
   <ItemGroup>
     <CopyFileToFolders Include="..\config.ini" />
     <CopyFileToFolders Include="CubeMesh.txt" />
+    <CopyFileToFolders Include="VoxMesh.txt" />
   </ItemGroup>
 </Project>

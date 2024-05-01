@@ -25,6 +25,10 @@ void VoxGame::Initialise(std::shared_ptr<Window> w)
 	lineMesh->LoadFromFile("CubeMesh.txt");
 	AddMesh("line", lineMesh);
 
+	auto cubeMesh = std::make_shared<Mesh>();
+	cubeMesh->LoadFromFile("VoxMesh.txt");
+	AddMesh("cube", cubeMesh);
+
 	// Create VBOs
 	for (MeshMapIterator i = _meshes.begin();
 		i != _meshes.end();
@@ -57,7 +61,9 @@ void VoxGame::Render()
 	//// Add this code for 3D (need to change ScoreDisplay to fit inside 3D window)
 	glm::mat4 MVM;
 	MVM = glm::perspectiveFov(45.0f, (float)_window->_width, (float)_window->_height, 0.1f, 100.0f);
-	MVM *= glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	//MVM *= glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	auto& cam = GetCameraPosition();
+	MVM *= glm::lookAt(cam[0], cam[1], cam[2]);
 	_renderSystem->SetMVM(MVM);
 
 	_sceneController->Render(_renderSystem.get());

@@ -19,15 +19,6 @@
 
 #include "GameMenuScene.h"
 
-// Simple game state enum for the Asteroids game
-enum GameState
-{
-	MainMenu,
-	Playing,
-	Paused,
-	Dead,
-	Resetting,
-};
 
 class VoxGame :
 	public Game

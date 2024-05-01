@@ -20,14 +20,20 @@ class Renderer_DX :
 {
 	// Data
 protected:
-	IDXGISwapChain*			_swapchain;             // the pointer to the swap chain interface
-	ID3D11Device*			_device;                // the pointer to our Direct3D device interface
-	ID3D11DeviceContext*	_context;				// the pointer to our Direct3D device context
-	ID3D11RenderTargetView* _backbuffer;			// the pointer to our back buffer
-	ID3D11InputLayout*		_layout;				// the pointer to the input layout
-	ID3D11VertexShader*		_vertexShader;			// the pointer to the vertex shader
-	ID3D11PixelShader*		_pixelShader;			// the pointer to the pixel shader
-	ID3D11Buffer*			_uniformBuffer;			// Stores the MVM and colour
+	IDXGISwapChain*				_swapchain;             // the pointer to the swap chain interface
+	ID3D11Device*				_device;                // the pointer to our Direct3D device interface
+	ID3D11DeviceContext*		_context;				// the pointer to our Direct3D device context
+	ID3D11RenderTargetView*		_backbuffer;			// the pointer to our back buffer
+	ID3D11InputLayout*			_layout;				// the pointer to the input layout
+	ID3D11VertexShader*			_vertexShader;			// the pointer to the vertex shader
+	ID3D11PixelShader*			_pixelShader;			// the pointer to the pixel shader
+	ID3D11Buffer*				_uniformBuffer;			// Stores the MVM and colour
+
+	ID3D11Buffer*				_indexBuffer;
+	ID3D11Buffer*				_constantBuffer;
+
+	ID3D11Texture2D*			_depthStencil;
+	ID3D11DepthStencilView*		_depthStencilView;
 
 	HWND					_hWnd;					// Window handle
 

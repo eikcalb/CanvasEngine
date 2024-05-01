@@ -28,6 +28,15 @@ typedef std::map<std::string, std::shared_ptr<Mesh>> MeshMap;
 typedef std::map<std::string, std::shared_ptr<Mesh>>::iterator MeshMapIterator;
 
 
+enum class GameState
+{
+	MainMenu,
+	Playing,
+	Paused,
+	Dead,
+	Resetting,
+};
+
 class Game : ObserverSubject
 {
 public:
@@ -40,6 +49,9 @@ protected:
 	double								_deltaTime;
 	double								_fps = 60;
 	std::atomic_bool					_quitFlag;
+	
+	glm::mat3							_cameraPos;
+	GameState							_gameState;
 
 	std::shared_ptr<InputController>	_inputController; // ✅
 	std::shared_ptr<NetworkController>	_networkController; // ✅
@@ -68,6 +80,12 @@ public:
 	const float GetFPS() const { return _fps; }
 	void SetFPS(float fps) { _fps = fps; }
 
+	glm::mat3& GetCameraPosition() { return _cameraPos; }
+	void SetCameraPosition(glm::mat3 position) { _cameraPos = position; }
+
+	GameState GetGameState() { return _gameState; }
+	void SetGameState(GameState state) { _gameState = state; }
+
 	// Meshes
 	std::shared_ptr<Mesh> GetMesh(std::string name);
 	void AddMesh(std::string name, std::shared_ptr<Mesh> mesh) { _meshes[name] = mesh; }
@@ -76,8 +94,7 @@ public:
 	bool GetQuitFlag() const { return _quitFlag; }
 	void SetQuitFlag(bool v) { _quitFlag = v; }
 
-	// Renderer
-	std::shared_ptr<Renderer> GetRenderer() const { return _renderer; }
+	std::shared_ptr<RenderSystem> GetRendererSystem() const { return _renderSystem; }
 	std::shared_ptr<InputController> GetInputController()	const { return _inputController; }
 	std::shared_ptr<ThreadController> GetThreadController()	const { return _threadController; }
 

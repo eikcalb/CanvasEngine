@@ -15,6 +15,9 @@ Game::Game()
 	: _quitFlag(false)
 {
 	_currentTime = clock();
+	_cameraPos = glm::mat3(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	
+	SetGameState(GameState::MainMenu);
 
 	TheGame = std::shared_ptr<Game>(this);
 

@@ -12,7 +12,6 @@ class Line :
 {
 	// Data
 protected:
-	unsigned short weight = 1;
 	bool canRotate = false;
 	Colour colour = Colour();
 

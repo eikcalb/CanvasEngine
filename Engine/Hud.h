@@ -2,6 +2,8 @@
 #include <memory>
 #include <imgui.h>
 
+#include "Colour.h"
+
 class Hud
 {
 protected:
@@ -17,6 +19,10 @@ public:
 
 	void Label(const char* labelText) {
 		ImGui::Text("%s", labelText);
+	}
+
+	void Label(const char* labelText, Colour color) {
+		ImGui::TextColored({color.r(),color.g(),color.b(),color.a()}, "%s", labelText);
 	}
 
 	void LabelText(const char* labelText, const char* text) {

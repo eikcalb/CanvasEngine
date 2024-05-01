@@ -44,8 +44,8 @@ int WINAPI WinMain(
 )
 {
 	// Create the Game object
-	VoxGame game;
-	game.GetThreadController()->AddTask(
+	std::shared_ptr<VoxGame> game = std::make_shared<VoxGame>();
+	game->GetThreadController()->AddTask(
 		[&] {
 			// Create a Window object
 			Window_DX application(SCREEN_WIDTH, SCREEN_HEIGHT, hInstance, nCmdShow);
@@ -56,12 +56,12 @@ int WINAPI WinMain(
 	);
 
 	// Wait for application to run
-	while (!game.GetQuitFlag()) {
+	while (!game->GetQuitFlag()) {
 		// NOOP - This loop will continue running until the game has been quit.
 	}
 
 	// Shutdown controllers.
-	game.GetThreadController().reset();
+	game->GetThreadController().reset();
 }
 
 #else
@@ -76,13 +76,13 @@ class VoxApp
 {
 private:
 	Window_GL win;
-	VoxGame* game;
+	std::shared_ptr<VoxGame> game;
 
 public:
 	VoxApp()
 		: win(dynamic_cast<Game*>(new VoxApp()), SCREEN_WIDTH, SCREEN_HEIGHT)
 	{
-		game = dynamic_cast<VoxGame*>(win.GetGame());
+		game = std::make_shared<VoxGame>(win.GetGame());
 	}
 
 	~VoxApp()

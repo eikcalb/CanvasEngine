@@ -40,6 +40,8 @@ void GameMenuScene::Initialise()
 	{
 		_gameObjects[i]->Start();
 	}
+
+	Game::TheGame->SetGameState(GameState::MainMenu);
 }
 
 /******************************************************************************************************************/
@@ -88,8 +90,8 @@ void GameMenuScene::Render(RenderSystem* renderer)
 	r->Label("Application Started!");
 	r->Space();
 	r->Space();
-	r->Label("Press the spacebar to continue");
-	r->Label("Or press \"esc\" to quit");
+	r->Label("Press the spacebar to continue", Colour::Green());
+	r->Label("Or press \"esc\" to quit", Colour::Red());
 
 	renderer->Process(_gameObjects);
 }

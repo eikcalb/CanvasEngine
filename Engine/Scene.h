@@ -16,7 +16,7 @@ public:
 
 	// Data
 protected:
-	std::vector<std::shared_ptr<GameObject>>		_gameObjects;		// The list of game objects
+	std::vector<std::shared_ptr<GameObject>> _gameObjects; // The list of game objects
 
 	// Structors
 public:

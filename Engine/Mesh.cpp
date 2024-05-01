@@ -1,4 +1,5 @@
 #include "Mesh.h"
+
 #include "VBO.h"
 #include "Renderer.h"
 
@@ -43,6 +44,21 @@ bool Mesh::AddVertex(Vertex v)
 
 /******************************************************************************************************************/
 
+bool Mesh::AddIndex(unsigned int i)
+{
+	if (!_locked)
+	{
+		_indices.push_back(i);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+/******************************************************************************************************************/
+
 bool Mesh::DeleteVertex(int i)
 {
 	if (!_locked)
@@ -58,10 +74,25 @@ bool Mesh::DeleteVertex(int i)
 
 /******************************************************************************************************************/
 
+bool Mesh::DeleteIndex(int i)
+{
+	if (!_locked)
+	{
+		_indices.erase(_indices.begin() + i);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+/******************************************************************************************************************/
+
 bool Mesh::Clear()
 {
 	if (!_locked)
 	{
+		_indices.clear();
 		_vertices.clear();
 		return true;
 	}
@@ -89,7 +120,7 @@ VBO* Mesh::CreateVBO(Renderer* renderer)
 	_vbo = new VBO_GL();
 #endif
 
-	_vbo->Create(renderer, _vertices.data(), NumVertices());
+	_vbo->Create(renderer, _vertices.data(), NumVertices(), _indices.data(), NumIndices());
 
 	return _vbo;
 }
@@ -145,6 +176,15 @@ bool Mesh::LoadFromStream(std::ifstream& in)
 		in >> v.b;
 		in >> v.a;
 		AddVertex(v);
+	}
+
+	int numIndices;
+	in >> numIndices;
+	for (int i = 0; i < numIndices; i++)
+	{
+		unsigned int index;
+		in >> index;
+		AddIndex(index);
 	}
 	return true;
 }
