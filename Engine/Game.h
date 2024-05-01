@@ -50,6 +50,7 @@ protected:
 	double								_fps = 60;
 	std::atomic_bool					_quitFlag;
 	
+	glm::mat3							_initialCameraPos;
 	glm::mat3							_cameraPos;
 	GameState							_gameState;
 
@@ -82,6 +83,7 @@ public:
 
 	glm::mat3& GetCameraPosition() { return _cameraPos; }
 	void SetCameraPosition(glm::mat3 position) { _cameraPos = position; }
+	void ResetCameraPosition() { _cameraPos = _initialCameraPos; }
 
 	GameState GetGameState() { return _gameState; }
 	void SetGameState(GameState state) { _gameState = state; }

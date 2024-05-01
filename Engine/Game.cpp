@@ -16,6 +16,7 @@ Game::Game()
 {
 	_currentTime = clock();
 	_cameraPos = glm::mat3(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	_initialCameraPos = _cameraPos;
 	
 	SetGameState(GameState::MainMenu);
 
@@ -97,6 +98,7 @@ void Game::OnKeyboard(int key, bool down)
 	data->down = down;
 	KeyPressMessage msg(data, InputController::EVENT_KEY_INPUT);
 
+	_inputController->SetKeyPressed(static_cast<KEYS>(key), down);
 	_inputController->Notify(&msg);
 }
 

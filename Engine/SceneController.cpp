@@ -102,6 +102,7 @@ void SceneController::PushScene(std::shared_ptr<Scene> s)
 
 	s->End();
 	_scenes.push(s);
+	Game::TheGame->ResetCameraPosition();
 	s->Initialise();
 }
 

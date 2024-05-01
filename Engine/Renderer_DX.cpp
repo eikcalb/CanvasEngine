@@ -257,7 +257,7 @@ void Renderer_DX::InitialiseHud() {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 
-	ImGui::StyleColorsLight();
+	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(_hWnd);
 	ImGui_ImplDX11_Init(GetDevice(), GetContext());
 }

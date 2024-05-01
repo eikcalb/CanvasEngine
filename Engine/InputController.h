@@ -211,6 +211,8 @@ public:
 		const float& pWidth, const float& pHeight
 	);
 
+    void SetKeyPressed(const KEYS key, bool pressed) { mKeyStates[key] = pressed; }
+
 	bool IsKeyPressed(const KEYS& button)
 	{
         return mKeyStates[button];

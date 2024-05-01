@@ -60,6 +60,8 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 
 	if (down) return; // Ignore key down events
 
+
+
 	// Switch key presses
 	switch (static_cast<KEYS>(key))
 	{
@@ -73,6 +75,10 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 	case KEYS::Escape: // Escape
 		SceneController::Instance()->PopScene();
 		break;
+	case KEYS::Up: // Up arrow-key
+	case KEYS::Down: // Down arrow-key
+		// Handled in update loop
+		break;
 	}
 }
 
@@ -81,7 +87,18 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 /// Update current scene
 void GamePlayScene::Update(double deltaTime)
 {
-	const GameState gameState = Game::TheGame->GetGameState();
+	auto& game = Game::TheGame;
+	const GameState gameState = game->GetGameState();
+
+	glm::mat3 camPos = game->GetCameraPosition();
+	if (game->GetInputController()->IsKeyPressed(KEYS::Up)) {
+		camPos[0] += glm::vec3(0, 0, -deltaTime);
+	}
+	else if (game->GetInputController()->IsKeyPressed(KEYS::Down)) {
+		camPos[0] += glm::vec3(0, 0, deltaTime);
+	}
+	game->SetCameraPosition(camPos);
+
 	if (gameState == GameState::Paused) {
 		return;
 	}
@@ -113,6 +130,8 @@ void GamePlayScene::Render(RenderSystem* renderer)
 	else if (gameState == GameState::Playing) {
 		r->Label("Press \"p\" to pause", Colour::Blue());
 	}
+	r->Label("Press \"esc\" to go back", Colour::Red());
+
 	r->Space();
 	r->Space();
 	r->LabelText("User ID", ResourceController::Instance()->GetConfig()->id.c_str());
