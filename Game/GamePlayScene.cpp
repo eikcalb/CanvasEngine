@@ -31,7 +31,7 @@ void GamePlayScene::Initialise()
 	//_voxel = new VoxelCanvas;
 	auto mesh = Game::TheGame->GetMesh("cube");
 	std::shared_ptr<Cube> cube = std::make_shared<Cube>(mesh);
-	cube->SetCanRotate(true);
+	cube->SetCanRotate(false);
 	AddGameObject(cube);
 
 	//std::shared_ptr<Cube> cube = nullptr;
@@ -51,6 +51,10 @@ void GamePlayScene::Initialise()
 	}
 
 	Game::TheGame->SetGameState(GameState::Playing);
+
+	glm::mat3& camPos = Game::TheGame->GetCameraPosition();
+	camPos[0] += glm::vec3(0, 1, -20.0f);
+	Game::TheGame->SetCameraPosition(camPos);
 }
 
 /******************************************************************************************************************/
@@ -90,12 +94,19 @@ void GamePlayScene::Update(double deltaTime)
 	auto& game = Game::TheGame;
 	const GameState gameState = game->GetGameState();
 
-	glm::mat3 camPos = game->GetCameraPosition();
+	glm::mat3& camPos = game->GetCameraPosition();
 	if (game->GetInputController()->IsKeyPressed(KEYS::Up)) {
-		camPos[0] += glm::vec3(0, 0, -deltaTime);
+		camPos[0] += glm::vec3(0, 0, deltaTime);
 	}
 	else if (game->GetInputController()->IsKeyPressed(KEYS::Down)) {
-		camPos[0] += glm::vec3(0, 0, deltaTime);
+		camPos[0] += glm::vec3(0, 0, -deltaTime);
+	}
+
+	if (game->GetInputController()->IsKeyPressed(KEYS::Left)) {
+		camPos[0] += glm::vec3(deltaTime, 0, 0);
+	}
+	else if (game->GetInputController()->IsKeyPressed(KEYS::Right)) {
+		camPos[0] += glm::vec3(-deltaTime, 0, 0);
 	}
 	game->SetCameraPosition(camPos);
 

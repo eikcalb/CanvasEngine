@@ -133,7 +133,7 @@ float Mesh::CalculateMaxSize()
 	for (int i = 0; i < NumVertices(); i++)
 	{
 		Vertex& v = _vertices[i];
-		Vector4 vec(v.x, v.y, v.z, 1);
+		Vector4 vec(v.position.x, v.position.y, v.position.z, 1);
 		float dist = vec.lengthSquared();
 		if (dist > max)
 		{
@@ -168,13 +168,13 @@ bool Mesh::LoadFromStream(std::ifstream& in)
 	for (int i = 0; i < numVertices; i++)
 	{
 		Vertex v;
-		in >> v.x;
-		in >> v.y;
-		in >> v.z;
-		in >> v.r;
-		in >> v.g;
-		in >> v.b;
-		in >> v.a;
+		in >> v.position.x;
+		in >> v.position.y;
+		in >> v.position.z;
+		in >> v.color.r;
+		in >> v.color.g;
+		in >> v.color.b;
+		in >> v.color.a;
 		AddVertex(v);
 	}
 

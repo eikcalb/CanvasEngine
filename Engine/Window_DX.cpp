@@ -140,8 +140,9 @@ void Window_DX::Initialise()
 				break;
 			}
 		}
-
-		Game::TheGame->Run();
+		else {
+			Game::TheGame->Run();
+		}
 	}
 
 	// Clean up DirectX

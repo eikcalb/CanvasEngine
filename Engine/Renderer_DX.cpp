@@ -73,23 +73,18 @@ void Renderer_DX::Destroy()
 void Renderer_DX::Draw(const std::shared_ptr<Mesh> mesh, glm::mat4 MVM, const Colour& colour)
 {
 	_context->OMSetRenderTargets(1, &_backbuffer, _depthStencilView);
-	MVM = glm::transpose(MVM);
+	_context->IASetInputLayout(_layout);
 
 	UniformBuffer uniforms;
 	memcpy(&uniforms.MVM, &MVM[0][0], sizeof(DirectX::XMFLOAT4X4));
 	colour.copyToArray((float*)&uniforms.Colour);
 
-	// Need to update uniform buffer here
-	D3D11_MAPPED_SUBRESOURCE ms;
-	_context->Map(_uniformBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);		// map the buffer
-	memcpy(ms.pData, &uniforms, sizeof(UniformBuffer));								// copy the data
-	_context->Unmap(_uniformBuffer, NULL);											// unmap the buffer
+	_context->UpdateSubresource(_uniformBuffer, 0, nullptr, &uniforms, 0, 0);
 	_context->VSSetConstantBuffers(0, 1, &_uniformBuffer);
 	_context->PSSetConstantBuffers(0, 1, &_uniformBuffer);
 	
 	// select which primtive type we are using
 	_context->IASetPrimitiveTopology(topology);
-	_context->IASetInputLayout(_layout);
 	
 	mesh->GetVBO()->Draw(this);
 }
@@ -138,10 +133,14 @@ void Renderer_DX::Initialise(int width, int height)
 
 	// get the address of the back buffer
 	ID3D11Texture2D *p_backbuffer;
-	_swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&p_backbuffer);
+	if (!SUCCEEDED(_swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&p_backbuffer))) {
+		throw std::runtime_error("Failed to get swapchain buffer!");
+	}
 
 	// use the back buffer address to create the render target
-	_device->CreateRenderTargetView(p_backbuffer, NULL, &_backbuffer);
+	if (!SUCCEEDED(_device->CreateRenderTargetView(p_backbuffer, NULL, &_backbuffer))) {
+		throw std::runtime_error("Failed to create swapchain!");
+	}
 
 	//D3D11_TEXTURE2D_DESC bDesc;
 	//p_backbuffer->GetDesc(&bDesc);
@@ -190,7 +189,6 @@ void Renderer_DX::Initialise(int width, int height)
 
 	_context->RSSetViewports(1, &viewport);
 
-
 	// Initialise shaders
 	InitialiseShaders();
 	InitialiseHud();
@@ -237,9 +235,9 @@ void Renderer_DX::InitialiseShaders()
 
 	D3D11_BUFFER_DESC cbDesc;
 	cbDesc.ByteWidth = sizeof(uniforms);
-	cbDesc.Usage = D3D11_USAGE_DYNAMIC;
+	cbDesc.Usage = D3D11_USAGE_DEFAULT;
 	cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cbDesc.CPUAccessFlags = 0;
 	cbDesc.MiscFlags = 0;
 	cbDesc.StructureByteStride = 0;
 

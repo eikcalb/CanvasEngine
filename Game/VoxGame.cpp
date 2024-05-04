@@ -60,7 +60,7 @@ void VoxGame::Render()
 
 	//// Add this code for 3D (need to change ScoreDisplay to fit inside 3D window)
 	glm::mat4 MVM;
-	MVM = glm::perspectiveFov(45.0f, (float)_window->_width, (float)_window->_height, 0.1f, 100.0f);
+	MVM = glm::perspectiveFov(45.0f, (float)_window->_width, (float)_window->_height, 0.1f, 1000.0f);
 	//MVM *= glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	auto& cam = GetCameraPosition();
 	MVM *= glm::lookAt(cam[0], cam[1], cam[2]);
@@ -82,7 +82,7 @@ void VoxGame::Run()
 	// Run parent method to get delta time etc
 	Game::Run();
 	// Get delta time:
-// https://en.cppreference.com/w/cpp/chrono/c/clock
+	// https://en.cppreference.com/w/cpp/chrono/c/clock
 	double temp_time = clock();
 	_deltaTime = (temp_time - _currentTime) / CLOCKS_PER_SEC;
 
