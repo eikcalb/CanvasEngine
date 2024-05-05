@@ -74,10 +74,6 @@ void Renderer_DX::Destroy()
 
 void Renderer_DX::Draw(const std::shared_ptr<GameObject> go, const Colour& colour)
 {
-	//_world = DirectX::XMMatrixMultiply(
-	//	_world,
-	//	DirectX::XMMatrixTranslationFromVector(DirectX::XMVectorSet(_cameraPos.r, _cameraPos.g, _cameraPos.b, 0.0f))
-	//);
 	auto goWorld = DirectX::XMMatrixIdentity() *
 		DirectX::XMMatrixTranslation(go->GetPosition().x(), go->GetPosition().y(), go->GetPosition().z()) *
 		DirectX::XMMatrixRotationRollPitchYaw(0, DirectX::XMConvertToRadians(go->GetAngle()), 0) *
@@ -155,30 +151,30 @@ void Renderer_DX::Initialise(int width, int height)
 		throw std::runtime_error("Failed to create swapchain!");
 	}
 
-	D3D11_TEXTURE2D_DESC descDepth = {};
-	descDepth.Width = width;
-	descDepth.Height = height;
-	descDepth.MipLevels = 1;
-	descDepth.ArraySize = 1;
-	descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	descDepth.SampleDesc.Count = 1;
-	descDepth.SampleDesc.Quality = 0;
-	descDepth.Usage = D3D11_USAGE_DEFAULT;
-	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	descDepth.CPUAccessFlags = 0;
-	descDepth.MiscFlags = 0;
-	if (!SUCCEEDED(_device->CreateTexture2D(&descDepth, nullptr, &_depthStencil))) {
-		throw std::runtime_error("Failed to create depth texture!");
-	}
+	//D3D11_TEXTURE2D_DESC descDepth = {};
+	//descDepth.Width = width;
+	//descDepth.Height = height;
+	//descDepth.MipLevels = 1;
+	//descDepth.ArraySize = 1;
+	//descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	//descDepth.SampleDesc.Count = 1;
+	//descDepth.SampleDesc.Quality = 0;
+	//descDepth.Usage = D3D11_USAGE_DEFAULT;
+	//descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	//descDepth.CPUAccessFlags = 0;
+	//descDepth.MiscFlags = 0;
+	//if (!SUCCEEDED(_device->CreateTexture2D(&descDepth, nullptr, &_depthStencil))) {
+	//	throw std::runtime_error("Failed to create depth texture!");
+	//}
 
 	// Create the depth stencil view
-	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
-	descDSV.Format = descDepth.Format;
-	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	descDSV.Texture2D.MipSlice = 0;
-	if (!SUCCEEDED(_device->CreateDepthStencilView(_depthStencil, &descDSV, &_depthStencilView))) {
-		throw std::runtime_error("Failed to create depth stencil!");
-	}
+	//D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
+	//descDSV.Format = descDepth.Format;
+	//descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	//descDSV.Texture2D.MipSlice = 0;
+	//if (!SUCCEEDED(_device->CreateDepthStencilView(_depthStencil, &descDSV, &_depthStencilView))) {
+	//	throw std::runtime_error("Failed to create depth stencil!");
+	//}
 
 	// set the render target as the back buffer
 	_context->OMSetRenderTargets(
