@@ -86,7 +86,7 @@ void GameMenuScene::Update(double deltaTime)
 void GameMenuScene::Render(RenderSystem* renderer)
 {
 	const auto& r = renderer->GetRenderer()->GetHud();
-	renderer->GetRenderer()->SetTopology(D3D_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
+	renderer->GetRenderer()->SetTopology(D3D_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 	r->Label("Application Started!");
 	r->Space();
 	r->Space();

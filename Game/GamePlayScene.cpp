@@ -53,7 +53,7 @@ void GamePlayScene::Initialise()
 	Game::TheGame->SetGameState(GameState::Playing);
 
 	glm::mat3& camPos = Game::TheGame->GetCameraPosition();
-	camPos[0] += glm::vec3(0, 1, -20.0f);
+	camPos[0] += glm::vec3(0, 0, -10.0f);
 	Game::TheGame->SetCameraPosition(camPos);
 }
 
