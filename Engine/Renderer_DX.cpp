@@ -74,7 +74,7 @@ void Renderer_DX::Destroy()
 
 void Renderer_DX::Draw(const std::shared_ptr<GameObject> go, const Colour& colour)
 {
-	auto goWorld = DirectX::XMMatrixIdentity() *
+	auto goWorld = _world *
 		DirectX::XMMatrixTranslation(go->GetPosition().x(), go->GetPosition().y(), go->GetPosition().z()) *
 		DirectX::XMMatrixRotationRollPitchYaw(0, DirectX::XMConvertToRadians(go->GetAngle()), 0) *
 		DirectX::XMMatrixScaling(go->GetScale(), go->GetScale(), go->GetScale());

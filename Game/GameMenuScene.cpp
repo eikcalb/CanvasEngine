@@ -69,6 +69,20 @@ void GameMenuScene::OnKeyboard(int key, bool down)
 /// Update current scene
 void GameMenuScene::Update(double deltaTime)
 {
+	auto& game = Game::TheGame;
+	const GameState gameState = game->GetGameState();
+
+	const auto& renderer = game->GetRendererSystem()->GetRenderer();
+	glm::vec3 camPos = renderer->GetCameraPosition();
+	if (game->GetInputController()->IsKeyPressed(KEYS::Up)) {
+		camPos += glm::vec3(0, 0, 10 * deltaTime);
+	}
+	else if (game->GetInputController()->IsKeyPressed(KEYS::Down)) {
+		camPos += glm::vec3(0, 0, 10 * -deltaTime);
+	}
+
+	renderer->SetCameraPosition(camPos);
+
 	Scene::Update(deltaTime);
 
 	for (int i = 0; i < (int)_gameObjects.size(); i++)
