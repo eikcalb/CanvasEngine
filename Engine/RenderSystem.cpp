@@ -28,7 +28,7 @@ void RenderSystem::Process(std::vector<std::shared_ptr<GameObject>>& list)
 	{
 		if (obj->IsAlive() && obj->ShouldDraw())
 		{
-				_renderer->Draw(obj, _MVM);
+				_renderer->Draw(obj);
 		}
 	}
 

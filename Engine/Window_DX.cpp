@@ -141,7 +141,13 @@ void Window_DX::Initialise()
 			}
 		}
 		else {
-			Game::TheGame->Run();
+			try {
+				Game::TheGame->Run();
+			}
+			catch (std::exception& ex) {
+				std::cout << ex.what() << std::endl;
+				exit(1);
+			}
 		}
 	}
 

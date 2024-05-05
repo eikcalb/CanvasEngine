@@ -50,8 +50,6 @@ protected:
 	double								_fps = 60;
 	std::atomic_bool					_quitFlag;
 	
-	glm::mat3							_initialCameraPos;
-	glm::mat3							_cameraPos;
 	GameState							_gameState;
 
 	std::shared_ptr<InputController>	_inputController; // ✅
@@ -60,11 +58,11 @@ protected:
 	std::shared_ptr<SceneController>	_sceneController; // ✅
 	std::shared_ptr<ThreadController>	_threadController; // ✅
 
-	MeshMap							_meshes;// The map of meshes
-	std::shared_ptr<Renderer>		_renderer;
-	std::shared_ptr<Window>			_window;
+	MeshMap								_meshes;// The map of meshes
+	std::shared_ptr<Renderer>			_renderer;
+	std::shared_ptr<Window>				_window;
 	// Systems
-	std::shared_ptr<RenderSystem>	_renderSystem;// To handle rendering
+	std::shared_ptr<RenderSystem>		_renderSystem;// To handle rendering
 
 	// TODO: introduce audio manager?
 public:
@@ -80,10 +78,6 @@ public:
 
 	const float GetFPS() const { return _fps; }
 	void SetFPS(float fps) { _fps = fps; }
-
-	glm::mat3& GetCameraPosition() { return _cameraPos; }
-	void SetCameraPosition(glm::mat3 position) { _cameraPos = position; }
-	void ResetCameraPosition() { _cameraPos = _initialCameraPos; }
 
 	GameState GetGameState() { return _gameState; }
 	void SetGameState(GameState state) { _gameState = state; }

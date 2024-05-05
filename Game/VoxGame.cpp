@@ -58,14 +58,8 @@ void VoxGame::Render()
 
 	_renderer->GetHud()->Start();
 
-	//// Add this code for 3D (need to change ScoreDisplay to fit inside 3D window)
-	glm::mat4 MVM;
-	MVM = glm::perspectiveFov(45.0f, (float)_window->_width, (float)_window->_height, 0.1f, 1000.0f);
 	//MVM *= glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	auto& cam = GetCameraPosition();
-	MVM *= glm::lookAt(cam[0], cam[1], cam[2]);
-	_renderSystem->SetMVM(MVM);
-
+	_renderer->UpdateCamera();
 	_sceneController->Render(_renderSystem.get());
 	_renderer->GetHud()->Render();
 

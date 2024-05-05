@@ -12,7 +12,6 @@ class RenderSystem :
 	// Data
 protected:
 	std::shared_ptr<Renderer> _renderer;
-	glm::mat4 _MVM;
 
 	// Structors
 public:
@@ -21,10 +20,8 @@ public:
 
 	// Get / sets
 public:
-	std::shared_ptr<Renderer> GetRenderer()		const	{ return _renderer; }
-	void SetRenderer(std::shared_ptr<Renderer> r)		{ _renderer = r; }
-	glm::mat4 GetMVM()			const	{ return _MVM; }
-	void SetMVM(glm::mat4 m)			{ _MVM = m; }
+	std::shared_ptr<Renderer> GetRenderer() const { return _renderer; }
+	void SetRenderer(std::shared_ptr<Renderer> r) { _renderer = r; }
 
 	// Functions
 public:

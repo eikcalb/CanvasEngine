@@ -51,10 +51,6 @@ void GamePlayScene::Initialise()
 	}
 
 	Game::TheGame->SetGameState(GameState::Playing);
-
-	glm::mat3& camPos = Game::TheGame->GetCameraPosition();
-	camPos[0] += glm::vec3(0, 0, -10.0f);
-	Game::TheGame->SetCameraPosition(camPos);
 }
 
 /******************************************************************************************************************/
@@ -93,22 +89,23 @@ void GamePlayScene::Update(double deltaTime)
 {
 	auto& game = Game::TheGame;
 	const GameState gameState = game->GetGameState();
-
-	glm::mat3& camPos = game->GetCameraPosition();
+	
+	const auto& renderer = game->GetRendererSystem()->GetRenderer();
+	glm::vec3 camPos = renderer->GetCameraPosition();
 	if (game->GetInputController()->IsKeyPressed(KEYS::Up)) {
-		camPos[0] += glm::vec3(0, 0, deltaTime);
+		camPos = glm::vec3(0, 0, deltaTime);
 	}
 	else if (game->GetInputController()->IsKeyPressed(KEYS::Down)) {
-		camPos[0] += glm::vec3(0, 0, -deltaTime);
+		camPos = glm::vec3(0, 0, -deltaTime);
 	}
 
 	if (game->GetInputController()->IsKeyPressed(KEYS::Left)) {
-		camPos[0] += glm::vec3(deltaTime, 0, 0);
+		camPos = glm::vec3(deltaTime, 0, 0);
 	}
 	else if (game->GetInputController()->IsKeyPressed(KEYS::Right)) {
-		camPos[0] += glm::vec3(-deltaTime, 0, 0);
+		camPos = glm::vec3(-deltaTime, 0, 0);
 	}
-	game->SetCameraPosition(camPos);
+	renderer->SetCameraPosition(camPos);
 
 	if (gameState == GameState::Paused) {
 		return;

@@ -22,6 +22,8 @@ class Renderer
 protected:
 	Colour					_clearColour;	// Screen clear colour
 	std::shared_ptr<Hud>	_hud;
+	glm::vec3							_initialCameraPos;
+	glm::vec3							_cameraPos;
 
 public:
 	D3D_PRIMITIVE_TOPOLOGY topology = D3D_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINELIST;
@@ -38,12 +40,22 @@ public:
 	void SetTopology(D3D_PRIMITIVE_TOPOLOGY tgy) { topology = tgy; }
 	std::shared_ptr<Hud> GetHud() { return _hud; }
 
+
+	glm::vec3& GetCameraPosition() { return _cameraPos; }
+	void SetCameraPosition(glm::vec3 position) {
+		_cameraPos = position;
+		UpdateCamera();
+	}
+	void ResetCameraPosition() { _cameraPos = _initialCameraPos; }
+
+	virtual void UpdateCamera() = 0;
+
 	// Functions
 public:
 	virtual void ClearScreen() = 0;
 
-	virtual void Draw(const std::shared_ptr<Mesh> mesh, glm::mat4 MVM, const Colour& colour) = 0;
-	virtual void Draw(std::shared_ptr<GameObject> gob, glm::mat4 MVM);
+	virtual void Draw(const std::shared_ptr<GameObject> go, const Colour& colour) = 0;
+	virtual void Draw(std::shared_ptr<GameObject> gob);
 
 	virtual void Initialise(int width, int height) = 0;
 

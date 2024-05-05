@@ -51,8 +51,6 @@ private:
 	GameObject(const GameObject&);
 	GameObject& operator=(const GameObject&) = default;
 
-
-	// Gets/sets
 public:
 	std::shared_ptr<Mesh> GetMesh() const { return _mesh; }
 	void SetMesh(std::shared_ptr<Mesh> m) { _mesh = m; }
@@ -84,14 +82,12 @@ public:
 
 	std::string GetType() const { return _type; }
 
-	// Component Functions
 public:
 	bool AddBehavior(std::shared_ptr<Behavior> goc);
 	bool RemoveBehavior(std::shared_ptr<Behavior> goc);
 	bool RemoveBehavior(std::string componentType);
 	std::shared_ptr<Behavior> GetBehavior(std::string tag);
 
-	// General Functions
 public:
 	// Setup function -- called to initialise object and its components. Should only be called once
 	virtual void Start();

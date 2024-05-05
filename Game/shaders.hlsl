@@ -4,27 +4,28 @@ struct VOut
 	float4 colour : COLOR;
 };
 
-cbuffer uniforms
+cbuffer ConstantBuffer : register( b0 )
 {
-	float4x4 MVM;
-	float4 globalColour;
-
+	matrix World;
+	matrix View;
+	matrix Projection;
+	float4 Colour;
 };
 
 VOut VShader(float4 position : POSITION, float4 colour : COLOR)
 {
 	VOut output;
 
-	float4 transformedPos = mul(position, MVM);
-
-	output.position = transformedPos;
+	output.position = mul( position, World );
+    output.position = mul( output.position, View );
+    output.position = mul( output.position, Projection );
 	output.colour = colour;
 
 	return output;
 }
 
 
-float4 PShader(float4 position : SV_POSITION, float4 color : COLOR) : SV_TARGET
+float4 PShader(VOut input) : SV_TARGET
 {
-	return color * globalColour;
+	return input.colour * Colour;
 }

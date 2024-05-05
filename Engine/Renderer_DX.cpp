@@ -4,13 +4,15 @@
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
 
-#include "VBO.h"
+#include "GameObject.h"
 #include "Mesh.h"
+#include "VBO.h"
+#include "Utils.h"
 
 /******************************************************************************************************************/
 
 Renderer_DX::Renderer_DX(HWND hWnd)
-	: _hWnd(hWnd), _depthStencil(nullptr), _depthStencilView(nullptr)
+	: _hWnd(hWnd), _depthStencil(nullptr), _depthStencilView(nullptr), _constantBuffer(nullptr)
 {
 }
 
@@ -25,7 +27,7 @@ Renderer_DX::~Renderer_DX()
 	delete _layout;			// the pointer to the input layout
 	delete _vertexShader;	// the pointer to the vertex shader
 	delete _pixelShader;	// the pointer to the pixel shader
-	delete _uniformBuffer;
+	delete _constantBuffer;
 
 	delete _indexBuffer;
 	delete _constantBuffer;
@@ -57,9 +59,9 @@ void Renderer_DX::Destroy()
 	_device->Release();
 	_context->Release();
 
-	if (_uniformBuffer)	
+	if (_constantBuffer)
 	{
-		_uniformBuffer->Release();
+		_constantBuffer->Release();
 	}
 
 
@@ -70,23 +72,34 @@ void Renderer_DX::Destroy()
 
 /******************************************************************************************************************/
 
-void Renderer_DX::Draw(const std::shared_ptr<Mesh> mesh, glm::mat4 MVM, const Colour& colour)
+void Renderer_DX::Draw(const std::shared_ptr<GameObject> go, const Colour& colour)
 {
+	//_world = DirectX::XMMatrixMultiply(
+	//	_world,
+	//	DirectX::XMMatrixTranslationFromVector(DirectX::XMVectorSet(_cameraPos.r, _cameraPos.g, _cameraPos.b, 0.0f))
+	//);
+	auto goWorld = DirectX::XMMatrixIdentity() *
+		DirectX::XMMatrixTranslation(go->GetPosition().x(), go->GetPosition().y(), go->GetPosition().z()) *
+		DirectX::XMMatrixRotationRollPitchYaw(0, DirectX::XMConvertToRadians(go->GetAngle()), 0) *
+		DirectX::XMMatrixScaling(go->GetScale(), go->GetScale(), go->GetScale());
+
 	_context->OMSetRenderTargets(1, &_backbuffer, _depthStencilView);
 	_context->IASetInputLayout(_layout);
 
-	UniformBuffer uniforms;
-	memcpy(&uniforms.MVM, &MVM[0][0], sizeof(DirectX::XMFLOAT4X4));
-	colour.copyToArray((float*)&uniforms.Colour);
+	ConstantBuffer cb{};
+	colour.copyToArray((float*)&cb.Colour);
+	cb.World = DirectX::XMMatrixTranspose(goWorld);
+	cb.View = DirectX::XMMatrixTranspose(_view);
+	cb.Projection = DirectX::XMMatrixTranspose(_proj);
+	_context->UpdateSubresource(_constantBuffer, 0, nullptr, &cb, 0, 0);
 
-	_context->UpdateSubresource(_uniformBuffer, 0, nullptr, &uniforms, 0, 0);
-	_context->VSSetConstantBuffers(0, 1, &_uniformBuffer);
-	_context->PSSetConstantBuffers(0, 1, &_uniformBuffer);
-	
+	_context->VSSetConstantBuffers(0, 1, &_constantBuffer);
+	_context->PSSetConstantBuffers(0, 1, &_constantBuffer);
+
 	// select which primtive type we are using
 	_context->IASetPrimitiveTopology(topology);
-	
-	mesh->GetVBO()->Draw(this);
+
+	go->GetMesh()->GetVBO()->Draw(this);
 }
 
 /******************************************************************************************************************/
@@ -132,7 +145,7 @@ void Renderer_DX::Initialise(int width, int height)
 		&_context);
 
 	// get the address of the back buffer
-	ID3D11Texture2D *p_backbuffer;
+	ID3D11Texture2D* p_backbuffer;
 	if (!SUCCEEDED(_swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&p_backbuffer))) {
 		throw std::runtime_error("Failed to get swapchain buffer!");
 	}
@@ -142,30 +155,30 @@ void Renderer_DX::Initialise(int width, int height)
 		throw std::runtime_error("Failed to create swapchain!");
 	}
 
-	//D3D11_TEXTURE2D_DESC descDepth = {};
-	//descDepth.Width = width;
-	//descDepth.Height = height;
-	//descDepth.MipLevels = 1;
-	//descDepth.ArraySize = 1;
-	//descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	//descDepth.SampleDesc.Count = 1;
-	//descDepth.SampleDesc.Quality = 0;
-	//descDepth.Usage = D3D11_USAGE_DEFAULT;
-	//descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	//descDepth.CPUAccessFlags = 0;
-	//descDepth.MiscFlags = 0;
-	//if (!SUCCEEDED(_device->CreateTexture2D(&descDepth, nullptr, &_depthStencil))) {
-	//	throw std::runtime_error("Failed to create depth texture!");
-	//}
+	D3D11_TEXTURE2D_DESC descDepth = {};
+	descDepth.Width = width;
+	descDepth.Height = height;
+	descDepth.MipLevels = 1;
+	descDepth.ArraySize = 1;
+	descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	descDepth.SampleDesc.Count = 1;
+	descDepth.SampleDesc.Quality = 0;
+	descDepth.Usage = D3D11_USAGE_DEFAULT;
+	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	descDepth.CPUAccessFlags = 0;
+	descDepth.MiscFlags = 0;
+	if (!SUCCEEDED(_device->CreateTexture2D(&descDepth, nullptr, &_depthStencil))) {
+		throw std::runtime_error("Failed to create depth texture!");
+	}
 
 	// Create the depth stencil view
-	//D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
-	//descDSV.Format = descDepth.Format;
-	//descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	//descDSV.Texture2D.MipSlice = 0;
-	//if (!SUCCEEDED(_device->CreateDepthStencilView(_depthStencil, &descDSV, &_depthStencilView))) {
-	//	throw std::runtime_error("Failed to create depth stencil!");
-	//}
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
+	descDSV.Format = descDepth.Format;
+	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	descDSV.Texture2D.MipSlice = 0;
+	if (!SUCCEEDED(_device->CreateDepthStencilView(_depthStencil, &descDSV, &_depthStencilView))) {
+		throw std::runtime_error("Failed to create depth stencil!");
+	}
 
 	// set the render target as the back buffer
 	_context->OMSetRenderTargets(
@@ -191,6 +204,14 @@ void Renderer_DX::Initialise(int width, int height)
 	// Initialise shaders
 	InitialiseShaders();
 	InitialiseHud();
+
+	_world = DirectX::XMMatrixIdentity();
+	// Initialize the view matrix
+	_eye = DirectX::XMVectorSet(0.0f, 0.0f, -5.0f, 0.0f);
+	_at = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	_up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	_view = DirectX::XMMatrixLookAtLH(_eye, _at, _up);
+	_proj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, width / (float)height, 0.01f, 100.0f);
 }
 
 /******************************************************************************************************************/
@@ -206,9 +227,13 @@ void Renderer_DX::SwapBuffers()
 void Renderer_DX::InitialiseShaders()
 {
 	// load and compile the two shaders
-	ID3D10Blob *VS, *PS;
-	D3DX11CompileFromFile(L"shaders.hlsl", 0, 0, "VShader", "vs_4_0", 0, 0, 0, &VS, 0, 0);
-	D3DX11CompileFromFile(L"shaders.hlsl", 0, 0, "PShader", "ps_4_0", 0, 0, 0, &PS, 0, 0);
+	ID3D10Blob* VS, * PS;
+	HRESULT hr;
+	hr = D3DX11CompileFromFile(L"shaders.hlsl", 0, 0, "VShader", "vs_4_0", 0, 0, 0, &VS, 0, 0);
+	hr = D3DX11CompileFromFile(L"shaders.hlsl", 0, 0, "PShader", "ps_4_0", 0, 0, 0, &PS, 0, 0);
+	if (!SUCCEEDED(hr)) {
+		throw std::exception("Failed to read shader file!");
+	}
 
 	// encapsulate both shaders into shader objects
 	_device->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &_vertexShader);
@@ -228,26 +253,20 @@ void Renderer_DX::InitialiseShaders()
 	_device->CreateInputLayout(ied, 2, VS->GetBufferPointer(), VS->GetBufferSize(), &_layout);
 	_context->IASetInputLayout(_layout);
 
-
-	// Create uniform buffer
-	UniformBuffer uniforms;
-
 	D3D11_BUFFER_DESC cbDesc;
-	cbDesc.ByteWidth = sizeof(uniforms);
+	ZeroMemory(&cbDesc, sizeof(D3D11_BUFFER_DESC));
+	cbDesc.ByteWidth = sizeof(ConstantBuffer);
 	cbDesc.Usage = D3D11_USAGE_DEFAULT;
 	cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	cbDesc.CPUAccessFlags = 0;
-	cbDesc.MiscFlags = 0;
-	cbDesc.StructureByteStride = 0;
-
-	// Fill in the subresource data.
-	D3D11_SUBRESOURCE_DATA InitData;
-	InitData.pSysMem = &uniforms;
-	InitData.SysMemPitch = 0;
-	InitData.SysMemSlicePitch = 0;
 
 	// Create the buffer.
-	_device->CreateBuffer(&cbDesc, &InitData, &_uniformBuffer);
+	hr = _device->CreateBuffer(&cbDesc, nullptr, &_constantBuffer);
+	if (!SUCCEEDED(hr)) {
+		std::cout << hr << ": " << Utils::GetErrorMessage(hr) << std::endl;
+		OutputDebugString(L"Failed to create constant buffer!\r\n");
+		throw std::runtime_error("Failed to create constant buffer!");
+	}
 }
 
 void Renderer_DX::InitialiseHud() {
