@@ -1,5 +1,7 @@
 #include "VoxGame.h"
 
+#include "GamePlayScene.h"
+
 /******************************************************************************************************************/
 
 VoxGame::VoxGame() : Game("Voxel Game")
@@ -37,7 +39,8 @@ void VoxGame::Initialise(std::shared_ptr<Window> w)
 		i->second->CreateVBO(_renderer.get());
 	}
 
-	_sceneController->PushScene(std::make_shared<GameMenuScene>());
+	//_sceneController->PushScene(std::make_shared<GameMenuScene>());
+	_sceneController->PushScene(std::make_shared<GamePlayScene>());
 }
 
 /******************************************************************************************************************/

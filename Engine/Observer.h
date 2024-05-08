@@ -14,6 +14,6 @@ class Observer
 {
 public:
 	/// Receive a message (called when notified of a message by the subject)
-	virtual void OnMessage(Message*) = 0;
+	virtual void OnMessage(Message* msg) = 0;
 };
 

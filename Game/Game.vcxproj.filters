@@ -38,6 +38,9 @@
     <ClCompile Include="Line.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="CameraBehavior.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VoxGame.h" />
@@ -77,6 +80,9 @@
       <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="Line.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraBehavior.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
   </ItemGroup>

@@ -40,7 +40,6 @@ public:
 	void SetTopology(D3D_PRIMITIVE_TOPOLOGY tgy) { topology = tgy; }
 	std::shared_ptr<Hud> GetHud() { return _hud; }
 
-
 	glm::vec3& GetCameraPosition() { return _cameraPos; }
 	void SetCameraPosition(glm::vec3 position) {
 		_cameraPos = position;

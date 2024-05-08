@@ -43,6 +43,7 @@ protected:
 
 	ID3D11Texture2D* _depthStencil;
 	ID3D11DepthStencilView* _depthStencilView;
+	ID3D11RasterizerState* _rasterizerState;
 
 	HWND						_hWnd;					// Window handle
 

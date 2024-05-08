@@ -20,14 +20,12 @@ private:
 	std::string _tag;
 	std::shared_ptr<GameObject> _owner;
 public:
-	Behavior(std::string type, std::shared_ptr<GameObject> owner)
-		: _owner(owner),
-		_tag(type)
-	{}
+	Behavior(std::string type, std::shared_ptr<GameObject> owner);
+	~Behavior() {
+
+	}
 
 	std::string GetTag() { return _tag; }
-
-	virtual void OnMessage(Message msg) = 0;
 
 	// Main update function (called every frame)
 	virtual void Update(double deltaTime) = 0;

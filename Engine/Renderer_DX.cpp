@@ -31,6 +31,7 @@ Renderer_DX::~Renderer_DX()
 
 	delete _indexBuffer;
 	delete _constantBuffer;
+	delete _rasterizerState;
 
 	delete _depthStencil;
 	delete _depthStencilView;
@@ -74,7 +75,7 @@ void Renderer_DX::Destroy()
 
 void Renderer_DX::Draw(const std::shared_ptr<GameObject> go, const Colour& colour)
 {
-	auto goWorld = _world *
+	auto goWorld = _world * //DirectX::XMMatrixIdentity() *
 		DirectX::XMMatrixTranslation(go->GetPosition().x(), go->GetPosition().y(), go->GetPosition().z()) *
 		DirectX::XMMatrixRotationRollPitchYaw(0, DirectX::XMConvertToRadians(go->GetAngle()), 0) *
 		DirectX::XMMatrixScaling(go->GetScale(), go->GetScale(), go->GetScale());
@@ -208,6 +209,14 @@ void Renderer_DX::Initialise(int width, int height)
 	_up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	_view = DirectX::XMMatrixLookAtLH(_eye, _at, _up);
 	_proj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, width / (float)height, 0.01f, 100.0f);
+
+	D3D11_RASTERIZER_DESC rasterizerDesc = {};
+	rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
+	//rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+	rasterizerDesc.CullMode = D3D11_CULL_NONE;
+	rasterizerDesc.FrontCounterClockwise = TRUE;
+	_device->CreateRasterizerState(&rasterizerDesc, &_rasterizerState);
+	_context->RSSetState(_rasterizerState);
 }
 
 /******************************************************************************************************************/

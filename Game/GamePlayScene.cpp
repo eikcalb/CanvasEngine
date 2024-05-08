@@ -3,6 +3,7 @@
 #define WIN32_LEAN_AND_MEAN // Required to prevent winsock/WinSock2 redifinition
 #include <D3Dcommon.h>
 
+#include "CameraBehavior.h"
 #include "Game.h"
 #include "RenderSystem.h"
 #include "Message.h"
@@ -33,6 +34,9 @@ void GamePlayScene::Initialise()
 	std::shared_ptr<Cube> cube = std::make_shared<Cube>(mesh);
 	cube->SetCanRotate(false);
 	AddGameObject(cube);
+	
+	std::shared_ptr<CameraBehavior> camBehavior = std::make_shared<CameraBehavior>(std::shared_ptr<GamePlayScene>(this));
+	cube->AddBehavior(camBehavior);
 
 	//std::shared_ptr<Cube> cube = nullptr;
 	//for (int y = 0; y < VOXEL_HEIGHT; ++y) {
@@ -65,11 +69,15 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 	// Switch key presses
 	switch (static_cast<KEYS>(key))
 	{
-	case KEYS::P: // P = pause
+	case KEYS::P:
 		// Pausing the game state will prevent game objects from receiving updates.
 		Game::TheGame->SetGameState(GameState::Paused);
 		break;
-	case KEYS::Space: // P = pause
+	case KEYS::R:
+		// Pausing the game state will prevent game objects from receiving updates.
+		Reset();
+		break;
+	case KEYS::Space:
 		Game::TheGame->SetGameState(GameState::Playing);
 		break;
 	case KEYS::Escape: // Escape
@@ -77,7 +85,7 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 		break;
 	case KEYS::Up: // Up arrow-key
 	case KEYS::Down: // Down arrow-key
-		// Handled in update loop
+		// Handled by camera behavior now.
 		break;
 	}
 }
@@ -89,31 +97,6 @@ void GamePlayScene::Update(double deltaTime)
 {
 	auto& game = Game::TheGame;
 	const GameState gameState = game->GetGameState();
-
-	const auto& renderer = game->GetRendererSystem()->GetRenderer();
-	glm::vec3 camPos = renderer->GetCameraPosition();
-	if (game->GetInputController()->IsKeyPressed(KEYS::OemComma)) {
-		camPos += glm::vec3(0, 10 * deltaTime, 0);
-	}
-	else if (game->GetInputController()->IsKeyPressed(KEYS::OemPeriod)) {
-		camPos += glm::vec3(0, 10 * -deltaTime, 0);
-	}
-
-	if (game->GetInputController()->IsKeyPressed(KEYS::Up)) {
-		camPos += glm::vec3(0, 0, 10 * deltaTime);
-	}
-	else if (game->GetInputController()->IsKeyPressed(KEYS::Down)) {
-		camPos += glm::vec3(0, 0, 10 * -deltaTime);
-	}
-
-	if (game->GetInputController()->IsKeyPressed(KEYS::Left)) {
-		camPos += glm::vec3(10 * deltaTime, 0, 0);
-	}
-	else if (game->GetInputController()->IsKeyPressed(KEYS::Right)) {
-		camPos += glm::vec3(10 * -deltaTime, 0, 0);
-	}
-	renderer->SetCameraPosition(camPos);
-
 	if (gameState == GameState::Paused) {
 		return;
 	}
@@ -137,6 +120,8 @@ void GamePlayScene::Render(RenderSystem* renderer)
 	const GameState gameState = Game::TheGame->GetGameState();
 
 	const auto& r = renderer->GetRenderer()->GetHud();
+	//renderer->GetRenderer()->SetTopology(D3D_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+	//renderer->GetRenderer()->SetTopology(D3D_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	renderer->GetRenderer()->SetTopology(D3D_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	if (gameState == GameState::Paused) {

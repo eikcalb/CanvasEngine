@@ -18,10 +18,6 @@ public:
 
 	// Data
 protected:
-	// Matrices
-	glm::mat4		_IM;  // Identity matrix
-	glm::mat4		_MVM; // ModelView matrix
-
 	VoxelCanvas*	_voxel;
 
 	// Structors

@@ -161,6 +161,7 @@
     <ClInclude Include="..\Includes\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\Includes\imgui\imstb_textedit.h" />
     <ClInclude Include="..\Includes\imgui\imstb_truetype.h" />
+    <ClInclude Include="CameraBehavior.h" />
     <ClInclude Include="GameMenuScene.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="Voxel.h" />
@@ -177,6 +178,7 @@
     <ClCompile Include="..\Includes\imgui\imgui_stdlib.cpp" />
     <ClCompile Include="..\Includes\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\Includes\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="CameraBehavior.cpp" />
     <ClCompile Include="GameMenuScene.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="Voxel.cpp" />
