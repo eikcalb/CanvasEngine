@@ -32,11 +32,11 @@ void GamePlayScene::Initialise()
 	//_voxel = new VoxelCanvas;
 	auto mesh = Game::TheGame->GetMesh("cube");
 	std::shared_ptr<Cube> cube = std::make_shared<Cube>(mesh);
-	cube->SetCanRotate(false);
+	cube->SetCanRotate(true);
 	AddGameObject(cube);
 	
 	std::shared_ptr<CameraBehavior> camBehavior = std::make_shared<CameraBehavior>(std::shared_ptr<GamePlayScene>(this));
-	cube->AddBehavior(camBehavior);
+	AddBehavior(camBehavior);
 
 	//std::shared_ptr<Cube> cube = nullptr;
 	//for (int y = 0; y < VOXEL_HEIGHT; ++y) {
@@ -95,13 +95,14 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 /// Update current scene
 void GamePlayScene::Update(double deltaTime)
 {
+	Scene::Update(deltaTime);
+
 	auto& game = Game::TheGame;
 	const GameState gameState = game->GetGameState();
 	if (gameState == GameState::Paused) {
 		return;
 	}
 
-	Scene::Update(deltaTime);
 
 	for (int i = 0; i < (int)_gameObjects.size(); i++)
 	{
@@ -143,6 +144,8 @@ void GamePlayScene::Render(RenderSystem* renderer)
 
 void GamePlayScene::Reset()
 {
+	__super::Reset();
+
 	for (int i = 0; i < (int)_gameObjects.size(); i++)
 	{
 		_gameObjects[i]->Reset();

@@ -3,6 +3,7 @@
 #define WIN32_LEAN_AND_MEAN // Required to prevent winsock/WinSock2 redifinition
 #include <D3Dcommon.h>
 
+#include "CameraBehavior.h"
 #include "Game.h"
 #include "GamePlayScene.h"
 #include "Line.h"
@@ -34,6 +35,9 @@ void GameMenuScene::Initialise()
 	std::shared_ptr<Line> line = std::make_shared<Line>(lineMesh);
 	line->SetCanRotate(true);
 	AddGameObject(line);
+
+	std::shared_ptr<CameraBehavior> camBehavior = std::make_shared<CameraBehavior>(std::shared_ptr<GameMenuScene>(this));
+	AddBehavior(camBehavior);
 
 	// Start all objects to set them up
 	for (int i = 0; i < (int)_gameObjects.size(); i++)
@@ -69,20 +73,6 @@ void GameMenuScene::OnKeyboard(int key, bool down)
 /// Update current scene
 void GameMenuScene::Update(double deltaTime)
 {
-	auto& game = Game::TheGame;
-	const GameState gameState = game->GetGameState();
-
-	const auto& renderer = game->GetRendererSystem()->GetRenderer();
-	glm::vec3 camPos = renderer->GetCameraPosition();
-	if (game->GetInputController()->IsKeyPressed(KEYS::Up)) {
-		camPos += glm::vec3(0, 0, 10 * deltaTime);
-	}
-	else if (game->GetInputController()->IsKeyPressed(KEYS::Down)) {
-		camPos += glm::vec3(0, 0, 10 * -deltaTime);
-	}
-
-	renderer->SetCameraPosition(camPos);
-
 	Scene::Update(deltaTime);
 
 	for (int i = 0; i < (int)_gameObjects.size(); i++)
@@ -114,6 +104,8 @@ void GameMenuScene::Render(RenderSystem* renderer)
 
 void GameMenuScene::Reset()
 {
+	__super::Reset();
+
 	for (int i = 0; i < (int)_gameObjects.size(); i++)
 	{
 		_gameObjects[i]->Reset();

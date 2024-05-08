@@ -130,7 +130,10 @@ void GameObject::End()
 // Resets the game object to the start state (similar to Start(), but may be called more than once)
 void GameObject::Reset()
 {
-
+	for (auto& i : _behaviors)
+	{
+		i.second->Reset();
+	}
 }
 
 /******************************************************************************************************************/
