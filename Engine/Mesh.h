@@ -20,15 +20,15 @@ protected:
 	std::atomic_bool _locked = false;	// True once we've made the VBO; can no longer add vertices etc unless reset
 	VBO* _vbo = nullptr;
 	std::vector<Vertex> _vertices;
-	std::vector<unsigned int> _indices;
+	std::vector<unsigned short> _indices;
 
 	// Gets/sets
 public:
 	VBO* GetVBO()			const { return _vbo; }
 
 	int NumIndices()		const { return (int)_indices.size(); }
-	const unsigned int GeIndex(int i)	const { return _indices[i]; }
-	const unsigned int& GetIndexRef(int i) const { return _indices[i]; }
+	const unsigned short GeIndex(int i)	const { return _indices[i]; }
+	const unsigned short& GetIndexRef(int i) const { return _indices[i]; }
 
 	int NumVertices()		const { return (int)_vertices.size(); }
 	const Vertex GetVertex(int i)	const { return _vertices[i]; }
@@ -38,7 +38,7 @@ public:
 public:
 	VBO* CreateVBO(Renderer* r);
 	bool AddVertex(Vertex v);
-	bool AddIndex(unsigned int i);
+	bool AddIndex(unsigned short i);
 	bool Clear();
 	bool DeleteVertex(int i);
 	bool DeleteIndex(int i);

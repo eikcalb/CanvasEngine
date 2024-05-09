@@ -18,7 +18,7 @@ public:
 
 	// Functions
 public:
-	virtual void Create(Renderer* renderer, Vertex vertices[], int numVertices, unsigned int indices[], int numIndices) = 0;
+	virtual void Create(Renderer* renderer, Vertex vertices[], int numVertices, unsigned short indices[], int numIndices) = 0;
 	virtual void Draw(Renderer* renderer) = 0;
 };
 

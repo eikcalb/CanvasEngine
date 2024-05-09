@@ -44,7 +44,7 @@ bool Mesh::AddVertex(Vertex v)
 
 /******************************************************************************************************************/
 
-bool Mesh::AddIndex(unsigned int i)
+bool Mesh::AddIndex(unsigned short i)
 {
 	if (!_locked)
 	{

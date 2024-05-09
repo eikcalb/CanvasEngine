@@ -32,7 +32,7 @@ void GamePlayScene::Initialise()
 	//_voxel = new VoxelCanvas;
 	auto mesh = Game::TheGame->GetMesh("cube");
 	std::shared_ptr<Cube> cube = std::make_shared<Cube>(mesh);
-	cube->SetCanRotate(true);
+	cube->SetCanRotate(false);
 	AddGameObject(cube);
 	
 	std::shared_ptr<CameraBehavior> camBehavior = std::make_shared<CameraBehavior>(std::shared_ptr<GamePlayScene>(this));

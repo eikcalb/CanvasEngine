@@ -6,7 +6,7 @@
 /******************************************************************************************************************/
 
 VBO_DX::VBO_DX()
-	: _vbo(NULL)
+	: _vbo(NULL), _idx(NULL)
 {
 }
 
@@ -20,8 +20,12 @@ VBO_DX::~VBO_DX()
 
 /******************************************************************************************************************/
 
-void VBO_DX::Create(Renderer* renderer, Vertex vertices[], int numVertices, unsigned int indices[], int numIndices)
+void VBO_DX::Create(Renderer* renderer, Vertex vertices[], int numVertices, unsigned short indices[], int numIndices)
 {
+	/// Apparently, using unsigned int for the index instead of unsigned short breaks
+	/// the output for DirectX.
+	/// Time lost = 7 days!
+
 	Renderer_DX* rendererDX = (Renderer_DX*)renderer;
 
 	_numVertices = numVertices;
