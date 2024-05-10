@@ -1,4 +1,5 @@
 #include "CameraBehavior.h"
+
 #include "Game.h"
 
 void CameraBehavior::Update(double deltaTime) {

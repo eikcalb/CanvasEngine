@@ -26,6 +26,11 @@ void Scene::Update(double deltaTime)
 	// Delete game objects
 	for (int i = 0; i < (int)_gameObjects.size(); i++)
 	{
+		if (_gameObjects[i]->IsAlive())
+		{
+			_gameObjects[i]->Update(deltaTime / 10);
+		}
+
 		if (_gameObjects[i]->ShouldBeDeleted())
 		{
 			_gameObjects[i].reset();
@@ -33,7 +38,6 @@ void Scene::Update(double deltaTime)
 			i--;
 		}
 	}
-
 	GameObject::Update(deltaTime);
 }
 

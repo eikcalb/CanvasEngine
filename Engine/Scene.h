@@ -7,7 +7,8 @@ class SceneController;
 
 /// Represents an abstract scene, i.e. the view presented to users.
 /// With this class, the application will display content to users.
-/// In an MVC architecture, this will be the presentation (view)
+/// In an MVC architecture, this will be the presentation (view).
+/// Scenes can be nested in order to produce a group of game objects.
 /// layer.
 class Scene : public GameObject
 {

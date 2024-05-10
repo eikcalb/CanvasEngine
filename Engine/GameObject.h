@@ -74,6 +74,12 @@ public:
 		_semPosition.release();
 	}
 
+	void Move(Vector4 v) {
+		_semPosition.acquire();
+		_position += v;
+		_semPosition.release();
+	}
+
 	bool IsAlive() const { return _alive; }
 	void SetAlive(bool v) { _alive = v; }
 

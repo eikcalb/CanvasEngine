@@ -211,9 +211,9 @@ void Renderer_DX::Initialise(int width, int height)
 	_proj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, width / (float)height, 0.01f, 100.0f);
 
 	D3D11_RASTERIZER_DESC rasterizerDesc = {};
-	rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
-	//rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-	rasterizerDesc.CullMode = D3D11_CULL_NONE;
+	//rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
+	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+	rasterizerDesc.CullMode = D3D11_CULL_BACK;
 	rasterizerDesc.FrontCounterClockwise = TRUE;
 	_device->CreateRasterizerState(&rasterizerDesc, &_rasterizerState);
 	_context->RSSetState(_rasterizerState);

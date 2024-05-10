@@ -31,13 +31,14 @@ GameMenuScene::~GameMenuScene()
 
 void GameMenuScene::Initialise()
 {
+	std::shared_ptr<CameraBehavior> camBehavior = std::make_shared<CameraBehavior>(std::shared_ptr<GameMenuScene>(this));
+	AddBehavior(camBehavior);
+
 	auto lineMesh = Game::TheGame->GetMesh("line");
 	std::shared_ptr<Line> line = std::make_shared<Line>(lineMesh);
 	line->SetCanRotate(true);
 	AddGameObject(line);
 
-	std::shared_ptr<CameraBehavior> camBehavior = std::make_shared<CameraBehavior>(std::shared_ptr<GameMenuScene>(this));
-	AddBehavior(camBehavior);
 
 	// Start all objects to set them up
 	for (int i = 0; i < (int)_gameObjects.size(); i++)
@@ -61,7 +62,10 @@ void GameMenuScene::OnKeyboard(int key, bool down)
 	case KEYS::Space:
 		SceneController::Instance()->PushScene(std::make_shared<GamePlayScene>());
 		break;
-
+	case KEYS::R:
+		// Pausing the game state will prevent game objects from receiving updates.
+		Reset();
+		break;
 	case KEYS::Escape: // Escape
 		SceneController::Instance()->PopScene();
 		break;

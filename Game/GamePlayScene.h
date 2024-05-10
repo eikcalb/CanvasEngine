@@ -33,16 +33,16 @@ public:
 public:
 
 	// Setup
-	virtual void Initialise();
+	virtual void Initialise() override;
 
 	/// Respond to input
-	virtual void OnKeyboard(int key, bool down);
+	virtual void OnKeyboard(int key, bool down) override;
 	
 	/// Update current scene
-	virtual void Update(double deltaTime);
+	virtual void Update(double deltaTime) override;
 
 	/// Render current scene
-	virtual void Render(RenderSystem* renderer);
+	virtual void Render(RenderSystem* renderer) override;
 
 
 	// Reset the game

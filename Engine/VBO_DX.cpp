@@ -24,7 +24,7 @@ void VBO_DX::Create(Renderer* renderer, Vertex vertices[], int numVertices, unsi
 {
 	/// Apparently, using unsigned int for the index instead of unsigned short breaks
 	/// the output for DirectX.
-	/// Time lost = 7 days!
+	/// Time lost = 7 days! (Documenting this nightmare that gave me nightmares!).
 
 	Renderer_DX* rendererDX = (Renderer_DX*)renderer;
 

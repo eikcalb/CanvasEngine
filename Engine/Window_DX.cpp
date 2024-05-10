@@ -92,6 +92,10 @@ LRESULT CALLBACK Window_DX::WindowProc(HWND hWnd, UINT message, WPARAM wParam, L
 	case WM_RBUTTONUP:
 	case WM_MBUTTONUP:
 	case WM_MOUSEWHEEL:
+	{
+		Game::TheGame->OnMouse(lParam, false);
+		break;
+	}
 	case WM_XBUTTONUP:
 	case WM_MOUSEHOVER:
 	case WM_INPUT:
@@ -110,10 +114,11 @@ LRESULT CALLBACK Window_DX::WindowProc(HWND hWnd, UINT message, WPARAM wParam, L
 		Game::TheGame->OnKeyboard(wParam, false);
 		break;
 	}
-					break;
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 
-	return DefWindowProc(hWnd, message, wParam, lParam);
+	return 0;
 }
 
 /******************************************************************************************************************/

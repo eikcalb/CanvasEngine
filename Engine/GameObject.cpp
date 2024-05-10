@@ -14,7 +14,7 @@ GameObject::GameObject(std::string type)
 	_type(type),
 	_deleteFlag(false),
 	_shouldDraw(false),
-	_semPosition(0)
+	_semPosition(1)
 {
 }
 
