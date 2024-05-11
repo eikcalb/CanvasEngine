@@ -25,7 +25,7 @@ public:
 	// Functions
 public:
 	virtual void Create(Renderer* renderer, Vertex vertices[], int numVertices, unsigned short indices[], int numIndices) override;
-	virtual void Draw(Renderer* renderer) override;
+	virtual void Draw(Renderer* renderer, unsigned long count) override;
 };
 
 #endif

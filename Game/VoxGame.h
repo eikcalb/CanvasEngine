@@ -18,11 +18,15 @@
 #include "MultiMesh.h"
 
 #include "GameMenuScene.h"
+#include "Voxel.h"
 
 
 class VoxGame :
 	public Game
 {
+private:
+	VoxelCanvas* _voxel;
+
 	// Structors
 public:
 	VoxGame();
@@ -30,6 +34,7 @@ public:
 
 	// Functions
 public:
+	VoxelCanvas* GetVoxelCanvas() { return _voxel; }
 
 	// Initialise the game
 	virtual void Initialise(std::shared_ptr<Window> w);

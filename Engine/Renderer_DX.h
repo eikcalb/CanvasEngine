@@ -10,12 +10,6 @@
 
 class GameObject;
 
-typedef struct UniformBuffer
-{
-	DirectX::XMFLOAT4X4 MVM;
-	DirectX::XMFLOAT4 Colour;
-} UniformBuffer;
-
 struct ConstantBuffer
 {
 	DirectX::XMMATRIX World;

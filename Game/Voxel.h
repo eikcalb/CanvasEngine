@@ -5,6 +5,8 @@
 constexpr unsigned int VOXEL_WIDTH = 2;// 12;
 constexpr unsigned int VOXEL_HEIGHT = 2;// 12;
 
+constexpr unsigned long VOXEL_AREA = VOXEL_WIDTH * VOXEL_HEIGHT;
+
 class VoxelCanvas
 {
 public:

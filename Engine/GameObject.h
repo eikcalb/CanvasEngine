@@ -27,7 +27,7 @@ protected:
 	Colour					_colour;		// Colour of object
 	bool					_shouldDraw;	// Whether or not to draw
 	bool					_shouldUpdate = true;	// Whether or not to draw
-
+	unsigned long			_instanceCount = 1;
 
 	// Data
 protected:
@@ -40,6 +40,7 @@ protected:
 	BehaviorMap				_behaviors;
 
 	std::binary_semaphore	_semPosition;
+	GeneratorBufferData*	_generatorData;
 
 	// Constructors
 public:
@@ -65,6 +66,8 @@ public:
 	bool ShouldUpdate() const { return _shouldUpdate; }
 	void SetShouldUpdate(bool v) { _shouldUpdate = v; }
 
+	unsigned long GetInstanceCount() { return _instanceCount; }
+
 	float GetAngle() const { return _angle; }
 	void SetAngle(float v) { _angle = v; }
 
@@ -89,6 +92,9 @@ public:
 
 	bool ShouldBeDeleted() const { return _deleteFlag; }
 	void SetDeleteFlag(bool v) { _deleteFlag = v; }
+
+	void SetGeneratorData(GeneratorBufferData* gd) { _generatorData = gd; }
+	GeneratorBufferData* GetGeneratorData() { return _generatorData; }
 
 	std::string GetType() const { return _type; }
 

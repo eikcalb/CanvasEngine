@@ -127,6 +127,7 @@ void GameObject::End()
 {
 	// Clear behavior list
 	_behaviors.clear();
+	delete _generatorData;
 }
 
 /******************************************************************************************************************/

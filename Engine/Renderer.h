@@ -15,7 +15,9 @@ class GameObject;
 class Mesh;
 
 // Platform independent renderer base class
-// Basically represents a graphics context and its active shaders
+// Basically represents a graphics context and its active shaders.
+// Ideally, we should have an array of shaders and each shader can
+// be specified during the draw call.
 class Renderer
 {
 	// Data

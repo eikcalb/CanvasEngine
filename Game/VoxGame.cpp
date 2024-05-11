@@ -6,12 +6,14 @@
 
 VoxGame::VoxGame() : Game("Voxel Game")
 {
+	_voxel = new VoxelCanvas();
 }
 
 /******************************************************************************************************************/
 
 VoxGame::~VoxGame()
 {
+	delete _voxel;
 }
 
 /******************************************************************************************************************/
@@ -20,6 +22,8 @@ void VoxGame::Initialise(std::shared_ptr<Window> w)
 {
 	// Initialise parent
 	Game::Initialise(w);
+
+	GetRendererSystem()->GetRenderer()->SetupGenerator(_voxel->GetSize());
 
 	//////////////
 	// Setup Meshes

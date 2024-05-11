@@ -4,9 +4,6 @@
 #include "GL\GLM\GLM.hpp"
 #include "GL\GLM\GTC\matrix_transform.hpp"
 
-// Game classes
-#include "Voxel.h"
-
 constexpr int WIDTH = 512;
 constexpr int HEIGHT = 512;
 
@@ -18,7 +15,6 @@ public:
 
 	// Data
 protected:
-	VoxelCanvas*	_voxel;
 
 	// Structors
 public:

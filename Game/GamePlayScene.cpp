@@ -7,12 +7,13 @@
 #include "Game.h"
 #include "RenderSystem.h"
 #include "Message.h"
+#include "VoxGame.h"
 
 /******************************************************************************************************************/
 // Structors
 /******************************************************************************************************************/
 
-GamePlayScene::GamePlayScene() : _voxel(nullptr)
+GamePlayScene::GamePlayScene()
 {
 
 }
@@ -36,8 +37,6 @@ void GamePlayScene::Initialise()
 	std::shared_ptr<CameraBehavior> camBehavior = std::make_shared<CameraBehavior>(std::shared_ptr<GamePlayScene>(this));
 	AddBehavior(camBehavior);
 
-	_voxel = new VoxelCanvas();
-
 	//Game::TheGame->GetThreadController()->AddTask(
 	//	[&] {
 			for (int y = 0; y < VOXEL_HEIGHT; y++) {
@@ -48,7 +47,6 @@ void GamePlayScene::Initialise()
 					cube->SetCanRotate(false);
 					AddGameObject(cube);
 					cube->Reset();
-					_voxel->SetVoxel(x, y, cube);
 				}
 			}
 	//	},
@@ -140,6 +138,7 @@ void GamePlayScene::Reset()
 		_gameObjects[i]->Reset();
 	}
 
+	auto _voxel = ((VoxGame*)Game::TheGame.get())->GetVoxelCanvas();
 	if (_voxel) {
 		_voxel->Reset();
 	}

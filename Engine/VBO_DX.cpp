@@ -61,7 +61,7 @@ void VBO_DX::Create(Renderer* renderer, Vertex vertices[], int numVertices, unsi
 
 /******************************************************************************************************************/
 
-void VBO_DX::Draw(Renderer* renderer)
+void VBO_DX::Draw(Renderer* renderer, unsigned long count = 1)
 {
 	Renderer_DX* rendererDX = (Renderer_DX*)renderer;
 
@@ -71,13 +71,13 @@ void VBO_DX::Draw(Renderer* renderer)
 	rendererDX->GetContext()->IASetVertexBuffers(0, 1, &_vbo, &stride, &offset);
 
 	// https://developer.nvidia.com/gpugems/gpugems2/part-i-geometric-complexity/chapter-3-inside-geometry-instancing
-	// https://www.braynzarsoft.net/viewtutorial/q16390-33-instancing-with-indexed-primitives#google_vignette
+	// https://www.braynzarsoft.net/viewtutorial/q16390-33-instancing-with-indexed-primitives
 	if (_numIndices > 0) {
 		rendererDX->GetContext()->IASetIndexBuffer(_idx, DXGI_FORMAT_R16_UINT, offset);
-		rendererDX->GetContext()->DrawIndexed(_numIndices, 0, 0);
+		rendererDX->GetContext()->DrawIndexedInstanced(_numIndices, count, 0, 0, 0);
 	}
 	else {
-		rendererDX->GetContext()->Draw(_numVertices, 0);
+		rendererDX->GetContext()->DrawInstanced(_numVertices, count, 0, 0);
 	}
 }
 

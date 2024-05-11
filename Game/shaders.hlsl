@@ -1,7 +1,14 @@
+#define INSTANCE_COUNT 262144
+
 struct VOut
 {
 	float4 position : SV_POSITION;
 	float4 colour : COLOR;
+};
+
+cbuffer InstanceBuffer : register(b1)
+{
+    float4 InstanceColors[INSTANCE_COUNT];
 };
 
 cbuffer ConstantBuffer : register( b0 )
