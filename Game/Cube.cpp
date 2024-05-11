@@ -9,7 +9,7 @@ Cube::Cube(std::shared_ptr<Mesh> mesh)
 {
 	SetColour(Colour::White());
 	SetMesh(mesh);
-	ShouldDraw(true);
+	SetShouldDraw(true);
 }
 
 /******************************************************************************************************************/
@@ -22,6 +22,10 @@ Cube::~Cube()
 
 void Cube::Update(double deltaTime)
 {
+	if (!ShouldUpdate()) {
+		return;
+	}
+
 	GameObject::Update(deltaTime);
 
 	if (canRotate) {
@@ -39,7 +43,7 @@ void Cube::OnMessage(Message* msg)
 
 void Cube::Reset()
 {
-	ShouldDraw(true);
+	SetShouldDraw(true);
 	for (auto& behavior : _behaviors) {
 		behavior.second->Reset();
 	}
@@ -54,7 +58,7 @@ void  Cube::SetWeight(u_short weight) {
 void  Cube::SetColor(Colour colour) {
 
 	colour = colour;
-	ShouldDraw(true);
+	SetShouldDraw(true);
 }
 
 void Cube::SetCanRotate(bool rotate) {

@@ -27,24 +27,34 @@ GamePlayScene::~GamePlayScene()
 // Functions
 /******************************************************************************************************************/
 
+void GamePlayScene::Start() {
+
+}
+
 void GamePlayScene::Initialise()
 {
 	std::shared_ptr<CameraBehavior> camBehavior = std::make_shared<CameraBehavior>(std::shared_ptr<GamePlayScene>(this));
 	AddBehavior(camBehavior);
 
 	_voxel = new VoxelCanvas();
-	auto mesh = Game::TheGame->GetMesh("cube");
-	std::shared_ptr<Cube> cube;
 
-	for (int y = 0; y < VOXEL_HEIGHT; y++) {
-		for (int x = 0; x < VOXEL_WIDTH; x++) {
-			cube = std::make_shared<Cube>(mesh);
-			cube->SetCanRotate(false);
-			AddGameObject(cube);
-			cube->Reset();
-			_voxel->SetVoxel(x, y, cube);
-		}
-	}
+	//Game::TheGame->GetThreadController()->AddTask(
+	//	[&] {
+			for (int y = 0; y < VOXEL_HEIGHT; y++) {
+				for (int x = 0; x < VOXEL_WIDTH; x++) {
+					auto mesh = Game::TheGame->GetMesh("cube");
+					std::shared_ptr<Cube> cube;
+					cube = std::make_shared<Cube>(mesh);
+					cube->SetCanRotate(false);
+					AddGameObject(cube);
+					cube->Reset();
+					_voxel->SetVoxel(x, y, cube);
+				}
+			}
+	//	},
+	//	TaskType::GRAPHICS,
+	//	"Scene Initialization Task"
+	//);
 
 	Game::TheGame->SetGameState(GameState::Playing);
 }
@@ -56,8 +66,6 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 
 	if (down) return; // Ignore key down events
 
-
-
 	// Switch key presses
 	switch (static_cast<KEYS>(key))
 	{
@@ -68,12 +76,6 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 	case KEYS::R:
 		// Pausing the game state will prevent game objects from receiving updates.
 		Reset();
-		break;
-	case KEYS::A:
-		for (int i = 0; i < (int)_gameObjects.size(); i++)
-		{
-			_gameObjects[i]->SetPosition(Vector4(i * 2, 0));
-		}
 		break;
 	case KEYS::Space:
 		Game::TheGame->SetGameState(GameState::Playing);
@@ -106,7 +108,7 @@ void GamePlayScene::Update(double deltaTime)
 
 /// Render current scene
 void GamePlayScene::Render(RenderSystem* renderer)
-{
+{ 
 	const GameState gameState = Game::TheGame->GetGameState();
 
 	const auto& r = renderer->GetRenderer()->GetHud();
@@ -136,6 +138,10 @@ void GamePlayScene::Reset()
 	for (int i = 0; i < (int)_gameObjects.size(); i++)
 	{
 		_gameObjects[i]->Reset();
+	}
+
+	if (_voxel) {
+		_voxel->Reset();
 	}
 }
 

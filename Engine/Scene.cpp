@@ -28,7 +28,7 @@ void Scene::Update(double deltaTime)
 	{
 		if (_gameObjects[i]->IsAlive())
 		{
-			_gameObjects[i]->Update(deltaTime / 10);
+			_gameObjects[i]->Update(deltaTime);
 		}
 
 		if (_gameObjects[i]->ShouldBeDeleted())

@@ -39,8 +39,14 @@ void VoxGame::Initialise(std::shared_ptr<Window> w)
 		i->second->CreateVBO(_renderer.get());
 	}
 
-	//_sceneController->PushScene(std::make_shared<GameMenuScene>());
-	_sceneController->PushScene(std::make_shared<GamePlayScene>());
+	GetThreadController()->AddTask(
+		[&] {
+			//_sceneController->PushScene(std::make_shared<GameMenuScene>());
+			_sceneController->PushScene(std::make_shared<GamePlayScene>());
+		},
+		TaskType::GRAPHICS,
+		"Setup Scenes"
+	);
 }
 
 /******************************************************************************************************************/

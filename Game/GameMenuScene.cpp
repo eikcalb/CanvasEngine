@@ -16,7 +16,6 @@
 
 GameMenuScene::GameMenuScene()
 {
-
 }
 
 /******************************************************************************************************************/
@@ -53,7 +52,6 @@ void GameMenuScene::Initialise()
 
 void GameMenuScene::OnKeyboard(int key, bool down)
 {
-
 	if (down) return; // Ignore key down events
 
 	// Switch key presses

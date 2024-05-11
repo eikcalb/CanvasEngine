@@ -100,6 +100,10 @@ void GameObject::Start()
 // Main update function (called every frame)
 void GameObject::Update(double deltaTime)
 {
+	if (!ShouldUpdate()) {
+		return;
+	}
+
 	// Update all objects
 	for (auto& i : _behaviors)
 	{

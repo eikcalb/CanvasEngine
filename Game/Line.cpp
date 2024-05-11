@@ -9,7 +9,7 @@ Line::Line(std::shared_ptr<Mesh> mesh)
 {
 	SetColour(Colour::White());
 	SetMesh(mesh);
-	ShouldDraw(true);
+	SetShouldDraw(true);
 }
 
 /******************************************************************************************************************/
@@ -39,7 +39,7 @@ void Line::OnMessage(Message* msg)
 
 void Line::Reset()
 {
-	ShouldDraw(true);
+	SetShouldDraw(true);
 	for (auto& behavior : _behaviors) {
 		behavior.second->Reset();
 	}
@@ -54,7 +54,7 @@ void Line::SetWeight(u_short weight) {
 void Line::SetColor(Colour colour) {
 
 	colour = colour;
-	ShouldDraw(true);
+	SetShouldDraw(true);
 }
 
 void Line::SetCanRotate(bool rotate) {

@@ -70,6 +70,8 @@ void VBO_DX::Draw(Renderer* renderer)
 	UINT offset = 0;
 	rendererDX->GetContext()->IASetVertexBuffers(0, 1, &_vbo, &stride, &offset);
 
+	// https://developer.nvidia.com/gpugems/gpugems2/part-i-geometric-complexity/chapter-3-inside-geometry-instancing
+	// https://www.braynzarsoft.net/viewtutorial/q16390-33-instancing-with-indexed-primitives#google_vignette
 	if (_numIndices > 0) {
 		rendererDX->GetContext()->IASetIndexBuffer(_idx, DXGI_FORMAT_R16_UINT, offset);
 		rendererDX->GetContext()->DrawIndexed(_numIndices, 0, 0);

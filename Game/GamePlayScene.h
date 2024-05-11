@@ -35,6 +35,8 @@ public:
 	// Setup
 	virtual void Initialise() override;
 
+	virtual void Start() override;
+
 	/// Respond to input
 	virtual void OnKeyboard(int key, bool down) override;
 	

@@ -22,8 +22,8 @@ class Renderer
 protected:
 	Colour					_clearColour;	// Screen clear colour
 	std::shared_ptr<Hud>	_hud;
-	glm::vec3							_initialCameraPos;
-	glm::vec3							_cameraPos;
+	glm::vec3				_initialCameraPos;
+	glm::vec3				_cameraPos;
 
 public:
 	D3D_PRIMITIVE_TOPOLOGY topology = D3D_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINELIST;

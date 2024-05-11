@@ -26,6 +26,7 @@ protected:
 	std::shared_ptr<Mesh>	_mesh;			// Vertex info
 	Colour					_colour;		// Colour of object
 	bool					_shouldDraw;	// Whether or not to draw
+	bool					_shouldUpdate = true;	// Whether or not to draw
 
 
 	// Data
@@ -59,7 +60,10 @@ public:
 	void SetColour(Colour c) { _colour = c; }
 
 	bool ShouldDraw() const { return _shouldDraw; }
-	void ShouldDraw(bool v) { _shouldDraw = v; }
+	void SetShouldDraw(bool v) { _shouldDraw = v; }
+
+	bool ShouldUpdate() const { return _shouldUpdate; }
+	void SetShouldUpdate(bool v) { _shouldUpdate = v; }
 
 	float GetAngle() const { return _angle; }
 	void SetAngle(float v) { _angle = v; }

@@ -204,7 +204,8 @@ void Renderer_DX::Initialise(int width, int height)
 
 	_world = DirectX::XMMatrixIdentity();
 	// Initialize the view matrix
-	_eye = DirectX::XMVectorSet(0.0f, 0.0f, -5.0f, 0.0f);
+	const auto& cam = GetCameraPosition();
+	_eye = DirectX::XMVectorSet(cam.r, cam.g, cam.b, 0.0f);
 	_at = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	_up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	_view = DirectX::XMMatrixLookAtLH(_eye, _at, _up);
