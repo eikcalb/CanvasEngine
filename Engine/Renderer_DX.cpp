@@ -58,13 +58,15 @@ void Renderer_DX::Destroy()
 	_swapchain->Release();
 	_backbuffer->Release();
 	_device->Release();
+	_depthStencil->Release();
+	_indexBuffer->Release();
+	_rasterizerState->Release();
 	_context->Release();
 
 	if (_constantBuffer)
 	{
 		_constantBuffer->Release();
 	}
-
 
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
@@ -89,14 +91,13 @@ void Renderer_DX::Draw(const std::shared_ptr<GameObject> go, const Colour& colou
 	cb.View = DirectX::XMMatrixTranspose(_view);
 	cb.Projection = DirectX::XMMatrixTranspose(_proj);
 	_context->UpdateSubresource(_constantBuffer, 0, nullptr, &cb, 0, 0);
-
 	_context->VSSetConstantBuffers(0, 1, &_constantBuffer);
 	_context->PSSetConstantBuffers(0, 1, &_constantBuffer);
 
 	// select which primtive type we are using
 	_context->IASetPrimitiveTopology(topology);
 
-	go->GetMesh()->GetVBO()->Draw(this);
+	go->GetMesh()->GetVBO()->Draw(this, go->GetGeneratorData(), go->GetInstanceCount());
 }
 
 /******************************************************************************************************************/

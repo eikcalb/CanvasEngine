@@ -6,17 +6,24 @@ struct VOut
 	float4 colour : COLOR;
 };
 
-cbuffer InstanceBuffer : register(b1)
-{
-    float4 InstanceColors[INSTANCE_COUNT];
-};
-
 cbuffer ConstantBuffer : register( b0 )
 {
 	matrix World;
 	matrix View;
 	matrix Projection;
 	float4 Colour;
+};
+
+cbuffer InstanceBuffer : register(b1)
+{
+	struct InstanceData
+	{
+		float4	Colour;
+		bool	IsTransparent;
+		bool	IsInstanced;
+	};
+
+    s[INSTANCE_COUNT];
 };
 
 VOut VShader(float4 position : POSITION, float4 colour : COLOR)

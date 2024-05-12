@@ -69,11 +69,11 @@ public:
 		_view = DirectX::XMMatrixLookAtLH(_eye, _at, _up);
 	}
 
-	virtual void ClearScreen();
-	virtual void Destroy();
+	virtual void ClearScreen() override;
+	virtual void Destroy() override;
 	virtual void Draw(const std::shared_ptr<GameObject> mesh, const Colour& colour) override;
-	virtual void Initialise(int width, int height);
-	virtual void SwapBuffers();
+	virtual void Initialise(int width, int height) override;
+	virtual void SwapBuffers() override;
 
 	// Initialise the shaders
 	void InitialiseShaders();

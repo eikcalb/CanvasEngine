@@ -16,6 +16,7 @@ class VBO_DX :
 protected:
 	ID3D11Buffer* _idx;
 	ID3D11Buffer* _vbo;
+	ID3D11Buffer* _ins;
 
 	// Structors
 public:
@@ -24,8 +25,8 @@ public:
 
 	// Functions
 public:
-	virtual void Create(Renderer* renderer, Vertex vertices[], int numVertices, unsigned short indices[], int numIndices) override;
-	virtual void Draw(Renderer* renderer, unsigned long count) override;
+	virtual void Create(Renderer* renderer, Vertex vertices[], int numVertices, unsigned short indices[], int numIndices, unsigned long instanceSize) override;
+	virtual void Draw(Renderer* renderer, const std::shared_ptr<VBOInstanceData> instanceData = nullptr, unsigned long count) override;
 };
 
 #endif

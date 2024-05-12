@@ -1,6 +1,7 @@
 #include "GameObject.h"
 
 #include "Mesh.h"
+#include "VBO.h"
 
 /******************************************************************************************************************/
 // Structors
@@ -16,6 +17,7 @@ GameObject::GameObject(std::string type)
 	_shouldDraw(false),
 	_semPosition(1)
 {
+	_generatorData = std::make_shared<VBOInstanceData>();
 }
 
 /******************************************************************************************************************/
@@ -127,7 +129,6 @@ void GameObject::End()
 {
 	// Clear behavior list
 	_behaviors.clear();
-	delete _generatorData;
 }
 
 /******************************************************************************************************************/

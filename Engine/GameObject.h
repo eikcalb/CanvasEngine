@@ -16,6 +16,7 @@
 
 
 class Mesh;
+struct VBOInstanceData;
 
 typedef std::unordered_map<std::string, std::shared_ptr<Behavior>> BehaviorMap;
 
@@ -40,7 +41,8 @@ protected:
 	BehaviorMap				_behaviors;
 
 	std::binary_semaphore	_semPosition;
-	GeneratorBufferData*	_generatorData;
+
+	std::shared_ptr<VBOInstanceData>	_generatorData;
 
 	// Constructors
 public:
@@ -93,8 +95,8 @@ public:
 	bool ShouldBeDeleted() const { return _deleteFlag; }
 	void SetDeleteFlag(bool v) { _deleteFlag = v; }
 
-	void SetGeneratorData(GeneratorBufferData* gd) { _generatorData = gd; }
-	GeneratorBufferData* GetGeneratorData() { return _generatorData; }
+	void SetGeneratorData(void* gd) { _generatorData->data = gd; }
+	std::shared_ptr<VBOInstanceData> GetGeneratorData() { return _generatorData; }
 
 	std::string GetType() const { return _type; }
 

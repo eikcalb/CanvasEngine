@@ -1,7 +1,14 @@
 #pragma once
+#include <memory>
+
 #include "Vertex.h"
 
 class Renderer;
+
+struct VBOInstanceData {
+	bool	shouldUpdate;
+	void* data;
+};
 
 // Abstract VBO class
 class VBO
@@ -18,7 +25,7 @@ public:
 
 	// Functions
 public:
-	virtual void Create(Renderer* renderer, Vertex vertices[], int numVertices, unsigned short indices[], int numIndices) = 0;
-	virtual void Draw(Renderer* renderer, unsigned long count) = 0;
+	virtual void Create(Renderer* renderer, Vertex vertices[], int numVertices, unsigned short indices[], int numIndices, unsigned long instanceSize = 0) = 0;
+	virtual void Draw(Renderer* renderer, const std::shared_ptr<VBOInstanceData> instanceData = nullptr, unsigned long count) = 0;
 };
 

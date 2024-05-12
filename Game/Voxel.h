@@ -1,34 +1,40 @@
 #pragma once
-#include "Cube.h"
-#include "Scene.h"
 
 constexpr unsigned int VOXEL_WIDTH = 2;// 12;
 constexpr unsigned int VOXEL_HEIGHT = 2;// 12;
 
 constexpr unsigned long VOXEL_AREA = VOXEL_WIDTH * VOXEL_HEIGHT;
 
+class Cube;
+
+struct GeneratorBufferData {
+	glm::vec4	Colour;
+	BOOL		IsTransparent;
+	BOOL		IsInstanced;
+};
+
+/// <summary>
+/// Helper class to manage a voxel. It works by specifying the generator data
+/// needed to generate multiple instances of a cube and provides methods that
+/// will update data in the generator.
+/// </summary>
 class VoxelCanvas
 {
 public:
-	void SetVoxel(int x, int y, std::shared_ptr<Cube> cube)
+	std::vector<GeneratorBufferData>* GetVoxel()
 	{
-		voxelGrid[y * VOXEL_WIDTH + x] = cube;
-		cube->SetShouldUpdate(false);
-		cube->SetPosition(Vector4(x, y));
-	}
-
-	Cube* GetVoxel(int x, int y)
-	{
-		return reinterpret_cast<Cube*>(voxelGrid[y * VOXEL_WIDTH + x].get());
+		return &voxelGrid;
 	}
 public:
 	VoxelCanvas()
 	{
 		voxelGrid = {};
-		voxelGrid.resize(VOXEL_WIDTH * VOXEL_HEIGHT);
+		voxelGrid.resize(VOXEL_AREA);
 	}
 
-	unsigned long GetSize() { return voxelGrid.size(); }
+	unsigned long GetSize() { return voxelGrid.size() * sizeof(GeneratorBufferData); }
+
+	GeneratorBufferData* GetVoxelData() { return voxelGrid.data(); }
 
 	void Reset() {
 		for (int i = 0; i < (int)voxelGrid.size(); i++)
@@ -41,7 +47,7 @@ public:
 	};
 
 private:
-	std::vector<std::shared_ptr<Cube>>	voxelGrid;
+	std::vector<GeneratorBufferData>	voxelGrid;
 	std::mutex							mutex;
 };
 
