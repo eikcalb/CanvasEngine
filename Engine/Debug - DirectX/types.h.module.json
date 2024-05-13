@@ -5,14 +5,14 @@
         {
             "primary-output": "Debug - DirectX\\types.h.obj",
             "outputs": [
-                "C:\\Users\\Derek Maro Okeowo\\source\\repos\\700105-2223-lab-i-eikcalb\\Debug - DirectX\\Engine.pdb",
+                "C:\\Users\\690846\\source\\repos\\700105-2223-lab-i-eikcalb\\Debug - DirectX\\Engine.pdb",
                 "Debug - DirectX\\",
-                "C:\\Users\\Derek Maro Okeowo\\source\\repos\\700105-2223-lab-i-eikcalb\\Engine\\Debug - DirectX\\types.h.ifc"
+                "C:\\Users\\690846\\source\\repos\\700105-2223-lab-i-eikcalb\\Engine\\Debug - DirectX\\types.h.ifc"
             ],
             "provides": [
                 {
                     "logical-name": "types.h",
-                    "source-path": "c:\\users\\derek maro okeowo\\source\\repos\\700105-2223-lab-i-eikcalb\\engine\\types.h",
+                    "source-path": "c:\\users\\690846\\source\\repos\\700105-2223-lab-i-eikcalb\\engine\\types.h",
                     "lookup-method": "absolute"
                 }
             ],
