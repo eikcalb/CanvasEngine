@@ -58,10 +58,13 @@ void Renderer_DX::Destroy()
 	_swapchain->Release();
 	_backbuffer->Release();
 	_device->Release();
-	_depthStencil->Release();
 	_indexBuffer->Release();
 	_rasterizerState->Release();
 	_context->Release();
+
+	if (_depthStencil) {
+		_depthStencil->Release();
+	}
 
 	if (_constantBuffer)
 	{
@@ -206,9 +209,10 @@ void Renderer_DX::Initialise(int width, int height)
 	_world = DirectX::XMMatrixIdentity();
 	// Initialize the view matrix
 	// http://www.directxtutorial.com/Lesson.aspx?lessonid=9-4-5
+	// https://www.3dgep.com/understanding-the-view-matrix/
 	const auto& cam = GetCameraPosition();
-	_eye = DirectX::XMVectorSet(cam.r, cam.g, cam.b, 0.0f);
-	_at = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	_eye = DirectX::XMVectorSet(cam[0].r, cam[0].g, cam[0].b, 0.0f);
+	_at = DirectX::XMVectorSet(cam[1].r, cam[1].g, cam[1].b, 0.0f);
 	_up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	_view = DirectX::XMMatrixLookAtLH(_eye, _at, _up);
 	_proj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, float(width) / (float)height, 0.1f, 100.0f);

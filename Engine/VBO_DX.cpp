@@ -17,8 +17,13 @@ VBO_DX::~VBO_DX()
 {
 	_idx->Release();
 	_vbo->Release();
-	_ins->Release();
-	_srv->Release();
+	if (_ins) {
+		_ins->Release();
+	}
+
+	if (_srv) {
+		_srv->Release();
+	}
 
 	delete _idx;
 	delete _vbo;

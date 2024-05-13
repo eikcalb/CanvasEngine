@@ -65,7 +65,8 @@ public:
 	// Functions
 public:
 	virtual void UpdateCamera() override {
-		_eye = DirectX::XMVectorSet(_cameraPos.x, _cameraPos.y, _cameraPos.z, 0.0f);
+		_eye = DirectX::XMVectorSet(_cameraPos[0].r, _cameraPos[0].g, _cameraPos[0].b, 0.0f);
+		_at = DirectX::XMVectorSet(_cameraPos[1].r, _cameraPos[1].g, _cameraPos[1].b, 0.0f);
 		_view = DirectX::XMMatrixLookAtLH(_eye, _at, _up);
 	}
 
