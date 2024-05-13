@@ -6,7 +6,7 @@
 /******************************************************************************************************************/
 
 Renderer::Renderer(): 
-	_clearColour(Colour::Black()),
+	_clearColour(Colour::Green()),
 	_cameraPos(glm::vec3(0.0f, 0.0f,-5.0f))
 {
 	_initialCameraPos = _cameraPos;

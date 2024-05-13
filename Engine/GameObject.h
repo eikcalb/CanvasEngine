@@ -95,6 +95,7 @@ public:
 	bool ShouldBeDeleted() const { return _deleteFlag; }
 	void SetDeleteFlag(bool v) { _deleteFlag = v; }
 
+	void SetShouldUpdateGenerator(bool u);
 	void SetGeneratorData(void* gd);
 	std::shared_ptr<VBOInstanceData> GetGeneratorData();
 

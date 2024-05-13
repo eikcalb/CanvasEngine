@@ -11,8 +11,8 @@
 #include "GL\GLM\GTC\matrix_transform.hpp"
 #include "GL\GLM\GTC\type_ptr.hpp"
 
-constexpr unsigned int VOXEL_WIDTH = 102;// 12;
-constexpr unsigned int VOXEL_HEIGHT = 2;// 12;
+constexpr unsigned int VOXEL_WIDTH = 5;// 12;
+constexpr unsigned int VOXEL_HEIGHT = 5;// 12;
 
 constexpr unsigned long VOXEL_AREA = VOXEL_WIDTH * VOXEL_HEIGHT;
 
@@ -23,8 +23,8 @@ struct GeneratorBufferData {
 	glm::vec4	Colour;
 	BOOL		IsTransparent = FALSE;
 	BOOL		IsInstanced = TRUE;
-	float		_pad0;
-	float		_pad1;
+	float		_pad0 = 0;
+	float		_pad1 = 0;
 };
 
 /// <summary>

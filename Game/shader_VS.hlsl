@@ -1,3 +1,7 @@
+#define WIDTH 5;//12;
+#define HEIGHT 5;//12;
+#pragma enable_d3d11_debug_symbols
+
 struct VOut
 {
 	float4 position : SV_POSITION;
@@ -33,6 +37,19 @@ VOut main(float4 position : POSITION, float4 colour : COLOR, uint instanceID : S
 	output.position = mul( position, World );
 	output.position = mul( output.position, View );
 	output.position = mul( output.position, Projection );
+	// For positioning, we will check that the `instanceID` updated.
+	// We will not position objects with a single instance, hence the
+	// need to confirm we are at least at 0+1
+	if (instanceID > 0) {
+		// We will calculate the next position based on the instance.
+		float heightRatio = instanceID / WIDTH;
+		uint y = floor(heightRatio);
+		uint x = instanceID % WIDTH;
+
+		output.position.x += x;
+		output.position.y += y;
+	}
+
 	output.colour = ib.Colour;
 
 	return output;

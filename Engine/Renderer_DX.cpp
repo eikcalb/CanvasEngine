@@ -11,8 +11,8 @@
 
 /******************************************************************************************************************/
 
-Renderer_DX::Renderer_DX(HWND hWnd)
-	: _hWnd(hWnd), _depthStencil(nullptr), _depthStencilView(nullptr), _constantBuffer(nullptr)
+Renderer_DX::Renderer_DX(HWND hWnd):
+	Renderer(), _hWnd(hWnd), _depthStencil(nullptr), _depthStencilView(nullptr), _constantBuffer(nullptr)
 {
 }
 
@@ -42,7 +42,7 @@ Renderer_DX::~Renderer_DX()
 void Renderer_DX::ClearScreen()
 {
 	_context->ClearRenderTargetView(_backbuffer, D3DXCOLOR(_clearColour.r(), _clearColour.g(), _clearColour.b(), _clearColour.a()));
-	_context->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	//_context->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
 /******************************************************************************************************************/

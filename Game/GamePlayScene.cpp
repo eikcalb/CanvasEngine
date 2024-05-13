@@ -54,6 +54,7 @@ void GamePlayScene::Initialise()
 	base.IsInstanced = TRUE;
 	voxel->Fill(base);
 	cube->SetGeneratorData(voxel->GetVoxelData());
+	cube->SetShouldUpdateGenerator(true);
 	AddGameObject(cube);
 
 	game->SetGameState(GameState::Playing);
