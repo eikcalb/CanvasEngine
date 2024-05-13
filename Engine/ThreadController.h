@@ -55,6 +55,10 @@ private:
 		// We will be creating a threadpool in order to alleviate overhead when creating
 		// these threads on demand. We will double the threads used in the application.
 		// So if we have 8 processors, we will have 16 threads.
+		// 
+		// Ideally, the system would be intelligent and manage the thread pool by creating
+		// new threads when work increases, and killing unused threads when idle, sort of
+		// how Kubernetes manages container pods.
 		for (int i = 0; i < (numProcessors * 2); i++)
 		{
 			threads.emplace_back(new Thread());

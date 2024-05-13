@@ -10,7 +10,7 @@
 #include "GL\GLM\GTC\matrix_transform.hpp"
 #include "GL\GLM\GTC\type_ptr.hpp"
 
-constexpr unsigned int VOXEL_WIDTH = 2;// 12;
+constexpr unsigned int VOXEL_WIDTH = 512;// 12;
 constexpr unsigned int VOXEL_HEIGHT = 2;// 12;
 
 constexpr unsigned long VOXEL_AREA = VOXEL_WIDTH * VOXEL_HEIGHT;
@@ -32,20 +32,17 @@ struct GeneratorBufferData {
 class VoxelCanvas
 {
 public:
-	std::vector<GeneratorBufferData>* GetVoxel()
-	{
-		return &voxelGrid;
-	}
-public:
 	VoxelCanvas()
 	{
-		voxelGrid = {};
-		voxelGrid.resize(VOXEL_AREA);
 	}
 
-	unsigned long GetSize() { return voxelGrid.size() * sizeof(GeneratorBufferData); }
+	~VoxelCanvas() {
+		delete voxelGrid;
+	}
 
-	GeneratorBufferData* GetVoxelData() { return voxelGrid.data(); }
+	unsigned long GetSize() { return ARRAYSIZE(voxelGrid) * sizeof(GeneratorBufferData); }
+
+	GeneratorBufferData* GetVoxelData() { return voxelGrid; }
 
 	void Reset() {
 		//for (int i = 0; i < (int)voxelGrid.size(); i++)
@@ -58,7 +55,7 @@ public:
 	};
 
 private:
-	std::vector<GeneratorBufferData>	voxelGrid;
-	std::mutex							mutex;
+	GeneratorBufferData	voxelGrid[VOXEL_AREA];
+	std::mutex			mutex;
 };
 

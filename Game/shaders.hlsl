@@ -38,6 +38,7 @@ VOut VShader(float4 position : POSITION, float4 colour : COLOR, uint instanceID 
 	output.position = mul( position, World );
     output.position = mul( output.position, View );
     output.position = mul( output.position, Projection );
+	output.position.x += instanceID;
 	output.colour = colour;
 
 	return output;

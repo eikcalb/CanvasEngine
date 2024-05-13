@@ -97,7 +97,7 @@ void Renderer_DX::Draw(const std::shared_ptr<GameObject> go, const Colour& colou
 	// select which primtive type we are using
 	_context->IASetPrimitiveTopology(topology);
 
-	go->GetMesh()->GetVBO()->Draw(this, go->GetGeneratorData(), go->GetInstanceSize());
+	go->GetMesh()->GetVBO()->Draw(this, go->GetGeneratorData(), go->GetInstanceCount());
 }
 
 /******************************************************************************************************************/

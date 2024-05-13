@@ -3,6 +3,7 @@
 #define WIN32_LEAN_AND_MEAN // Required to prevent winsock/WinSock2 redifinition
 #include <D3Dcommon.h>
 
+#include "cube.h"
 #include "CameraBehavior.h"
 #include "Game.h"
 #include "RenderSystem.h"
@@ -34,19 +35,24 @@ void GamePlayScene::Start() {
 
 void GamePlayScene::Initialise()
 {
+	VoxGame* game = (VoxGame*)Game::TheGame.get();
 	std::shared_ptr<CameraBehavior> camBehavior = std::make_shared<CameraBehavior>(std::shared_ptr<GamePlayScene>(this));
 	AddBehavior(camBehavior);
 
+	// Create the cube that will be rendered.
+	auto mesh = Game::TheGame->GetMesh("cube");
+	std::shared_ptr<Cube> cube = std::make_shared<Cube>(mesh, VOXEL_AREA);
+	cube->SetCanRotate(false);
+	AddGameObject(cube);
+	cube->Reset();
+
+	// Set the cube to be a generator.
+	cube->SetGeneratorData(game->GetVoxelCanvas()->GetVoxelData());
 	//Game::TheGame->GetThreadController()->AddTask(
 	//	[&] {
 			//for (int y = 0; y < VOXEL_HEIGHT; y++) {
 			//	for (int x = 0; x < VOXEL_WIDTH; x++) {
-			//		auto mesh = Game::TheGame->GetMesh("cube");
-			//		std::shared_ptr<Cube> cube;
-			//		cube = std::make_shared<Cube>(mesh);
-			//		cube->SetCanRotate(false);
-			//		AddGameObject(cube);
-			//		cube->Reset();
+
 			//	}
 			//}
 	//	},
@@ -54,7 +60,7 @@ void GamePlayScene::Initialise()
 	//	"Scene Initialization Task"
 	//);
 
-	Game::TheGame->SetGameState(GameState::Playing);
+	game->SetGameState(GameState::Playing);
 }
 
 /******************************************************************************************************************/

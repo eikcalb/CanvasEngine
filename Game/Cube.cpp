@@ -4,9 +4,11 @@
 
 /******************************************************************************************************************/
 
-Cube::Cube(std::shared_ptr<Mesh> mesh)
+Cube::Cube(std::shared_ptr<Mesh> mesh, unsigned long count)
 	: GameObject("Cube")
 {
+	_instanceCount = count;
+
 	SetColour(Colour::White());
 	SetMesh(mesh);
 	SetShouldDraw(true);

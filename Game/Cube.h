@@ -18,7 +18,7 @@ protected:
 
 	// Structors
 public:
-	Cube(std::shared_ptr<Mesh> mesh);
+	Cube(std::shared_ptr<Mesh> mesh, unsigned long count);
 	virtual ~Cube();
 
 	// Functions
