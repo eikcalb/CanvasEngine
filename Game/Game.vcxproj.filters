@@ -89,7 +89,6 @@
   <ItemGroup>
     <None Include="shader.frag" />
     <None Include="shader.vert" />
-    <None Include="shaders.hlsl" />
     <None Include="..\Includes\imgui\imgui.natstepfilter">
       <Filter>imgui</Filter>
     </None>
@@ -114,5 +113,9 @@
     <CopyFileToFolders Include="..\config.ini" />
     <CopyFileToFolders Include="CubeMesh.txt" />
     <CopyFileToFolders Include="VoxMesh.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader_PS.hlsl" />
+    <FxCompile Include="shader_VS.hlsl" />
   </ItemGroup>
 </Project>

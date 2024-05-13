@@ -18,10 +18,12 @@ VBO_DX::~VBO_DX()
 	_idx->Release();
 	_vbo->Release();
 	_ins->Release();
+	_srv->Release();
 
 	delete _idx;
 	delete _vbo;
 	delete _ins;
+	delete _srv;
 }
 
 /******************************************************************************************************************/
@@ -32,7 +34,8 @@ void VBO_DX::Create(
 	int numVertices,
 	unsigned short indices[],
 	int numIndices,
-	unsigned long instanceSize
+	unsigned int stride,
+	unsigned long size
 )
 {
 	/// Apparently, using unsigned int for the index instead of unsigned short breaks
@@ -71,23 +74,42 @@ void VBO_DX::Create(
 
 	rendererDX->GetDevice()->CreateBuffer(&id, &iData, &_idx);
 
-	if (instanceSize <= 0) {
+	if (stride <= 0) {
 		return;
 	}
 
 	D3D11_BUFFER_DESC instanceBufferDesc{};
 	ZeroMemory(&instanceBufferDesc, sizeof(D3D11_BUFFER_DESC));
-	instanceBufferDesc.ByteWidth = instanceSize;
+	instanceBufferDesc.ByteWidth = stride * size;
 	instanceBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	instanceBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	instanceBufferDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 	instanceBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	instanceBufferDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+	instanceBufferDesc.StructureByteStride = stride;
 
 	// Create the buffer to store instance data.
 	auto hr = rendererDX->GetDevice()->CreateBuffer(&instanceBufferDesc, nullptr, &_ins);
 	if (!SUCCEEDED(hr)) {
-		std::cout << hr << ": " << Utils::GetErrorMessage(hr) << std::endl;
-		OutputDebugString(L"Failed to create instance buffer!\r\n");
+		auto errMessage = Utils::GetErrorMessage(hr);
+		auto output = L"Failed to create instance buffer!\r\n" + std::wstring(errMessage.begin(), errMessage.end());
+		OutputDebugString(output.c_str());
 		throw std::runtime_error("Failed to create instance buffer!");
+	}
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+	ZeroMemory(&srvDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
+	srvDesc.Format = DXGI_FORMAT_UNKNOWN; // Assuming you have the appropriate format for your data
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
+	//srvDesc.Buffer.ElementWidth = stride * size;
+	srvDesc.Buffer.FirstElement = 0;
+	srvDesc.Buffer.NumElements = size;
+
+	hr = rendererDX->GetDevice()->CreateShaderResourceView(_ins, &srvDesc, &_srv);
+	if (!SUCCEEDED(hr)) {
+		auto errMessage = Utils::GetErrorMessage(hr);
+		auto output = L"Failed to create shader resource!\r\n" + std::wstring(errMessage.begin(), errMessage.end());
+		OutputDebugString(output.c_str());
+		throw std::runtime_error("Failed to create shader resource!");
 	}
 }
 
@@ -100,8 +122,6 @@ void VBO_DX::Draw(Renderer* renderer, const std::shared_ptr<VBOInstanceData> ins
 	if (instanceData && _ins) {
 		// Here, we will be setting up the instance data that will be used to render multiple
 		// instances of the same object on the GPU.
-		// We use the second constant buffer slot nere because, for now, the renderer takes
-		// the first constant buffer slot.
 		// 
 		// References for GPU instancing concept are below. Although they sugegst utilizing a
 		// vertex buffer, that would require updating the input layout and that cannot be done
@@ -110,12 +130,15 @@ void VBO_DX::Draw(Renderer* renderer, const std::shared_ptr<VBOInstanceData> ins
 		// https://developer.nvidia.com/gpugems/gpugems2/part-i-geometric-complexity/chapter-3-inside-geometry-instancing
 		// https://www.braynzarsoft.net/viewtutorial/q16390-33-instancing-with-indexed-primitives
 		// https://www.rastertek.com/dx11tut37.html
+		//
+		// According to the limitation published here: https://www.gamedev.net/forums/topic/624529-structured-buffers-vs-constant-buffers/,
+		// a constant buffer cannot be more than 64kb, hence it is limited for the purpose of a
+		// generator. Instead, we will utilize a structured buffer.
 		if (instanceData->shouldUpdate) {
 			rendererDX->GetContext()->UpdateSubresource(_ins, 0, nullptr, instanceData->data, 0, 0);
 		}
 
-		rendererDX->GetContext()->VSSetConstantBuffers(1, 1, &_ins);
-		rendererDX->GetContext()->PSSetConstantBuffers(1, 1, &_ins);
+		rendererDX->GetContext()->VSSetShaderResources(0, 1, &_srv);
 	}
 
 	// select which vertex buffer to display

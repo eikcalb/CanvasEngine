@@ -234,11 +234,31 @@ void Renderer_DX::SwapBuffers()
 void Renderer_DX::InitialiseShaders()
 {
 	// load and compile the two shaders
-	ID3D10Blob* VS,* PS;
+	ID3D10Blob* PS,* VS;
+	ID3DBlob* compilationErrors = nullptr;
+
 	HRESULT hr;
-	hr = D3DX11CompileFromFile(L"shaders.hlsl", 0, 0, "VShader", "vs_5_0", 0, 0, 0, &VS, 0, 0);
-	hr = D3DX11CompileFromFile(L"shaders.hlsl", 0, 0, "PShader", "ps_4_0", 0, 0, 0, &PS, 0, 0);
+	hr = D3DX11CompileFromFile(L"shader_VS.hlsl", 0, 0, "main", "vs_5_0", D3D10_SHADER_DEBUG, 0, 0, &VS, &compilationErrors, 0);
 	if (!SUCCEEDED(hr)) {
+		if (compilationErrors)
+		{
+			// Display compilation errors
+			OutputDebugStringA(static_cast<const char*>(compilationErrors->GetBufferPointer()));
+			compilationErrors->Release();
+		}
+		auto errMessage = Utils::GetErrorMessage(hr);
+		auto output = L"Failed to read shader file!\r\n" + std::wstring(errMessage.begin(), errMessage.end());
+		OutputDebugString(output.c_str());
+		throw std::exception("Failed to read shader file!");
+	}
+	hr = D3DX11CompileFromFile(L"shader_PS.hlsl", 0, 0, "main", "ps_5_0", 0, 0, 0, &PS, &compilationErrors, 0);
+	if (!SUCCEEDED(hr)) {
+		if (compilationErrors)
+		{
+			// Display compilation errors
+			OutputDebugStringA(static_cast<const char*>(compilationErrors->GetBufferPointer()));
+			compilationErrors->Release();
+		}
 		auto errMessage = Utils::GetErrorMessage(hr);
 		auto output = L"Failed to read shader file!\r\n" + std::wstring(errMessage.begin(), errMessage.end());
 		OutputDebugString(output.c_str());

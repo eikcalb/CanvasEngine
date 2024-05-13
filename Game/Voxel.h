@@ -10,7 +10,7 @@
 #include "GL\GLM\GTC\matrix_transform.hpp"
 #include "GL\GLM\GTC\type_ptr.hpp"
 
-constexpr unsigned int VOXEL_WIDTH = 512;// 12;
+constexpr unsigned int VOXEL_WIDTH = 102;// 12;
 constexpr unsigned int VOXEL_HEIGHT = 2;// 12;
 
 constexpr unsigned long VOXEL_AREA = VOXEL_WIDTH * VOXEL_HEIGHT;
@@ -20,8 +20,10 @@ class Cube;
 // Limit for buffers is 64k, hence we need a new way to move this into GPU.
 struct GeneratorBufferData {
 	glm::vec4	Colour;
-	BOOL		IsTransparent;
-	BOOL		IsInstanced;
+	BOOL		IsTransparent = FALSE;
+	BOOL		IsInstanced = TRUE;
+	float		_pad0;
+	float		_pad1;
 };
 
 /// <summary>
@@ -40,7 +42,7 @@ public:
 		delete voxelGrid;
 	}
 
-	unsigned long GetSize() { return ARRAYSIZE(voxelGrid) * sizeof(GeneratorBufferData); }
+	unsigned long GetSize() { return ARRAYSIZE(voxelGrid); }
 
 	GeneratorBufferData* GetVoxelData() { return voxelGrid; }
 

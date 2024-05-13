@@ -22,7 +22,8 @@ protected:
 	std::vector<Vertex> _vertices;
 	std::vector<unsigned short> _indices;
 
-	unsigned long _instanceSize;
+	unsigned long	_instanceCount;
+	unsigned int	_instanceStride;
 
 	// Gets/sets
 public:
@@ -37,7 +38,8 @@ public:
 	const Vertex& GetVertexRef(int i) const { return _vertices[i]; }
 
 private:
-	unsigned long GetInstanceSize() { return _instanceSize; }
+	unsigned long GetInstanceCount() { return _instanceCount; }
+	unsigned long GetInstanceStride() { return _instanceStride; }
 
 	// Functions
 public:
@@ -50,7 +52,7 @@ public:
 
 	// Loads the Mesh from a file (returns true if loaded OK)
 	bool LoadFromFile(std::string filename);
-	bool LoadFromFile(std::string filename, unsigned long instanceSize);
+	bool LoadFromFile(std::string filename, unsigned int instanceStride, unsigned long instanceCount);
 
 	// Loads the Mesh from an existing stream (returns true if OK)
 	bool LoadFromStream(std::ifstream& in);

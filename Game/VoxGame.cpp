@@ -30,7 +30,7 @@ void VoxGame::Initialise(std::shared_ptr<Window> w)
 	AddMesh("line", lineMesh);
 
 	auto cubeMesh = std::make_shared<Mesh>();
-	cubeMesh->LoadFromFile("VoxMesh.txt", _voxel->GetSize());
+	cubeMesh->LoadFromFile("VoxMesh.txt", sizeof(GeneratorBufferData), _voxel->GetSize());
 	AddMesh("cube", cubeMesh);
 
 	// Create VBOs
