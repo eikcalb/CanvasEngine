@@ -143,3 +143,5 @@ void GameObject::Reset()
 }
 
 /******************************************************************************************************************/
+void GameObject::SetGeneratorData(void* gd) { _generatorData->data = gd; }
+std::shared_ptr<VBOInstanceData> GameObject::GetGeneratorData() { return _generatorData; }

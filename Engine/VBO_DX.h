@@ -1,5 +1,6 @@
 #pragma once
 #if BUILD_DIRECTX
+#include <memory>
 #include <d3dx11.h>
 #include <d3dx10.h>
 
@@ -26,7 +27,7 @@ public:
 	// Functions
 public:
 	virtual void Create(Renderer* renderer, Vertex vertices[], int numVertices, unsigned short indices[], int numIndices, unsigned long instanceSize) override;
-	virtual void Draw(Renderer* renderer, const std::shared_ptr<VBOInstanceData> instanceData = nullptr, unsigned long count) override;
+	virtual void Draw(Renderer* renderer, const std::shared_ptr<VBOInstanceData> instanceData = nullptr, unsigned long count = 1) override;
 };
 
 #endif

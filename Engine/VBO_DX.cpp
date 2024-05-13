@@ -26,7 +26,14 @@ VBO_DX::~VBO_DX()
 
 /******************************************************************************************************************/
 
-void VBO_DX::Create(Renderer* renderer, Vertex vertices[], int numVertices, unsigned short indices[], int numIndices, unsigned long instanceSize)
+void VBO_DX::Create(
+	Renderer* renderer,
+	Vertex vertices[],
+	int numVertices,
+	unsigned short indices[],
+	int numIndices,
+	unsigned long instanceSize
+)
 {
 	/// Apparently, using unsigned int for the index instead of unsigned short breaks
 	/// the output for DirectX.
@@ -86,7 +93,7 @@ void VBO_DX::Create(Renderer* renderer, Vertex vertices[], int numVertices, unsi
 
 /******************************************************************************************************************/
 
-void VBO_DX::Draw(Renderer* renderer, const std::shared_ptr<VBOInstanceData> instanceData = nullptr, unsigned long count = 1)
+void VBO_DX::Draw(Renderer* renderer, const std::shared_ptr<VBOInstanceData> instanceData, unsigned long count)
 {
 	Renderer_DX* rendererDX = (Renderer_DX*)renderer;
 

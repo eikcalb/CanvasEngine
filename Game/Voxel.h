@@ -1,4 +1,14 @@
 #pragma once
+#define WIN32_LEAN_AND_MEAN // Required to prevent winsock/WinSock2 redifinition
+
+#include <mutex>
+#include <vector>
+#include <Windows.h>
+
+// GLM
+#include "GL\GLM\GLM.hpp"
+#include "GL\GLM\GTC\matrix_transform.hpp"
+#include "GL\GLM\GTC\type_ptr.hpp"
 
 constexpr unsigned int VOXEL_WIDTH = 2;// 12;
 constexpr unsigned int VOXEL_HEIGHT = 2;// 12;
@@ -37,13 +47,13 @@ public:
 	GeneratorBufferData* GetVoxelData() { return voxelGrid.data(); }
 
 	void Reset() {
-		for (int i = 0; i < (int)voxelGrid.size(); i++)
-		{
-			voxelGrid[i]->SetShouldUpdate(false);
-			auto y = std::floor(i/VOXEL_WIDTH);
-			auto x = i % VOXEL_WIDTH;
-			voxelGrid[i]->SetPosition(Vector4(x, y));
-		}
+		//for (int i = 0; i < (int)voxelGrid.size(); i++)
+		//{
+		//	voxelGrid[i]->SetShouldUpdate(false);
+		//	auto y = std::floor(i/VOXEL_WIDTH);
+		//	auto x = i % VOXEL_WIDTH;
+		//	voxelGrid[i]->SetPosition(Vector4(x, y));
+		//}
 	};
 
 private:

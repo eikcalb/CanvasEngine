@@ -23,8 +23,6 @@ void VoxGame::Initialise(std::shared_ptr<Window> w)
 	// Initialise parent
 	Game::Initialise(w);
 
-	GetRendererSystem()->GetRenderer()->SetupGenerator(_voxel->GetSize());
-
 	//////////////
 	// Setup Meshes
 	auto lineMesh = std::make_shared<Mesh>();

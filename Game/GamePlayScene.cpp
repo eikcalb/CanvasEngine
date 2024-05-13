@@ -39,16 +39,16 @@ void GamePlayScene::Initialise()
 
 	//Game::TheGame->GetThreadController()->AddTask(
 	//	[&] {
-			for (int y = 0; y < VOXEL_HEIGHT; y++) {
-				for (int x = 0; x < VOXEL_WIDTH; x++) {
-					auto mesh = Game::TheGame->GetMesh("cube");
-					std::shared_ptr<Cube> cube;
-					cube = std::make_shared<Cube>(mesh);
-					cube->SetCanRotate(false);
-					AddGameObject(cube);
-					cube->Reset();
-				}
-			}
+			//for (int y = 0; y < VOXEL_HEIGHT; y++) {
+			//	for (int x = 0; x < VOXEL_WIDTH; x++) {
+			//		auto mesh = Game::TheGame->GetMesh("cube");
+			//		std::shared_ptr<Cube> cube;
+			//		cube = std::make_shared<Cube>(mesh);
+			//		cube->SetCanRotate(false);
+			//		AddGameObject(cube);
+			//		cube->Reset();
+			//	}
+			//}
 	//	},
 	//	TaskType::GRAPHICS,
 	//	"Scene Initialization Task"
