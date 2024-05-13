@@ -17,6 +17,7 @@ constexpr unsigned long VOXEL_AREA = VOXEL_WIDTH * VOXEL_HEIGHT;
 
 class Cube;
 
+// Limit for buffers is 64k, hence we need a new way to move this into GPU.
 struct GeneratorBufferData {
 	glm::vec4	Colour;
 	BOOL		IsTransparent;

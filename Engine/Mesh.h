@@ -22,6 +22,8 @@ protected:
 	std::vector<Vertex> _vertices;
 	std::vector<unsigned short> _indices;
 
+	unsigned long _instanceSize;
+
 	// Gets/sets
 public:
 	VBO* GetVBO()			const { return _vbo; }
@@ -34,6 +36,9 @@ public:
 	const Vertex GetVertex(int i)	const { return _vertices[i]; }
 	const Vertex& GetVertexRef(int i) const { return _vertices[i]; }
 
+private:
+	unsigned long GetInstanceSize() { return _instanceSize; }
+
 	// Functions
 public:
 	VBO* CreateVBO(Renderer* r);
@@ -45,6 +50,7 @@ public:
 
 	// Loads the Mesh from a file (returns true if loaded OK)
 	bool LoadFromFile(std::string filename);
+	bool LoadFromFile(std::string filename, unsigned long instanceSize);
 
 	// Loads the Mesh from an existing stream (returns true if OK)
 	bool LoadFromStream(std::ifstream& in);

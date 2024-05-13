@@ -28,7 +28,7 @@ protected:
 	Colour					_colour;		// Colour of object
 	bool					_shouldDraw;	// Whether or not to draw
 	bool					_shouldUpdate = true;	// Whether or not to draw
-	unsigned long			_instanceCount = 1;
+	unsigned long			_instanceSize = 1;
 
 	// Data
 protected:
@@ -68,7 +68,7 @@ public:
 	bool ShouldUpdate() const { return _shouldUpdate; }
 	void SetShouldUpdate(bool v) { _shouldUpdate = v; }
 
-	unsigned long GetInstanceCount() { return _instanceCount; }
+	unsigned long GetInstanceSize() { return _instanceSize; }
 
 	float GetAngle() const { return _angle; }
 	void SetAngle(float v) { _angle = v; }

@@ -1,4 +1,6 @@
-#define INSTANCE_COUNT 262144
+
+//static const int INSTANCE_COUNT = 262144
+#define INSTANCE_COUNT 10
 
 struct VOut
 {
@@ -6,7 +8,14 @@ struct VOut
 	float4 colour : COLOR;
 };
 
-cbuffer ConstantBuffer : register( b0 )
+struct InstanceData
+{
+	float4	Colour;
+	bool	IsTransparent;
+	bool	IsInstanced;
+};
+
+cbuffer ConstantBuffer
 {
 	matrix World;
 	matrix View;
@@ -14,21 +23,17 @@ cbuffer ConstantBuffer : register( b0 )
 	float4 Colour;
 };
 
-cbuffer InstanceBuffer : register(b1)
+cbuffer InstanceBuffer
 {
-	struct InstanceData
-	{
-		float4	Colour;
-		bool	IsTransparent;
-		bool	IsInstanced;
-	};
-
-    s[INSTANCE_COUNT];
+   float4 instances[INSTANCE_COUNT];
 };
 
-VOut VShader(float4 position : POSITION, float4 colour : COLOR)
+
+VOut VShader(float4 position : POSITION, float4 colour : COLOR, uint instanceID : SV_InstanceID)
 {
 	VOut output;
+
+	//InstanceData id = instances[instanceID]
 
 	output.position = mul( position, World );
     output.position = mul( output.position, View );

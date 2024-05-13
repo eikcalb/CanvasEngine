@@ -16,7 +16,7 @@ using namespace std;
 
 /******************************************************************************************************************/
 
-Mesh::Mesh()
+Mesh::Mesh(): _instanceSize(0)
 {}
 
 /******************************************************************************************************************/
@@ -120,7 +120,7 @@ VBO* Mesh::CreateVBO(Renderer* renderer)
 	_vbo = new VBO_GL();
 #endif
 
-	_vbo->Create(renderer, _vertices.data(), NumVertices(), _indices.data(), NumIndices());
+	_vbo->Create(renderer, _vertices.data(), NumVertices(), _indices.data(), NumIndices(), GetInstanceSize());
 
 	return _vbo;
 }
@@ -150,6 +150,21 @@ bool Mesh::LoadFromFile(std::string filename)
 	ifstream in(filename);
 	if (in)
 	{
+		return LoadFromStream(in);
+	}
+	else
+	{
+		// Could not open file
+		return false;
+	}
+}
+
+bool Mesh::LoadFromFile(std::string filename, unsigned long instanceSize)
+{
+	ifstream in(filename);
+	if (in)
+	{
+		_instanceSize = instanceSize;
 		return LoadFromStream(in);
 	}
 	else

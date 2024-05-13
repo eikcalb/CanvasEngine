@@ -97,7 +97,7 @@ void Renderer_DX::Draw(const std::shared_ptr<GameObject> go, const Colour& colou
 	// select which primtive type we are using
 	_context->IASetPrimitiveTopology(topology);
 
-	go->GetMesh()->GetVBO()->Draw(this, go->GetGeneratorData(), go->GetInstanceCount());
+	go->GetMesh()->GetVBO()->Draw(this, go->GetGeneratorData(), go->GetInstanceSize());
 }
 
 /******************************************************************************************************************/
@@ -234,11 +234,14 @@ void Renderer_DX::SwapBuffers()
 void Renderer_DX::InitialiseShaders()
 {
 	// load and compile the two shaders
-	ID3D10Blob* VS, * PS;
+	ID3D10Blob* VS,* PS;
 	HRESULT hr;
-	hr = D3DX11CompileFromFile(L"shaders.hlsl", 0, 0, "VShader", "vs_4_0", 0, 0, 0, &VS, 0, 0);
+	hr = D3DX11CompileFromFile(L"shaders.hlsl", 0, 0, "VShader", "vs_5_0", 0, 0, 0, &VS, 0, 0);
 	hr = D3DX11CompileFromFile(L"shaders.hlsl", 0, 0, "PShader", "ps_4_0", 0, 0, 0, &PS, 0, 0);
 	if (!SUCCEEDED(hr)) {
+		auto errMessage = Utils::GetErrorMessage(hr);
+		auto output = L"Failed to read shader file!\r\n" + std::wstring(errMessage.begin(), errMessage.end());
+		OutputDebugString(output.c_str());
 		throw std::exception("Failed to read shader file!");
 	}
 
@@ -270,8 +273,9 @@ void Renderer_DX::InitialiseShaders()
 	// Create the buffer.
 	hr = _device->CreateBuffer(&cbDesc, nullptr, &_constantBuffer);
 	if (!SUCCEEDED(hr)) {
-		std::cout << hr << ": " << Utils::GetErrorMessage(hr) << std::endl;
-		OutputDebugString(L"Failed to create constant buffer!\r\n");
+		auto errMessage = Utils::GetErrorMessage(hr);
+		auto output = L"Failed to create constant buffer!\r\n" + std::wstring(errMessage.begin(), errMessage.end());
+		OutputDebugString(output.c_str());
 		throw std::runtime_error("Failed to create constant buffer!");
 	}
 }
