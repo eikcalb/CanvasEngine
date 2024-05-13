@@ -1,5 +1,5 @@
-#define WIDTH 5;//12;
-#define HEIGHT 5;//12;
+#define WIDTH 512;
+#define HEIGHT 512;
 #pragma enable_d3d11_debug_symbols
 
 struct VOut
@@ -34,9 +34,6 @@ VOut main(float4 position : POSITION, float4 colour : COLOR, uint instanceID : S
 
 	InstanceData ib = InstanceBuffer[instanceID];
 
-	output.position = mul( position, World );
-	output.position = mul( output.position, View );
-	output.position = mul( output.position, Projection );
 	// For positioning, we will check that the `instanceID` updated.
 	// We will not position objects with a single instance, hence the
 	// need to confirm we are at least at 0+1
@@ -46,10 +43,13 @@ VOut main(float4 position : POSITION, float4 colour : COLOR, uint instanceID : S
 		uint y = floor(heightRatio);
 		uint x = instanceID % WIDTH;
 
-		output.position.x += x;
-		output.position.y += y;
+		position.x += x;
+		position.y += y;
 	}
 
+	output.position = mul( position, World );
+	output.position = mul( output.position, View );
+	output.position = mul( output.position, Projection );
 	output.colour = ib.Colour;
 
 	return output;

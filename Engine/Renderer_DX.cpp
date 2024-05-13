@@ -205,12 +205,13 @@ void Renderer_DX::Initialise(int width, int height)
 
 	_world = DirectX::XMMatrixIdentity();
 	// Initialize the view matrix
+	// http://www.directxtutorial.com/Lesson.aspx?lessonid=9-4-5
 	const auto& cam = GetCameraPosition();
 	_eye = DirectX::XMVectorSet(cam.r, cam.g, cam.b, 0.0f);
 	_at = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	_up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	_view = DirectX::XMMatrixLookAtLH(_eye, _at, _up);
-	_proj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, width / (float)height, 0.01f, 100.0f);
+	_proj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, float(width) / (float)height, 0.1f, 100.0f);
 
 	D3D11_RASTERIZER_DESC rasterizerDesc = {};
 	//rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
