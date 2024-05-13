@@ -43,6 +43,7 @@ public:
 
 	void Fill(GeneratorBufferData defaultValue)
 	{
+		std::lock_guard(_mutex);
 		std::fill(std::begin(voxelGrid), std::end(voxelGrid), defaultValue);
 	}
 
@@ -57,10 +58,12 @@ public:
 
 
 	void UpdateAt(unsigned long i, GeneratorBufferData data) {
+		std::lock_guard(_mutex);
 		voxelGrid[i] = data;
 	}
 
 	void UpdateAt(unsigned int x, unsigned int y, GeneratorBufferData data) {
+		std::lock_guard(_mutex);
 		voxelGrid[y * VOXEL_WIDTH + x] = data;
 	}
 
@@ -80,6 +83,6 @@ public:
 
 private:
 	GeneratorBufferData	voxelGrid[VOXEL_AREA];
-	std::mutex			mutex;
+	std::mutex			_mutex;
 };
 
