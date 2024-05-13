@@ -1,4 +1,6 @@
 #pragma once
+#include <unordered_map>
+
 #include "Vector4.h"
 
 /////////////////////////////////
@@ -48,4 +50,7 @@ public:
 	static Colour White();
 	static Colour Grey();
 	static Colour Null();
+
+public:
+	static const std::unordered_map<std::string, Colour> ColourMap;
 };

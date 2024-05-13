@@ -1,6 +1,7 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN // Required to prevent winsock/WinSock2 redifinition
 
+#include <algorithm>
 #include <mutex>
 #include <vector>
 #include <Windows.h>
@@ -34,12 +35,33 @@ struct GeneratorBufferData {
 class VoxelCanvas
 {
 public:
-	VoxelCanvas()
-	{
-	}
-
+	VoxelCanvas() {}
+	
 	~VoxelCanvas() {
 		delete voxelGrid;
+	}
+
+	void Fill(GeneratorBufferData defaultValue)
+	{
+		std::fill(std::begin(voxelGrid), std::end(voxelGrid), defaultValue);
+	}
+
+	GeneratorBufferData& GetAt(unsigned long i) {
+		return voxelGrid[i];
+	}
+
+
+	GeneratorBufferData& GetAt(unsigned int x, unsigned int y) {
+		return voxelGrid[y * VOXEL_WIDTH + x];
+	}
+
+
+	void UpdateAt(unsigned long i, GeneratorBufferData data) {
+		voxelGrid[i] = data;
+	}
+
+	void UpdateAt(unsigned int x, unsigned int y, GeneratorBufferData data) {
+		voxelGrid[y * VOXEL_WIDTH + x] = data;
 	}
 
 	unsigned long GetSize() { return ARRAYSIZE(voxelGrid); }

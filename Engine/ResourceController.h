@@ -13,6 +13,8 @@
 #include <WinSock2.h>
 #include <wrl/client.h>
 
+#include "Colour.h"
+
 struct Peer{
 	std::string	ipAddress;
 	u_short		port;
@@ -24,6 +26,8 @@ struct Config {
 	// for networking.
 	u_short						port;
 	std::string					id;
+	// Default colour is white.
+	Colour						colour;
 };
 
 static const char* CONFIG_ENV_VAR = "VOX_CONFIG_FILE";

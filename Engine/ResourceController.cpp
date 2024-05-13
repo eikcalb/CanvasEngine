@@ -64,6 +64,9 @@ const Config& const ResourceController::LoadConfig(const std::string& pFilename)
 					if (key == "id") {
 						iniData.id = value;
 					}
+					if (key == "colour") {
+						iniData.colour = Colour::ColourMap.at(value);
+					}
 				}
 			}
 		}

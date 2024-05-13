@@ -28,12 +28,12 @@ VOut main(float4 position : POSITION, float4 colour : COLOR, uint instanceID : S
 {
 	VOut output;
 
-	InstanceData id = InstanceBuffer[instanceID];
+	InstanceData ib = InstanceBuffer[instanceID];
 
 	output.position = mul( position, World );
 	output.position = mul( output.position, View );
 	output.position = mul( output.position, Projection );
-	output.colour = colour;
+	output.colour = ib.Colour;
 
 	return output;
 }

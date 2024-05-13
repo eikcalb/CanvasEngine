@@ -94,3 +94,15 @@ Colour Colour::Null()
 {
 	return Colour(0,0,0,0);
 }
+
+const std::unordered_map<std::string, Colour> Colour::ColourMap = {
+	{"red", Colour::Red()},
+	{"blue", Colour::Blue()},
+	{"green", Colour::Green()},
+	{"yellow", Colour::Yellow()},
+	{"white", Colour::White()},
+	{"grey", Colour::Grey()},
+	{"magenta", Colour(1, 0, 1)},
+	{"orange",  Colour(1, 0.5, 0)},
+	{"purple",Colour(0.5, 0, 0.5)},
+};

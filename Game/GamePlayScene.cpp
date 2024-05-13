@@ -36,6 +36,7 @@ void GamePlayScene::Start() {
 void GamePlayScene::Initialise()
 {
 	VoxGame* game = (VoxGame*)Game::TheGame.get();
+	auto voxel = game->GetVoxelCanvas();
 	std::shared_ptr<CameraBehavior> camBehavior = std::make_shared<CameraBehavior>(std::shared_ptr<GamePlayScene>(this));
 	AddBehavior(camBehavior);
 
@@ -43,22 +44,17 @@ void GamePlayScene::Initialise()
 	auto mesh = Game::TheGame->GetMesh("cube");
 	std::shared_ptr<Cube> cube = std::make_shared<Cube>(mesh, VOXEL_AREA);
 	cube->SetCanRotate(false);
-	AddGameObject(cube);
-	cube->Reset();
 
 	// Set the cube to be a generator.
-	cube->SetGeneratorData(game->GetVoxelCanvas()->GetVoxelData());
-	//Game::TheGame->GetThreadController()->AddTask(
-	//	[&] {
-			//for (int y = 0; y < VOXEL_HEIGHT; y++) {
-			//	for (int x = 0; x < VOXEL_WIDTH; x++) {
+	GeneratorBufferData base;
+	auto& userColour = game->GetResourceController()->GetConfig()->colour;
 
-			//	}
-			//}
-	//	},
-	//	TaskType::GRAPHICS,
-	//	"Scene Initialization Task"
-	//);
+	base.Colour = glm::vec4(userColour.r(), userColour.g(), userColour.b(), userColour.a());
+	base.IsTransparent = false;
+	base.IsInstanced = TRUE;
+	voxel->Fill(base);
+	cube->SetGeneratorData(voxel->GetVoxelData());
+	AddGameObject(cube);
 
 	game->SetGameState(GameState::Playing);
 }
