@@ -116,6 +116,8 @@ void VBO_DX::Create(
 		OutputDebugString(output.c_str());
 		throw std::runtime_error("Failed to create shader resource!");
 	}
+
+	rendererDX->GetContext()->VSSetShaderResources(0, 1, &_srv);
 }
 
 /******************************************************************************************************************/
@@ -145,8 +147,6 @@ void VBO_DX::Draw(Renderer* renderer, const std::shared_ptr<VBOInstanceData> ins
 			// the application up[dates it again.
 			//instanceData->shouldUpdate = false;
 		}
-
-		rendererDX->GetContext()->VSSetShaderResources(0, 1, &_srv);
 	}
 
 	// select which vertex buffer to display

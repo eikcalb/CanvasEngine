@@ -50,7 +50,7 @@ VOut main(float4 position : POSITION, float4 colour : COLOR, uint instanceID : S
 	output.position = mul( position, World );
 	output.position = mul( output.position, View );
 	output.position = mul( output.position, Projection );
-	output.colour = ib.Colour;
+	output.colour = colour + ib.Colour;
 
 	return output;
 }

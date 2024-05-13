@@ -59,7 +59,7 @@ void  Cube::SetWeight(u_short weight) {
 
 void  Cube::SetColor(Colour colour) {
 
-	colour = colour;
+	_colour = colour;
 	SetShouldDraw(true);
 }
 

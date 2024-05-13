@@ -14,7 +14,6 @@ class Cube :
 protected:
 	unsigned short weight = 1;
 	bool canRotate = false;
-	Colour colour = Colour();
 
 	// Structors
 public:

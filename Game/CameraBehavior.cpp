@@ -7,13 +7,14 @@ void CameraBehavior::Update(double deltaTime) {
 	auto& game = Game::TheGame;
 	const auto& renderer = game->GetRendererSystem()->GetRenderer();
 	auto camPos = renderer->GetCameraPosition();
+	auto ic = game->GetInputController();
 
-	if (game->GetInputController()->IsKeyPressed(KEYS::A)) {
+	if (ic->IsKeyPressed(KEYS::A)) {
 		glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), updateTime, right);
 		up = glm::vec3(rotationMatrix * glm::vec4(up, 0.0f));
 		forward = glm::vec3(rotationMatrix * glm::vec4(forward, 0.0f));
 	}
-	else if (game->GetInputController()->IsKeyPressed(KEYS::D)) {
+	else if (ic->IsKeyPressed(KEYS::D)) {
 		glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), -updateTime, right);
 		up = glm::vec3(rotationMatrix * glm::vec4(up, 0.0f));
 		forward = glm::vec3(rotationMatrix * glm::vec4(forward, 0.0f));
@@ -21,24 +22,24 @@ void CameraBehavior::Update(double deltaTime) {
 
 	// Camera navigation is courtesy of ChatGPT.
 	// https://chat.openai.com/share/d03c4216-a6f1-46ee-a10a-641bb76cb132
-	if (game->GetInputController()->IsKeyPressed(KEYS::Up)) {
+	if (ic->IsKeyPressed(KEYS::Up)) {
 		camPos[0] += up * updateTime;
 	}
-	else if (game->GetInputController()->IsKeyPressed(KEYS::Down)) {
+	else if (ic->IsKeyPressed(KEYS::Down)) {
 		camPos[0] -= up * updateTime;
 	}
 
-	if (game->GetInputController()->IsKeyPressed(KEYS::W)) {
+	if (ic->IsKeyPressed(KEYS::W)) {
 		camPos[0] += forward * updateTime;
 	}
-	else if (game->GetInputController()->IsKeyPressed(KEYS::S)) {
+	else if (ic->IsKeyPressed(KEYS::S)) {
 		camPos[0] -= forward * updateTime;
 	}
 
-	if (game->GetInputController()->IsKeyPressed(KEYS::Right)) {
+	if (ic->IsKeyPressed(KEYS::Right)) {
 		camPos[0] += right * updateTime;
 	}
-	else if (game->GetInputController()->IsKeyPressed(KEYS::Left)) {
+	else if (ic->IsKeyPressed(KEYS::Left)) {
 		camPos[0] -= right * updateTime;
 	}
 

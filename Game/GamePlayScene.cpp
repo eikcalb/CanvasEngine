@@ -53,6 +53,7 @@ void GamePlayScene::Initialise()
 	base.IsTransparent = false;
 	base.IsInstanced = TRUE;
 	voxel->Fill(base);
+	cube->SetColor(userColour);
 	cube->SetGeneratorData(voxel->GetVoxelData());
 	cube->SetShouldUpdateGenerator(true);
 	AddGameObject(cube);
@@ -114,6 +115,7 @@ void GamePlayScene::Render(RenderSystem* renderer)
 
 	const auto& r = renderer->GetRenderer()->GetHud();
 	renderer->GetRenderer()->SetTopology(D3D_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	renderer->Process(_gameObjects);
 
 	if (gameState == GameState::Paused) {
 		r->Label("Paused...Press the spacebar to continue", Colour::Green());
@@ -126,8 +128,6 @@ void GamePlayScene::Render(RenderSystem* renderer)
 	r->Space();
 	r->Space();
 	r->LabelText("User ID", ResourceController::Instance()->GetConfig()->id.c_str());
-
-	renderer->Process(_gameObjects);
 }
 
 /******************************************************************************************************************/
