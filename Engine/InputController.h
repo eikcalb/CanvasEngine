@@ -1,8 +1,17 @@
 #pragma once
 #include <memory>
+
 #include "GL\GLM\GLM.hpp"
 
 #include "ObserverSubject.h"
+
+enum class MOUSE_BUTTON {
+    LEFT = 0x0001,
+    RIGHT = 0x0002,
+    MIDDLE = 0x0010,
+    FORWARD = 0x0020,
+    BACKWARD = 0x0040,
+};
 
 enum class KEYS
 {
@@ -185,10 +194,10 @@ typedef  glm::vec4 MouseRay;
 class InputController : public ObserverSubject
 {
 protected:
-	std::map<KEYS, bool>	mKeyStates;
+    std::map<KEYS, bool>                mKeyStates;
+    std::map<MOUSE_BUTTON, bool>        mMouseStates;
 	glm::vec2							mMousePosition = glm::vec2(0.0f);
 	int									mMouseWheelValue = 0;
-	bool								mMouseClicked = false;
 
 	InputController();
 public:
@@ -222,6 +231,13 @@ public:
 	{
         return !mKeyStates[button];
 	}
+
+    void SetMousePressed(const MOUSE_BUTTON b, bool pressed) { mMouseStates[b] = pressed; }
+
+    const bool GetMousePressed(const MOUSE_BUTTON button)
+    {
+        return mMouseStates[button];
+    }
     
     void Notify(Message* msg) {
         BroadcastMessage(msg);

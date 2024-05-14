@@ -81,24 +81,21 @@ LRESULT CALLBACK Window_DX::WindowProc(HWND hWnd, UINT message, WPARAM wParam, L
 	}
 	break;
 	case WM_LBUTTONDOWN:
-	case WM_RBUTTONDOWN:
-	case WM_MBUTTONDOWN:
-	case WM_XBUTTONDOWN:
-	{
-		Game::TheGame->OnMouse(lParam, true);
-		break;
-	}
+	//case WM_RBUTTONDOWN:
+	//case WM_MBUTTONDOWN:
+	//case WM_XBUTTONDOWN:
 	case WM_LBUTTONUP:
-	case WM_RBUTTONUP:
-	case WM_MBUTTONUP:
-	case WM_MOUSEWHEEL:
+	//case WM_RBUTTONUP:
+	//case WM_MBUTTONUP:
+	//case WM_MOUSEWHEEL:
 	{
-		Game::TheGame->OnMouse(lParam, false);
+		Game::TheGame->OnMouse(wParam, lParam);
 		break;
 	}
-	case WM_XBUTTONUP:
+	//case WM_XBUTTONUP:
 	case WM_MOUSEHOVER:
-	case WM_INPUT:
+	//case WM_INPUT:
+	//case WM_MOUSELEAVE: // Should we handle mouse leave?
 	case WM_MOUSEMOVE:
 	{
 		Game::TheGame->OnMouse(lParam, false);

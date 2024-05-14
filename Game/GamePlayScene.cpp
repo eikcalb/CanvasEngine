@@ -53,7 +53,7 @@ void GamePlayScene::Initialise()
 	base.IsTransparent = false;
 	base.IsInstanced = TRUE;
 	voxel->Fill(base);
-	cube->SetColor(userColour);
+	//cube->SetColor(userColour);
 	cube->SetGeneratorData(voxel->GetVoxelData());
 	cube->SetShouldUpdateGenerator(true);
 	AddGameObject(cube);

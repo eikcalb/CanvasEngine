@@ -10,6 +10,12 @@ InputController::InputController(): ObserverSubject()
 		KEYS key = static_cast<KEYS>(i);
 		mKeyStates[key] = false;
 	}
+
+	for (int i = 0; i <= static_cast<int>(MOUSE_BUTTON::BACKWARD); ++i)
+	{
+		MOUSE_BUTTON button = static_cast<MOUSE_BUTTON>(i);
+		mMouseStates[button] = false;
+	}
 }
 
 const int InputController::ScrollWheel() const
@@ -23,6 +29,7 @@ const glm::vec2& InputController::MousePosition() const
 }
 
 // Get the ray direction in world space
+// https://www.braynzarsoft.net/viewtutorial/q16390-20-picking
 const MouseRay InputController::MouseRay(const glm::mat4& pViewInverse, const glm::mat4& pProjInverse, const float& width, const float& height)
 {
 	// Convert the screen coordinates to normalized device coordinates (NDC)

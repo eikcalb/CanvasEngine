@@ -4,7 +4,6 @@
 
 struct MouseMessageInfo : public BaseMessageType {
 	glm::vec2			pos;
-	bool				clicked;
 };
 
 class MouseInputMessage : public Message
@@ -22,6 +21,5 @@ public:
 	// Gets/Sets
 public:
 	glm::vec2	GetPosition()	const { return reinterpret_cast<MouseMessageInfo*>(_data.get())->pos; }
-	bool		GetClicked()	const { return reinterpret_cast<MouseMessageInfo*>(_data.get())->clicked; }
 };
 

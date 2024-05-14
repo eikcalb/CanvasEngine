@@ -49,7 +49,7 @@ protected:
 	double								_deltaTime;
 	double								_fps = 60;
 	std::atomic_bool					_quitFlag;
-	
+
 	GameState							_gameState;
 
 	std::shared_ptr<InputController>	_inputController; // ✅
@@ -67,7 +67,7 @@ protected:
 	// TODO: introduce audio manager?
 public:
 	Game();
-	Game(const std::string name): Game() { _name = name; }
+	Game(const std::string name) : Game() { _name = name; }
 	virtual ~Game();
 
 
@@ -108,7 +108,7 @@ public:
 
 	// Keyboard input
 	virtual void OnKeyboard(int key, bool down);
-	virtual void OnMouse(LPARAM wParam, bool down);
+	virtual void OnMouse(WPARAM buttonState, LPARAM lParam);
 
 	// Draw everything
 	virtual void Render() = 0;

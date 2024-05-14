@@ -15,7 +15,7 @@ Game::Game()
 	: _quitFlag(false)
 {
 	_currentTime = clock();
-	
+
 	SetGameState(GameState::MainMenu);
 
 	TheGame = std::shared_ptr<Game>(this);
@@ -67,14 +67,14 @@ void Game::Initialise(std::shared_ptr<Window> w)
 		}
 
 		return false;
-	});
+		});
 
 	_networkController->SetCommunicationConfig(&cc);
 	_networkController->SetConnectionStrategy(cs);
 	_networkController->Start();
 }
 
- std::shared_ptr<Mesh> Game::GetMesh(std::string name)
+std::shared_ptr<Mesh> Game::GetMesh(std::string name)
 {
 	// Found
 	MeshMapIterator i = _meshes.find(name);
@@ -100,14 +100,21 @@ void Game::OnKeyboard(int key, bool down)
 	_inputController->Notify(&msg);
 }
 
-void Game::OnMouse(LPARAM lParam, bool down)
+void Game::OnMouse(WPARAM buttonState, LPARAM lParam)
 {
 	int xPos = GET_X_LPARAM(lParam);
 	int yPos = GET_Y_LPARAM(lParam);
+
+	// Get button states
+	_inputController->SetMousePressed(MOUSE_BUTTON::LEFT, buttonState & static_cast<int>(MOUSE_BUTTON::LEFT));
+	_inputController->SetMousePressed(MOUSE_BUTTON::RIGHT, buttonState & static_cast<int>(MOUSE_BUTTON::RIGHT));
+	_inputController->SetMousePressed(MOUSE_BUTTON::MIDDLE, buttonState & static_cast<int>(MOUSE_BUTTON::MIDDLE));
+	_inputController->SetMousePressed(MOUSE_BUTTON::FORWARD, buttonState & static_cast<int>(MOUSE_BUTTON::FORWARD));
+	_inputController->SetMousePressed(MOUSE_BUTTON::BACKWARD, buttonState & static_cast<int>(MOUSE_BUTTON::BACKWARD));
+
 	// Create keypress message and send it to all objects
-	auto data = std::make_shared< MouseMessageInfo>();
+	auto data = std::make_shared<MouseMessageInfo>();
 	data->pos = glm::vec2(xPos, yPos);
-	data->clicked = down;
 	MouseInputMessage msg(std::shared_ptr<MouseMessageInfo>(data), InputController::EVENT_MOUSE_INPUT);
 
 	_inputController->Notify(&msg);
