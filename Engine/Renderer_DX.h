@@ -70,6 +70,28 @@ public:
 		_view = DirectX::XMMatrixLookAtLH(_eye, _at, _up);
 	}
 
+	virtual glm::vec3 CalculateMouseRay(const int x_, const int y_, unsigned int width, unsigned int height) override {
+		// Convert mouse coordinates to NDC (-1 to 1)
+		float x = (2.0f * x_) / width - 1.0f;
+		float y = 1.0f - (2.0f * y_) / height;
+
+		DirectX::XMFLOAT4X4 proj, view;
+		DirectX::XMStoreFloat4x4(&proj, _proj);
+		DirectX::XMStoreFloat4x4(&view, _view);
+
+		float vx = x * proj._11;
+		float vy = y * proj._22;
+
+		float invDet = 1.0f / (view._11 * view._22 - view._12 * view._21);
+		float nx = (view._22 * vx - view._12 * vy) * invDet;
+		float ny = (-view._21 * vx + view._11 * vy) * invDet;
+
+		DirectX::XMVECTOR rayDir = DirectX::XMVectorSet(nx, ny, -1.0f, 0.0f);
+		auto dir = DirectX::XMVector3Normalize(rayDir);
+
+		return glm::vec3(DirectX::XMVectorGetX(dir), DirectX::XMVectorGetY(dir), DirectX::XMVectorGetZ(dir));
+	}
+
 	virtual void ClearScreen() override;
 	virtual void Destroy() override;
 	virtual void Draw(const std::shared_ptr<GameObject> mesh, const Colour& colour) override;

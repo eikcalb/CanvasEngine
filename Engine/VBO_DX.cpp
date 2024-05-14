@@ -142,6 +142,7 @@ void VBO_DX::Draw(Renderer* renderer, const std::shared_ptr<VBOInstanceData> ins
 		// a constant buffer cannot be more than 64kb, hence it is limited for the purpose of a
 		// generator. Instead, we will utilize a structured buffer.
 		if (instanceData->shouldUpdate) {
+			// TODO: Doesn't seem to work. Perhaps try using mapped resource instead!!!!!
 			rendererDX->GetContext()->UpdateSubresource(_ins, 0, nullptr, instanceData->data, 0, 0);
 			// After updating the shader resource, it is automatically set to pause update until
 			// the application up[dates it again.

@@ -6,6 +6,7 @@
 #include "cube.h"
 #include "CameraBehavior.h"
 #include "Game.h"
+#include "MouseInputMessage.h"
 #include "RenderSystem.h"
 #include "Message.h"
 #include "VoxGame.h"
@@ -37,8 +38,14 @@ void GamePlayScene::Initialise()
 {
 	VoxGame* game = (VoxGame*)Game::TheGame.get();
 	auto voxel = game->GetVoxelCanvas();
-	std::shared_ptr<CameraBehavior> camBehavior = std::make_shared<CameraBehavior>(std::shared_ptr<GamePlayScene>(this));
+	auto thisShared = std::shared_ptr<GamePlayScene>(this);
+	
+	// Setup Camera controls.
+	std::shared_ptr<CameraBehavior> camBehavior = std::make_shared<CameraBehavior>(thisShared);
 	AddBehavior(camBehavior);
+
+	// Setup Listener.
+	game->GetInputController()->Observe(InputController::EVENT_MOUSE_INPUT, thisShared);
 
 	// Create the cube that will be rendered.
 	auto mesh = Game::TheGame->GetMesh("cube");
@@ -89,6 +96,19 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 	case KEYS::Down: // Down arrow-key
 		// Handled by camera behavior now.
 		break;
+	}
+}
+
+/******************************************************************************************************************/
+
+void GamePlayScene::OnMessage(Message* msg)
+{
+	if (auto mouse = reinterpret_cast<MouseInputMessage*>(msg)) {
+		// Check mouse hit.
+		auto isLeftClicked = Game::TheGame->GetInputController()->GetMousePressed(MOUSE_BUTTON::LEFT);
+		if (isLeftClicked) {
+
+		}
 	}
 }
 

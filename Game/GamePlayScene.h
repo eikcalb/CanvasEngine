@@ -42,6 +42,7 @@ public:
 	/// Render current scene
 	virtual void Render(RenderSystem* renderer) override;
 
+	virtual void OnMessage(Message* msg) override;
 
 	// Reset the game
 	void Reset();

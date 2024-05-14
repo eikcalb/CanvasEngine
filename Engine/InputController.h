@@ -189,15 +189,11 @@ enum class KEYS
     OemClear = 0xfe
 };
 
-typedef  glm::vec4 MouseRay;
-
 class InputController : public ObserverSubject
 {
 protected:
     std::map<KEYS, bool>                mKeyStates;
     std::map<MOUSE_BUTTON, bool>        mMouseStates;
-	glm::vec2							mMousePosition = glm::vec2(0.0f);
-	int									mMouseWheelValue = 0;
 
 	InputController();
 public:
@@ -210,15 +206,6 @@ public:
 
 	InputController(const InputController& InputController) = delete;
 	InputController& operator=(InputController const&) = delete;
-
-	//Mouse
-	const int ScrollWheel() const;
-	const glm::vec2& MousePosition() const;
-	const MouseRay MouseRay(
-		const glm::mat4& pViewInverse,
-		const glm::mat4& pProjInverse,
-		const float& pWidth, const float& pHeight
-	);
 
     void SetKeyPressed(const KEYS key, bool pressed) { mKeyStates[key] = pressed; }
 

@@ -107,6 +107,8 @@ void Renderer_DX::Draw(const std::shared_ptr<GameObject> go, const Colour& colou
 
 void Renderer_DX::Initialise(int width, int height)
 {
+
+#pragma region DirectX setup
 	// Reference: https://learn.microsoft.com/en-us/windows/win32/direct3dgetstarted/complete-code-sample-for-using-a-corewindow-with-directx
 	// create a struct to hold information about the swap chain
 	DXGI_SWAP_CHAIN_DESC scd;
@@ -205,6 +207,7 @@ void Renderer_DX::Initialise(int width, int height)
 	// Initialise shaders
 	InitialiseShaders();
 	InitialiseHud();
+#pragma endregion  DirectX setup
 
 	_world = DirectX::XMMatrixIdentity();
 	// Initialize the view matrix
