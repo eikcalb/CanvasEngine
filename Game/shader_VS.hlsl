@@ -37,15 +37,13 @@ VOut main(float4 position : POSITION, float4 colour : COLOR, uint instanceID : S
 	// For positioning, we will check that the `instanceID` updated.
 	// We will not position objects with a single instance, hence the
 	// need to confirm we are at least at 0+1
-	if (instanceID > 0) {
-		// We will calculate the next position based on the instance.
-		float heightRatio = instanceID / WIDTH;
-		uint y = floor(heightRatio);
-		uint x = instanceID % WIDTH;
-
-		position.x += x;
-		position.y += y;
-	}
+	// We will calculate the next position based on the instance.
+	float heightRatio = instanceID / WIDTH;
+	uint y = floor(heightRatio);
+	uint x = instanceID % WIDTH;
+	position.x += x * 2;
+	position.y += y * 2;
+	
 
 	output.position = mul( position, World );
 	output.position = mul( output.position, View );

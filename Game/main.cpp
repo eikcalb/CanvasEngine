@@ -53,7 +53,9 @@ int WINAPI WinMain(
 	}
 
 	// Shutdown controllers.
-	game->GetThreadController().reset();
+	//game->GetThreadController().reset();
+	//game->GetInputController().reset();
+	//game->GetResourceController().reset();
 }
 
 #else
