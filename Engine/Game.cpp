@@ -72,6 +72,7 @@ void Game::Initialise(std::shared_ptr<Window> w)
 	_networkController->SetCommunicationConfig(&cc);
 	_networkController->SetConnectionStrategy(cs);
 	_networkController->Start();
+	_inputController->Observe(InputController::EVENT_KEY_INPUT, _networkController);
 }
 
 int Game::GetWindowHeight() { return _window->_height; }

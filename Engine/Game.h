@@ -95,6 +95,7 @@ public:
 
 	std::shared_ptr<RenderSystem> GetRendererSystem() const { return _renderSystem; }
 	std::shared_ptr<InputController> GetInputController()	const { return _inputController; }
+	std::shared_ptr<NetworkController> GetNetworkController()	const { return _networkController; }
 	std::shared_ptr<ResourceController> GetResourceController()	const { return _resourceController; }
 	std::shared_ptr<ThreadController> GetThreadController()	const { return _threadController; }
 

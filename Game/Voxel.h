@@ -11,11 +11,17 @@
 #include "GL\GLM\GTC\matrix_transform.hpp"
 #include "GL\GLM\GTC\type_ptr.hpp"
 
-constexpr unsigned int VOXEL_WIDTH = 512;
-constexpr unsigned int VOXEL_HEIGHT = 512;// 12;
+#include "Observer.h"
 
-//constexpr unsigned int VOXEL_WIDTH = 1;
-//constexpr unsigned int VOXEL_HEIGHT = 1;// 12;
+#define use1 1
+
+#if !use1
+constexpr unsigned int VOXEL_WIDTH = 512;
+constexpr unsigned int VOXEL_HEIGHT = 512;
+#else
+constexpr unsigned int VOXEL_WIDTH = 1;
+constexpr unsigned int VOXEL_HEIGHT = 1;
+#endif
 
 constexpr unsigned long VOXEL_AREA = VOXEL_WIDTH * VOXEL_HEIGHT;
 

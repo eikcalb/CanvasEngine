@@ -20,4 +20,6 @@ public:
 
 	}
 	virtual ~NetworkMessage();
+
+	const NetworkMessageInfo* GetMessage() { return reinterpret_cast<NetworkMessageInfo*>(_data.get()); }
 };

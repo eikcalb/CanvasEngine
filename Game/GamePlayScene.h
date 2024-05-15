@@ -4,6 +4,9 @@
 #include "GL\GLM\GLM.hpp"
 #include "GL\GLM\GTC\matrix_transform.hpp"
 
+#include "NetworkController.h"
+#include "NetworkMessage.h"
+
 constexpr int WIDTH = 512;
 constexpr int HEIGHT = 512;
 
@@ -17,6 +20,7 @@ private:
 	std::shared_ptr<Cube> _cube;
 	glm::vec2 _lastMousePos;
 	glm::vec3 _lastMouseRay;
+	int _messageSendFreq;
 
 	// Structors
 public:
@@ -45,6 +49,8 @@ public:
 
 	virtual void Start() override;
 
+	virtual void End() override;
+
 	/// Respond to input
 	virtual void OnKeyboard(int key, bool down) override;
 	
@@ -55,6 +61,9 @@ public:
 	virtual void Render(RenderSystem* renderer) override;
 
 	virtual void OnMessage(Message* msg) override;
+
+	void UpdatePeers();
+	void HandleMessage(const NetworkMessageInfo* msg);
 
 	// Reset the game
 	void Reset();

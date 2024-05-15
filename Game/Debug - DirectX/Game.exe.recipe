@@ -2,15 +2,15 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\Derek Maro Okeowo\source\repos\700105-2223-lab-i-eikcalb\Debug - DirectX\Game.exe</FullPath>
+      <FullPath>C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Debug - DirectX\Game.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>C:\Users\Derek Maro Okeowo\source\repos\700105-2223-lab-i-eikcalb\Debug - DirectX\shader_PS.cso</FullPath>
+      <FullPath>C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Debug - DirectX\shader_PS.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\Derek Maro Okeowo\source\repos\700105-2223-lab-i-eikcalb\Debug - DirectX\shader_VS.cso</FullPath>
+      <FullPath>C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Debug - DirectX\shader_VS.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

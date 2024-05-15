@@ -1,5 +1,7 @@
 #include "NetworkController.h"
 
+#include "KeyPressMessage.h"
+
 const std::string NetworkController::EVENT_TYPE_NEW_MESSAGE = "network_controller_new_message";
 
 NetworkController::NetworkController() : backlog(),
@@ -58,7 +60,7 @@ void NetworkController::HandleIncomingMessages()
 		for (auto peer : GetPeerMap()) {
 			if (FD_ISSET(peer.second->GetSocket(), &readSockets)) {
 				mThreadController->AddTask([&] {
-					// Here, we will fetch th enew message and add it to
+					// Here, we will fetch the new message and add it to
 					// the message queue.
 					const auto& input = peer.second->Receive();
 					if (input.size() <= 0) {
@@ -215,6 +217,19 @@ void NetworkController::OnMessage(Message* msg) {
 		// TODO: use WSAEventSelect to reset a blocking select and listen to this new peer.
 		OutputDebugString(L"New connection received!");
 		peers[peer->conn->GetID()] = peer->conn;
+	}
+	else if (msgType == InputController::EVENT_KEY_INPUT) {
+		const auto& keyMsg = reinterpret_cast<KeyPressMessage*>(msg);
+		KEYS key = static_cast<KEYS>(keyMsg->GetKey());
+		if (!keyMsg->GetDown()) {
+			if (key == KEYS::C) {
+				mThreadController->AddTask([&] {
+					connectionStrategy->Connect();
+					},
+					TaskType::NETWORK, "NC.OnMessage:Connect to peers!"
+				);
+			}
+		}
 	}
 }
 

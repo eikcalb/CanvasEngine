@@ -88,7 +88,7 @@ public:
 
 	/// This function will end and the following are guaranteed:
 	/// - Peers must have been atleast attempted to be connected to.
-	/// - If connection strategy is promiscuous, then the socked is
+	/// - If connection strategy is promiscuous, then the socket is
 	///   set to start accepting connections.
 	/// - The incoming and outgoing message queues are setup to be
 	///   checked in a loop and handled accordingly.

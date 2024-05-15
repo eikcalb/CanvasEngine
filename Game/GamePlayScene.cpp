@@ -6,6 +6,7 @@
 #include "CameraBehavior.h"
 #include "Game.h"
 #include "MouseInputMessage.h"
+#include "InputController.h"
 #include "RenderSystem.h"
 #include "Message.h"
 #include "VoxGame.h"
@@ -32,6 +33,13 @@ GamePlayScene::~GamePlayScene()
 void GamePlayScene::Start() {
 
 }
+void GamePlayScene::End() {
+	//if (Game::TheGame) {
+	//	//auto thisShared = std::shared_ptr<GamePlayScene>(this);
+	//	//VoxGame* game = (VoxGame*)Game::TheGame.get();
+	//	//game->GetInputController()->UnObserve(InputController::EVENT_MOUSE_INPUT, thisShared);
+	//}
+}
 
 void GamePlayScene::Initialise()
 {
@@ -45,6 +53,7 @@ void GamePlayScene::Initialise()
 
 	// Setup Listener.
 	game->GetInputController()->Observe(InputController::EVENT_MOUSE_INPUT, thisShared);
+	game->GetNetworkController()->Observe(NetworkController::EVENT_TYPE_NEW_MESSAGE, thisShared);
 
 	// Create the cube that will be rendered.
 	auto mesh = Game::TheGame->GetMesh("cube");
@@ -65,6 +74,14 @@ void GamePlayScene::Initialise()
 	AddGameObject(_cube);
 
 	game->SetGameState(GameState::Playing);
+}
+
+void GamePlayScene::UpdatePeers() {
+	// Sends current grid status to peers.
+}
+
+void GamePlayScene::HandleMessage(const NetworkMessageInfo* msg) {
+
 }
 
 /******************************************************************************************************************/
@@ -102,7 +119,11 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 
 void GamePlayScene::OnMessage(Message* msg)
 {
-	if (auto mouse = reinterpret_cast<MouseInputMessage*>(msg)) {
+	const auto& type = msg->GetMessageType();
+	if (type == InputController::EVENT_MOUSE_INPUT)
+	{
+#pragma region keyboard
+		auto mouse = reinterpret_cast<MouseInputMessage*>(msg);
 		auto& game = Game::TheGame;
 		auto mousePos = mouse->GetPosition();
 		SetMousePos(mousePos);
@@ -136,6 +157,7 @@ void GamePlayScene::OnMessage(Message* msg)
 				intersectionPoint.y >= squareMin.y && intersectionPoint.y <= squareMax.y;
 
 			// r->IntersectMouseRay(orig, dir, pos, _cube->size)
+			// If there is a hit, we will update the peers and reset update counter.
 			if (intersects) {
 				_cube->SetColor(Colour::Green());
 			}
@@ -150,7 +172,12 @@ void GamePlayScene::OnMessage(Message* msg)
 			//auto isHit = (intersectionX >= minX && intersectionX <= maxX &&
 			//	intersectionY >= minY && intersectionY <= maxY);
 		}
-
+#pragma endregion keyboard
+	}
+	else if (type == NetworkController::EVENT_TYPE_NEW_MESSAGE) {
+		auto networkMessage = reinterpret_cast<NetworkMessage*>(msg);
+		const auto m = networkMessage->GetMessage();
+		HandleMessage(m);
 	}
 }
 
@@ -166,6 +193,15 @@ void GamePlayScene::Update(double deltaTime)
 	}
 
 	Scene::Update(deltaTime);
+
+	// Update network with my data. Here we will have a counter that limits how frequently
+	// we update the network about the voxel.
+	if (_messageSendFreq > 1 / 20) {
+		// Time has passed. We can send status messages
+		UpdatePeers();
+		_messageSendFreq = 0;
+	}
+	_messageSendFreq += deltaTime;
 }
 
 /******************************************************************************************************************/
