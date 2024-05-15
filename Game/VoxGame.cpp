@@ -1,6 +1,7 @@
 #include "VoxGame.h"
 
 #include "GamePlayScene.h"
+#include <Utils.h>
 
 /******************************************************************************************************************/
 
@@ -49,6 +50,8 @@ void VoxGame::Initialise(std::shared_ptr<Window> w)
 		TaskType::GRAPHICS,
 		"Setup Scenes"
 	);
+
+	_currentTime = Utils::GetTime();
 }
 
 /******************************************************************************************************************/
@@ -85,12 +88,11 @@ void VoxGame::Run()
 {
 	// Run parent method to get delta time etc
 	Game::Run();
-	// Get delta time:
-	// https://en.cppreference.com/w/cpp/chrono/c/clock
-	double temp_time = clock();
-	_deltaTime = (temp_time - _currentTime) / CLOCKS_PER_SEC;
 
-	if (_deltaTime >= 1 / GetFPS()) {
+	double temp_time = Utils::GetTime();
+	_deltaTime = temp_time - _currentTime;
+
+	if (_deltaTime >= 1.0 / GetFPS()) {
 		// Update scenes
 		_sceneController->Update(_deltaTime);
 
@@ -99,10 +101,12 @@ void VoxGame::Run()
 		{
 			OutputDebugString(L"Cannot run the application when no scene is set!");
 			SetQuitFlag(true);
+			return;
 		}
 
 		// Draw
 		Render();
+		SetActualFPS(1.0 / (temp_time - _currentTime));
 		_currentTime = temp_time;
 	}
 }

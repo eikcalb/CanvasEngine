@@ -59,6 +59,8 @@ private:
 	IncomingMessagesQueue messageQueue;
 	OutgoingMessagesQueue sendQueue;
 	std::atomic_bool isAlive = false;
+	std::atomic_uint _fps = 30;
+	std::atomic_uint _actualfps = 0;
 
 	//Private constructor for singleton pattern
 	NetworkController();
@@ -98,6 +100,11 @@ public:
 	int						PeerCount();
 
 	virtual void OnMessage(Message*) override;
+
+	const float GetFPS() const { return _fps; }
+	void SetFPS(float fps) { _fps = fps; }
+
+	const float GetActualFPS() const { return _actualfps; }
 
 	const PeerMap& GetPeerMap() const { return peers; }
 

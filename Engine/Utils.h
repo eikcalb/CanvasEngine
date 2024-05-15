@@ -1,5 +1,8 @@
 #pragma once
+#define WIN32_LEAN_AND_MEAN // Required to prevent winsock/WinSock2 redifinition
+
 #include <string>
+#include <windows.h>
 
 namespace Utils {
 	// Sourced from: https://stackoverflow.com/a/217605
@@ -36,5 +39,13 @@ namespace Utils {
 		std::string message(messageBuffer, size);
 		LocalFree(messageBuffer);
 		return message;
+	}
+
+	static inline double GetTime()
+	{
+		LARGE_INTEGER frequency, currentTime;
+		QueryPerformanceFrequency(&frequency);
+		QueryPerformanceCounter(&currentTime);
+		return double(currentTime.QuadPart) / double(frequency.QuadPart);
 	}
 };

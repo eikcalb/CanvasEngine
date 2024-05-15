@@ -48,6 +48,7 @@ protected:
 	double								_currentTime;
 	double								_deltaTime;
 	double								_fps = 60;
+	std::atomic_uint					_actualfps = 0;
 	std::atomic_bool					_quitFlag;
 
 	GameState							_gameState;
@@ -81,6 +82,9 @@ public:
 
 	const float GetFPS() const { return _fps; }
 	void SetFPS(float fps) { _fps = fps; }
+
+	const float GetActualFPS() const { return _actualfps; }
+	void SetActualFPS(float fps) { _actualfps = fps; }
 
 	GameState GetGameState() { return _gameState; }
 	void SetGameState(GameState state) { _gameState = state; }

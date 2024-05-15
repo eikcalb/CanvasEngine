@@ -1,13 +1,16 @@
 #include "NetworkController.h"
 
 #include "KeyPressMessage.h"
+#include "Utils.h"
 
 const std::string NetworkController::EVENT_TYPE_NEW_MESSAGE = "network_controller_new_message";
 
-NetworkController::NetworkController() : backlog(),
-messages(),
-messageQueue(),
-peers() {
+NetworkController::NetworkController() :
+	backlog(),
+	messages(),
+	messageQueue(),
+	peers()
+{
 	mInputController = InputController::Instance();
 	mThreadController = ThreadController::Instance();
 	mResourceController = ResourceController::Instance();
@@ -88,43 +91,53 @@ void NetworkController::HandleIncomingMessages()
 void NetworkController::ProcessMessages() {
 	// This runs asynchronously, so we will check for new messages in each
 	// queue and process those messages.
+
+	// Manage frequency.
+	double start = Utils::GetTime();
 	do {
-		if (sendQueue.size() > 0) {
-			mThreadController->AddTask([&] {
-				std::lock_guard lock(sendMx);
+		auto now = Utils::GetTime();
+		auto dt =  now - start;
 
-				OutputDebugString(L"Sending message to peers!");
+		if (dt >= 1.0 / _fps) {
+			if (sendQueue.size() > 0) {
+				mThreadController->AddTask([&] {
+					std::lock_guard lock(sendMx);
 
-				while (!sendQueue.empty()) {
-					const auto& message = sendQueue.front();
-					for (auto& peerEntry : GetPeerMap()) {
-						peerEntry.second->Send(message);
+					OutputDebugString(L"Sending message to peers!");
+
+					while (!sendQueue.empty()) {
+						const auto& message = sendQueue.front();
+						for (auto& peerEntry : GetPeerMap()) {
+							peerEntry.second->Send(message);
+						}
+						sendQueue.pop();
 					}
-					sendQueue.pop();
-				}
 
-				OutputDebugString(L"Send succeeded!");
-				},
-				TaskType::NETWORK,
-				"NC.ProcessMessages:Handle outgoing messages!"
-			);
-		}
+					OutputDebugString(L"Send succeeded!");
+					},
+					TaskType::NETWORK,
+					"NC.ProcessMessages:Handle outgoing messages!"
+				);
+			}
 
-		if (messageQueue.size() > 0) {
-			mThreadController->AddTask([&] {
-				std::lock_guard lock(messageMx);
+			if (messageQueue.size() > 0) {
+				mThreadController->AddTask([&] {
+					std::lock_guard lock(messageMx);
 
-				OutputDebugString(L"Reading messages from peers!");
+					OutputDebugString(L"Reading messages from peers!");
 
-				while (!messageQueue.empty()) {
-					auto& message = messageQueue.front();
-					BroadcastMessage(message.get());
-					messageQueue.pop();
-				}
-				},
-				TaskType::NETWORK,
-				"NC.ProcessMessages:Handle incoming messages!"
-			);
+					while (!messageQueue.empty()) {
+						auto& message = messageQueue.front();
+						BroadcastMessage(message.get());
+						messageQueue.pop();
+					}
+					},
+					TaskType::NETWORK,
+					"NC.ProcessMessages:Handle incoming messages!"
+				);
+			}
+			_actualfps = 1.0 / (dt);
+			start = now;
 		}
 	} while (isAlive);
 }
@@ -201,12 +214,14 @@ void NetworkController::OnMessage(Message* msg) {
 		if (PeerCount() > MAX_PEERS) {
 			OutputDebugString(L"Connection has reached capacity!");
 			peer->conn.reset();
+			return;
 		}
 
 		// Check if the peer already exists.
 		if (peers.count(peer->conn->GetID()) > 0) {
 			OutputDebugString(L"Connection already exists!");
 			peer->conn.reset();
+			return;
 		}
 
 		// Set the socket to non-bloaking.
@@ -226,7 +241,7 @@ void NetworkController::OnMessage(Message* msg) {
 				mThreadController->AddTask([&] {
 					connectionStrategy->Connect();
 					},
-					TaskType::NETWORK, "NC.OnMessage:Connect to peers!"
+					TaskType::NETWORK, "NC.OnMessage:Connect to peers again!"
 				);
 			}
 		}

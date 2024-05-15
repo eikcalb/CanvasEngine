@@ -35,7 +35,7 @@ Window_DX::Window_DX(int width, int height, HINSTANCE hInstance, int nCmdShow)
 
 	auto appName = Game::TheGame->GetName();
 
-	_hWnd = CreateWindowEx(WS_EX_TOPMOST,
+	_hWnd = CreateWindowEx(0,//WS_EX_TOPMOST,
 		L"WindowClass",
 		std::wstring(appName.begin(), appName.end()).c_str(),
 		WS_OVERLAPPEDWINDOW | WS_VISIBLE & ~WS_THICKFRAME,

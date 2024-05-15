@@ -58,9 +58,12 @@ void Renderer_DX::Destroy()
 	_swapchain->Release();
 	_backbuffer->Release();
 	_device->Release();
-	_indexBuffer->Release();
 	_rasterizerState->Release();
 	_context->Release();
+
+	if (_indexBuffer) {
+		_indexBuffer->Release();
+	}
 
 	if (_depthStencil) {
 		_depthStencil->Release();

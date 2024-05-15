@@ -108,6 +108,33 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 	case KEYS::Escape: // Escape
 		SceneController::Instance()->PopScene();
 		break;
+	case KEYS::M:
+		// Integrity check.
+		break;
+	case KEYS::U:
+	{
+		const auto fps = Game::TheGame->GetFPS();
+		Game::TheGame->SetFPS(fps + 1);
+		break;
+	}
+	case KEYS::J:
+	{
+		const auto fps = Game::TheGame->GetFPS();
+		Game::TheGame->SetFPS(std::max(1, int(fps)-1));
+		break;
+	}
+	case KEYS::Y:
+	{
+		const auto fps = Game::TheGame->GetNetworkController()->GetFPS();
+		Game::TheGame->GetNetworkController()->SetFPS(fps + 1);
+		break;
+	}
+	case KEYS::H:
+	{
+		const auto fps = Game::TheGame->GetNetworkController()->GetFPS();
+		Game::TheGame->GetNetworkController()->SetFPS(std::max(1, int(fps) - 1));
+		break;
+	}
 	case KEYS::Up: // Up arrow-key
 	case KEYS::Down: // Down arrow-key
 		// Handled by camera behavior now.
@@ -229,8 +256,24 @@ void GamePlayScene::Render(RenderSystem* renderer)
 
 	const std::string mouseLabel = "Mouse Pos: X:" + std::to_string(_lastMousePos.x) + ", Y:" + std::to_string(_lastMousePos.y);
 	r->Label(mouseLabel.c_str());
-	const std::string mouseRayLabel = "Mouse Last Ray: X:" + std::to_string(_lastMouseRay.x) + ", Y:" + std::to_string(_lastMouseRay.y);
+	//const std::string mouseRayLabel = "Mouse Last Ray: X:" + std::to_string(_lastMouseRay.x) + ", Y:" + std::to_string(_lastMouseRay.y);
+	//r->Label(mouseRayLabel.c_str());
+
+	r->Space();
+	r->Space();
+	const std::string mouseRayLabel = "Player Count: " + std::to_string(Game::TheGame->GetNetworkController()->PeerCount() + 1);
 	r->Label(mouseRayLabel.c_str());
+	//The total mass of voxels on the current PC
+	//The actual mass of voxels across all PCs
+	//The starting mass of voxels across all PCs
+	const std::string fpsTargetLabel = "Graphics Target FPS: " + std::to_string(Game::TheGame->GetFPS());
+	r->Label(fpsTargetLabel.c_str());
+	const std::string fpsActualLabel = "Graphics Actual FPS: " + std::to_string(Game::TheGame->GetActualFPS());
+	r->Label(fpsActualLabel.c_str());
+	const std::string fpsNetworkTargetLabel = "Network Target FPS: " + std::to_string(Game::TheGame->GetNetworkController()->GetFPS());
+	r->Label(fpsNetworkTargetLabel.c_str());
+	const std::string fpsNetworkActualLabel = "Network Actual FPS: " + std::to_string(Game::TheGame->GetNetworkController()->GetActualFPS());
+	r->Label(fpsNetworkActualLabel.c_str());
 }
 
 /******************************************************************************************************************/
