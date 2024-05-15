@@ -23,7 +23,9 @@ public:
 	virtual ~Colour();
 
 	// Create vector from individual floats, with defaults for a
-	Colour(float r, float g, float b, float a=1);
+	Colour(float r, float g, float b, float a = 1);
+
+	Colour(std::string rgba);
 
 	// Create vector from an array of floats (either 1x3, or 1x4)
 	explicit Colour(float values[]);

@@ -36,7 +36,13 @@ protected:
 		}
 	}
 
+	~ObserverSubject() {
+		listeners.clear();
+	}
+
 public:
+	void ClearAllListeners() { listeners.clear(); }
+
 	bool Observe(std::string type, std::shared_ptr<Observer> observer) {
 		// Accessing a map using the index form invokes the default constructor
 		// for the type specified if it does not exist.

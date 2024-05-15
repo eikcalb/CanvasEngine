@@ -1,5 +1,8 @@
 #include "Colour.h"
+
 #include <exception>
+#include <sstream>
+
 using namespace std;
 
 /*******************************************************************/
@@ -18,6 +21,30 @@ Colour::Colour(float r, float g, float b, float a)
 	set(r,g,b,a);
 }
 
+/*******************************************************************/
+
+Colour::Colour(std::string rgba)
+{
+		std::stringstream ss(rgba);
+		std::string token;
+		int index = 0;
+		float result[4]{};
+
+		while (std::getline(ss, token, ',')) {
+			if (index >= 3) {
+				// More components than expected
+				break;
+			}
+			result[index++] = std::stof(token);
+		}
+
+		if (index != 4) {
+			// Not enough components in the string
+			throw std::invalid_argument("Invalid input string for glm::vec3");
+		}
+
+		Colour(result[0], result[1], result[2], result[3]);
+}
 /*******************************************************************/
 
 // This constructor accepts float arrays of 2, 3, or 4 floats

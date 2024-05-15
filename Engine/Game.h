@@ -32,6 +32,7 @@ enum class GameState
 {
 	MainMenu,
 	Playing,
+	Validating,
 	Paused,
 	Dead,
 	Resetting,

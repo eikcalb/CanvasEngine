@@ -48,4 +48,9 @@ namespace Utils {
 		QueryPerformanceCounter(&currentTime);
 		return double(currentTime.QuadPart) / double(frequency.QuadPart);
 	}
+
+	static inline std::vector<byte> stringToBytes(const std::string& str) {
+		std::vector<byte> bytes(str.begin(), str.end());
+		return bytes;
+	}
 };

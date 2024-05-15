@@ -31,7 +31,7 @@ class Cube;
 struct GeneratorBufferData {
 	glm::vec4	Colour;
 	BOOL		IsTransparent = FALSE;
-	BOOL		IsInstanced = TRUE;
+	BOOL		IsIntegrityCheck = FALSE;
 	float		_pad0 = 0;
 	float		_pad1 = 0;
 };

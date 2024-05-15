@@ -1,9 +1,13 @@
 #include "Connection.h"
 
+#include "NetworkMessage.h"
+
 #pragma region Static constant declarations
 
 const std::string ConnectionStrategy::EVENT_TYPE_STARTED = "network_started";
 const std::string ConnectionStrategy::EVENT_TYPE_NEW_CONNECTION = "network_new_connection";
+
+const std::string Connection::EVENT_TYPE_CLOSED_CONNECTION = "network_closed_connection";
 
 #pragma endregion
 
@@ -45,9 +49,40 @@ void Connection::Send(const std::vector<byte>& data) {
 	// Send data over the socket
 	if (send(socket, buffer, length, 0) == SOCKET_ERROR) {
 		// Handle send error
+		auto errorCode = WSAGetLastError();
 		OutputDebugString(L"Send failed with ");
-		OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
+		OutputDebugString(std::to_wstring(errorCode).c_str());
+		if (errorCode == WSAECONNRESET || errorCode == WSAENOTCONN) {
+			Disconnect();
+		}
 	}
+}
+
+void Connection::Disconnect() {
+	if (socket == INVALID_SOCKET) {
+		// Probably already disconnected.
+		return;
+	}
+
+	auto shutdownResult = shutdown(socket, SD_BOTH);
+	if (shutdownResult == SOCKET_ERROR) {
+		OutputDebugString(L"Failed to shutdown socket.");
+	}
+
+	closesocket(socket);
+	socket = INVALID_SOCKET;
+
+	OutputDebugString(L"Destroyed connection: ID_");
+	auto msgInfo = std::make_shared<NetworkMessageInfo>();
+	msgInfo->peerID = info->GetIDString();
+
+	auto msg = new NetworkMessage(
+		msgInfo,
+		EVENT_TYPE_CLOSED_CONNECTION
+	);
+	BroadcastMessage(msg);
+	ClearAllListeners();
+	info.reset();
 }
 
 const std::vector<byte>& Connection::Receive() {
@@ -61,15 +96,20 @@ const std::vector<byte>& Connection::Receive() {
 			auto errorCode = WSAGetLastError();
 			if (errorCode != WSAEWOULDBLOCK)
 			{
-				// Error or connection closed ungracefully
+				// Error or connection closed ungracefully.
 				OutputDebugString(L"Receive failed with ");
 				OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
+				Disconnect();
+				return result;
 				throw std::exception("Connection error with peer!");
+			}
+			else {
+				// Nothing left to read, but socket may still be active.
 			}
 		}
 		else if (receiveCount == 0)
 		{
-			// Connection closed by the peer
+			// Connection closed by the peer.
 			OutputDebugString(L"Connection gracefully closed with peer.");
 			done = true;
 			break;

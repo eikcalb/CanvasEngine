@@ -2,6 +2,7 @@
 
 #define WIN32_LEAN_AND_MEAN // Required to prevent winsock/WinSock2 redifinition
 
+#include "Colour.h"
 #include "Cube.h"
 #include "CameraBehavior.h"
 #include "Game.h"
@@ -10,6 +11,7 @@
 #include "RenderSystem.h"
 #include "Message.h"
 #include "VoxGame.h"
+#include <Utils.h>
 
 /******************************************************************************************************************/
 // Structors
@@ -65,10 +67,10 @@ void GamePlayScene::Initialise()
 	auto& userColour = game->GetResourceController()->GetConfig()->colour;
 
 	base.Colour = glm::vec4(userColour.r(), userColour.g(), userColour.b(), userColour.a());
-	base.IsTransparent = false;
-	base.IsInstanced = TRUE;
+	base.IsTransparent = FALSE;
+	base.IsIntegrityCheck = FALSE;
 	voxel->Fill(base);
-	//cube->SetColor(userColour);
+	_cube->SetColor(userColour);
 	_cube->SetGeneratorData(voxel->GetVoxelData());
 	_cube->SetShouldUpdateGenerator(true);
 	AddGameObject(_cube);
@@ -80,8 +82,29 @@ void GamePlayScene::UpdatePeers() {
 	// Sends current grid status to peers.
 }
 
-void GamePlayScene::HandleMessage(const NetworkMessageInfo* msg) {
+void GamePlayScene::HandleMessage(std::string peerID, const NetworkMessageContent& msg) {
+	if (msg.type == MessageType::INIT) {
+		peerDataMap[peerID] = {
+			Colour(msg.content),
+			0, // initial mass is zero as the mass will be calculated when we do an integrity test.
+			msg.sequence
+		};
+	}
+	else if (msg.type == MessageType::DRAW) {
+		// New update from peer. Handlw the draw on canvas.
+	}
+	else if (msg.type == MessageType::INTEGRITY) {
+		// Send my mass to the requestor.
+	}
+}
 
+void GamePlayScene::SendInit(const NetworkMessageInfo* msg){
+	const auto& colour = Game::TheGame->GetResourceController()->GetConfig()->colour;
+	std::string text = "INIT;1;"
+		+ std::to_string(colour.r()) + ","
+		+ std::to_string(colour.g()) + ","
+		+ std::to_string(colour.b());
+	Game::TheGame->GetNetworkController()->SendMessage(Utils::stringToBytes(text));
 }
 
 /******************************************************************************************************************/
@@ -110,6 +133,12 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 		break;
 	case KEYS::M:
 		// Integrity check.
+		if (Game::TheGame->GetGameState() == GameState::Validating) {
+			Game::TheGame->SetGameState(GameState::Playing);
+		}
+		else if (Game::TheGame->GetGameState() == GameState::Playing) {
+			Game::TheGame->SetGameState(GameState::Validating);
+		}
 		break;
 	case KEYS::U:
 	{
@@ -120,7 +149,7 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 	case KEYS::J:
 	{
 		const auto fps = Game::TheGame->GetFPS();
-		Game::TheGame->SetFPS(std::max(1, int(fps)-1));
+		Game::TheGame->SetFPS(std::max(1, int(fps) - 1));
 		break;
 	}
 	case KEYS::Y:
@@ -201,10 +230,23 @@ void GamePlayScene::OnMessage(Message* msg)
 		}
 #pragma endregion keyboard
 	}
+	else if (type == ConnectionStrategy::EVENT_TYPE_NEW_CONNECTION) {
+#pragma region new connection
+		auto networkMessage = reinterpret_cast<ConnectionMessage*>(msg);
+		const auto conn = networkMessage->GetConnection();
+		conn->Observe(Connection::EVENT_TYPE_CLOSED_CONNECTION, std::shared_ptr<GamePlayScene>(this));
+#pragma endregion new connection
+	}
+	else if (type == Connection::EVENT_TYPE_CLOSED_CONNECTION) {
+		const auto& nMsg = reinterpret_cast<NetworkMessageInfo*>(msg);
+		peerDataMap.erase(nMsg->peerID);
+	}
 	else if (type == NetworkController::EVENT_TYPE_NEW_MESSAGE) {
+#pragma region new message
 		auto networkMessage = reinterpret_cast<NetworkMessage*>(msg);
-		const auto m = networkMessage->GetMessage();
-		HandleMessage(m);
+		const auto m = networkMessage->ParseNetworkMessage();
+		HandleMessage(networkMessage->GetMessage()->peerID, m);
+#pragma endregion new message
 	}
 }
 
@@ -223,7 +265,7 @@ void GamePlayScene::Update(double deltaTime)
 
 	// Update network with my data. Here we will have a counter that limits how frequently
 	// we update the network about the voxel.
-	if (_messageSendFreq > 1 / 20) {
+	if (_messageSendFreq > 1 / 2000) {
 		// Time has passed. We can send status messages
 		UpdatePeers();
 		_messageSendFreq = 0;
@@ -253,6 +295,7 @@ void GamePlayScene::Render(RenderSystem* renderer)
 	r->Space();
 	r->Space();
 	r->LabelText("User ID", ResourceController::Instance()->GetConfig()->id.c_str());
+	r->LabelText("Integrity Check", gameState == GameState::Validating ? "TRUE" : "FALSE");
 
 	const std::string mouseLabel = "Mouse Pos: X:" + std::to_string(_lastMousePos.x) + ", Y:" + std::to_string(_lastMousePos.y);
 	r->Label(mouseLabel.c_str());

@@ -16,6 +16,6 @@ public:
 
 	}
 
-
+	std::shared_ptr<Connection> GetConnection() { return reinterpret_cast<ConnectionMessageInfo*>(_data.get())->conn; }
 };
 

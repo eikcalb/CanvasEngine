@@ -12,7 +12,7 @@ struct InstanceData
 {
 	float4	Colour;
 	bool	IsTransparent;
-	bool	IsInstanced;
+	bool	IsIntegrityCheck;
 	// https://developer.nvidia.com/content/understanding-structured-buffer-performance
 	float	_pad0;
 	float	_pad1; // 32 bits

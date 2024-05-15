@@ -111,7 +111,7 @@ struct CommunicationConfig {
 /// This class allows for fault tolerance by possibly retrying requests that are
 /// out of order.
 /// </summary>
-class Connection : ObserverSubject
+class Connection : public ObserverSubject
 {
 	// This will indicate the message sequence count and is used to help order
 	// the messages received by this connection.
@@ -126,6 +126,7 @@ class Connection : ObserverSubject
 
 public:
 	static const byte SEPARATOR = '\n';
+	static const std::string EVENT_TYPE_CLOSED_CONNECTION;
 
 	Connection() = default;
 
@@ -141,23 +142,7 @@ public:
 	inline const std::string GetID() const { return info->id + ":" + std::to_string(info->port); }
 	const SOCKET& GetSocket() const { return socket; }
 
-	inline void Disconnect() {
-		if (socket == INVALID_SOCKET) {
-			// Probably already disconnected.
-			return;
-		}
-
-		auto shutdownResult = shutdown(socket, SD_BOTH);
-		if (shutdownResult == SOCKET_ERROR) {
-			OutputDebugString(L"Failed to shutdown socket.");
-		}
-
-		closesocket(socket);
-		socket = INVALID_SOCKET;
-		info.reset();
-
-		OutputDebugString(L"Destroyed connection: ID_");
-	}
+	inline void Disconnect();
 
 	/// <summary>
 	/// Receive an incoming message from the associated socket. This works by calling `recv`

@@ -12,6 +12,12 @@ constexpr int HEIGHT = 512;
 
 class Cube;
 
+struct PeerData {
+	Colour colour;
+	unsigned long mass;
+	long lastSequenceID;
+};
+
 class GamePlayScene :
 	public Scene
 {
@@ -21,6 +27,10 @@ private:
 	glm::vec2 _lastMousePos;
 	glm::vec3 _lastMouseRay;
 	int _messageSendFreq;
+
+	// This will store the player information during the game.
+	// For a start, we will fill in the initialization info.
+	std::unordered_map<std::string, PeerData> peerDataMap;
 
 	// Structors
 public:
@@ -63,7 +73,8 @@ public:
 	virtual void OnMessage(Message* msg) override;
 
 	void UpdatePeers();
-	void HandleMessage(const NetworkMessageInfo* msg);
+	void HandleMessage(std::string peerID, const NetworkMessageContent& msg);
+	void SendInit(const NetworkMessageInfo* msg);
 
 	// Reset the game
 	void Reset();

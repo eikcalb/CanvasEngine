@@ -206,32 +206,39 @@ void NetworkController::OnMessage(Message* msg) {
 			return;
 		}
 
-		ConnectionMessageInfo* peer = reinterpret_cast<ConnectionMessageInfo*>(connMsg->getData().get());
-		// We lock here to ensure that while reading the connected peer list,
-		// an update does not occur, thereby leading to inconsistent state.
-		std::lock_guard lock(peerMx);
+		{
+			ConnectionMessageInfo* peer = reinterpret_cast<ConnectionMessageInfo*>(connMsg->getData().get());
+			// We lock here to ensure that while reading the connected peer list,
+			// an update does not occur, thereby leading to inconsistent state.
+			std::lock_guard lock(peerMx);
 
-		if (PeerCount() > MAX_PEERS) {
-			OutputDebugString(L"Connection has reached capacity!");
-			peer->conn.reset();
-			return;
+			if (PeerCount() > MAX_PEERS) {
+				OutputDebugString(L"Connection has reached capacity!");
+				peer->conn.reset();
+				return;
+			}
+
+			// Check if the peer already exists.
+			if (peers.count(peer->conn->GetID()) > 0) {
+				OutputDebugString(L"Connection already exists!");
+				peer->conn.reset();
+				return;
+			}
+
+			// Set the socket to non-bloaking.
+			u_long mode = 1;
+			ioctlsocket(peer->conn->GetSocket(), FIONBIO, &mode);
+
+			// We add the new peer to our list of peers.
+			// TODO: use WSAEventSelect to reset a blocking select and listen to this new peer.
+			OutputDebugString(L"New connection received!");
+			peers[peer->conn->GetID()] = peer->conn;
+			peer->conn->Observe(Connection::EVENT_TYPE_CLOSED_CONNECTION, std::shared_ptr<NetworkController>(this));
 		}
-
-		// Check if the peer already exists.
-		if (peers.count(peer->conn->GetID()) > 0) {
-			OutputDebugString(L"Connection already exists!");
-			peer->conn.reset();
-			return;
-		}
-
-		// Set the socket to non-bloaking.
-		u_long mode = 1;
-		ioctlsocket(peer->conn->GetSocket(), FIONBIO, &mode);
-
-		// We add the new peer to our list of peers.
-		// TODO: use WSAEventSelect to reset a blocking select and listen to this new peer.
-		OutputDebugString(L"New connection received!");
-		peers[peer->conn->GetID()] = peer->conn;
+	}
+	else if (msgType == Connection::EVENT_TYPE_CLOSED_CONNECTION) {
+		const auto& nMsg = reinterpret_cast<NetworkMessageInfo*>(msg);
+		peers.erase(nMsg->peerID);
 	}
 	else if (msgType == InputController::EVENT_KEY_INPUT) {
 		const auto& keyMsg = reinterpret_cast<KeyPressMessage*>(msg);
