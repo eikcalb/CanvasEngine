@@ -52,6 +52,12 @@ public:
 	virtual void UpdateCamera() = 0;
 
 	virtual glm::mat2x4 CalculateMouseRay(const int x, const int y, unsigned int width, unsigned int height) = 0;
+	virtual bool IntersectMouseRay(
+		const glm::vec4&,
+		const glm::vec4&,
+		const Vector4& position,
+		const float radius
+	) = 0;
 
 	// Functions
 public:

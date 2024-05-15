@@ -1,7 +1,6 @@
 #include "GamePlayScene.h"
 
 #define WIN32_LEAN_AND_MEAN // Required to prevent winsock/WinSock2 redifinition
-#include <D3Dcommon.h>
 
 #include "Cube.h"
 #include "CameraBehavior.h"
@@ -15,7 +14,7 @@
 // Structors
 /******************************************************************************************************************/
 
-GamePlayScene::GamePlayScene(): _lastMousePos()
+GamePlayScene::GamePlayScene() : _lastMousePos()
 {
 
 }
@@ -39,7 +38,7 @@ void GamePlayScene::Initialise()
 	VoxGame* game = (VoxGame*)Game::TheGame.get();
 	auto voxel = game->GetVoxelCanvas();
 	auto thisShared = std::shared_ptr<GamePlayScene>(this);
-	
+
 	// Setup Camera controls.
 	std::shared_ptr<CameraBehavior> camBehavior = std::make_shared<CameraBehavior>(thisShared);
 	AddBehavior(camBehavior);
@@ -111,26 +110,20 @@ void GamePlayScene::OnMessage(Message* msg)
 		// Check mouse hit.
 		auto isLeftClicked = game->GetInputController()->GetMousePressed(MOUSE_BUTTON::LEFT);
 		if (isLeftClicked) {
-			auto r = game->GetRendererSystem()->GetRenderer();
-			auto ray = r->CalculateMouseRay(mousePos.x, mousePos.y, game->GetWindowWidth(), game->GetWindowHeight());
-			SetMouseRay(glm::vec3(ray[1]));
+			const auto& r = game->GetRendererSystem()->GetRenderer();
+			const auto ray = r->CalculateMouseRay(mousePos.x, mousePos.y, game->GetWindowWidth(), game->GetWindowHeight());
+			const auto& orig = ray[0];
+			const auto& dir = ray[1];
+
+			SetMouseRay(glm::vec3(dir));
 			// Get the cube position.
-			auto pos = _cube->GetPosition();
+			const auto pos = _cube->GetPosition();
 
+			if (r->IntersectMouseRay(orig, dir, pos, _cube->size)) {
+				_cube->SetColor(Colour::Green());
+			}
+			
 			return;
-			//float minX = pos.x() - _cube->size / 2.0f;
-			//float maxX = pos.x() + _cube->size / 2.0f;
-			//float minY = pos.y() - _cube->size / 2.0f;
-			//float maxY = pos.y() + _cube->size / 2.0f;
-			//float minZ = pos.z() - _cube->size / 2.0f;
-			//float maxZ = pos.z() + _cube->size / 2.0f;
-
-			//// Check if the ray intersects with the plane of the front face of the cube
-			//float t = (maxZ - pos.z()) / ray.z;
-			//if (t < 0) {
-			//	return; // Ray is pointing away from the front face
-			//}
-
 			//auto rayOrigin = r->GetCameraPosition()[0];
 			//float intersectionX = rayOrigin.x + t * ray.x;
 			//float intersectionY = rayOrigin.y + t * ray.y;
@@ -159,7 +152,7 @@ void GamePlayScene::Update(double deltaTime)
 
 /// Render current scene
 void GamePlayScene::Render(RenderSystem* renderer)
-{ 
+{
 	const GameState gameState = Game::TheGame->GetGameState();
 
 	const auto& r = renderer->GetRenderer()->GetHud();
@@ -180,7 +173,7 @@ void GamePlayScene::Render(RenderSystem* renderer)
 
 	const std::string mouseLabel = "Mouse Pos: X:" + std::to_string(_lastMousePos.x) + ", Y:" + std::to_string(_lastMousePos.y);
 	r->Label(mouseLabel.c_str());
-	const std::string mouseRayLabel = "Mouse Pos: X:" + std::to_string(_lastMouseRay.x) + ", Y:" + std::to_string(_lastMouseRay.y);
+	const std::string mouseRayLabel = "Mouse Last Ray: X:" + std::to_string(_lastMouseRay.x) + ", Y:" + std::to_string(_lastMouseRay.y);
 	r->Label(mouseRayLabel.c_str());
 }
 

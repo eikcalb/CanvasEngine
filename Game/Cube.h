@@ -16,7 +16,7 @@ protected:
 	bool canRotate = false;
 
 public:
-	const int size = 2;
+	const int size = 1;
 
 	// Structors
 public:

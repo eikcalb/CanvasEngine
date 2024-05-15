@@ -70,6 +70,8 @@ public:
 		_view = DirectX::XMMatrixLookAtLH(_eye, _at, _up);
 	}
 
+	// Get the ray direction in world space
+	// https://www.braynzarsoft.net/viewtutorial/q16390-20-picking
 	// https://stackoverflow.com/questions/39376687/mouse-picking-with-ray-casting-in-directx
 	virtual glm::mat2x4 CalculateMouseRay(const int x, const int y, unsigned int width, unsigned int height) override {
 		auto orig = DirectX::XMVector3Unproject(DirectX::XMVectorSet(x, y, 0,1),
@@ -98,6 +100,61 @@ public:
 		glm::vec4 dirGlm = glm::vec4(DirectX::XMVectorGetX(dest), DirectX::XMVectorGetY(dest), DirectX::XMVectorGetZ(dest), DirectX::XMVectorGetW(dest));
 
 		return glm::mat2x4(origGlm, dirGlm);
+	}
+
+	virtual bool IntersectMouseRay(const glm::vec4& rayOrig, const glm::vec4& rayDir, const Vector4& pos, const float radius) override {
+		// Calculate the minimum and maximum X, Y, and Z coordinates of the cube
+		float minX = pos.x() - radius;
+		float maxX = pos.x() + radius;
+		float minY = pos.y() - radius;
+		float maxY = pos.y() + radius;
+		float minZ = pos.z() - radius;
+		float maxZ = pos.z() + radius;
+
+		// Calculate intersections with each face of the cube
+		float tMin = -std::numeric_limits<float>::infinity();
+		float tMax = std::numeric_limits<float>::infinity();
+
+		for (int i = 0; i < 3; ++i) {
+			if (rayDir[i] != 0.0f) {
+				float t1 = (minX - rayOrig[i]) / rayDir[i];
+				float t2 = (maxX - rayOrig[i]) / rayDir[i];
+
+				tMin = std::max(tMin, std::min(t1, t2));
+				tMax = std::min(tMax, std::max(t1, t2));
+			}
+		}
+
+		for (int i = 0; i < 3; ++i) {
+			if (rayDir[i] != 0.0f) {
+				float t1 = (minY - rayOrig[i]) / rayDir[i];
+				float t2 = (maxY - rayOrig[i]) / rayDir[i];
+
+				tMin = std::max(tMin, std::min(t1, t2));
+				tMax = std::min(tMax, std::max(t1, t2));
+			}
+		}
+
+		for (int i = 0; i < 3; ++i) {
+			if (rayDir[i] != 0.0f) {
+				float t1 = (minZ - rayOrig[i]) / rayDir[i];
+				float t2 = (maxZ - rayOrig[i]) / rayDir[i];
+
+				tMin = std::max(tMin, std::min(t1, t2));
+				tMax = std::min(tMax, std::max(t1, t2));
+			}
+		}
+
+		// Check if the ray intersects with the front face of the cube
+		if (tMin <= tMax) {
+			// Check if the intersection point is in front of the cube
+			//glm::vec4 intersectionPoint = rayOrig + rayDir * tMin;
+			//// Check the z index here for intersection.
+			//if (intersectionPoint.z > pos.z())
+				return true;
+		}
+
+		return false;
 	}
 
 	virtual void ClearScreen() override;

@@ -9,16 +9,16 @@ void CameraBehavior::Update(double deltaTime) {
 	auto camPos = renderer->GetCameraPosition();
 	auto ic = game->GetInputController();
 
-	if (ic->IsKeyPressed(KEYS::A)) {
-		glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), updateTime, right);
-		up = glm::vec3(rotationMatrix * glm::vec4(up, 0.0f));
-		forward = glm::vec3(rotationMatrix * glm::vec4(forward, 0.0f));
-	}
-	else if (ic->IsKeyPressed(KEYS::D)) {
-		glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), -updateTime, right);
-		up = glm::vec3(rotationMatrix * glm::vec4(up, 0.0f));
-		forward = glm::vec3(rotationMatrix * glm::vec4(forward, 0.0f));
-	}
+	//if (ic->IsKeyPressed(KEYS::A)) {
+	//	glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), updateTime, right);
+	//	up = glm::vec3(rotationMatrix * glm::vec4(up, 0.0f));
+	//	forward = glm::vec3(rotationMatrix * glm::vec4(forward, 0.0f));
+	//}
+	//else if (ic->IsKeyPressed(KEYS::D)) {
+	//	glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), -updateTime, right);
+	//	up = glm::vec3(rotationMatrix * glm::vec4(up, 0.0f));
+	//	forward = glm::vec3(rotationMatrix * glm::vec4(forward, 0.0f));
+	//}
 
 	// Camera navigation is courtesy of ChatGPT.
 	// https://chat.openai.com/share/d03c4216-a6f1-46ee-a10a-641bb76cb132
