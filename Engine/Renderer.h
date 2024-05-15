@@ -56,7 +56,8 @@ public:
 		const glm::vec4&,
 		const glm::vec4&,
 		const Vector4& position,
-		const float radius
+		const float size,
+		glm::vec3& destIntersection
 	) = 0;
 
 	// Functions

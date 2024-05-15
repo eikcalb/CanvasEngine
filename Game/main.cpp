@@ -1,7 +1,7 @@
 #include "VoxGame.h"
 
-static const int		SCREEN_WIDTH = 1080;
-static const int		SCREEN_HEIGHT = 712;
+static const int		SCREEN_WIDTH = 1600;
+static const int		SCREEN_HEIGHT = 900;
 
 
 #if BUILD_DIRECTX

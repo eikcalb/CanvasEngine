@@ -99,18 +99,24 @@ public:
 		glm::vec4 origGlm = glm::vec4(DirectX::XMVectorGetX(orig), DirectX::XMVectorGetY(orig), DirectX::XMVectorGetZ(orig), DirectX::XMVectorGetW(orig));
 		glm::vec4 dirGlm = glm::vec4(DirectX::XMVectorGetX(dest), DirectX::XMVectorGetY(dest), DirectX::XMVectorGetZ(dest), DirectX::XMVectorGetW(dest));
 
-		return glm::mat2x4(origGlm, glm::normalize(dirGlm));
-		//return glm::mat2x4(origGlm, dirGlm);
+		//return glm::mat2x4(origGlm, glm::normalize(dirGlm));
+		return glm::mat2x4(origGlm, dirGlm);
 	}
 
 	// https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection.html
-	virtual bool IntersectMouseRay(const glm::vec4& rayOrig, const glm::vec4& rayDir, const Vector4& pos, const float radius) override {
+	virtual bool IntersectMouseRay(
+		const glm::vec4& rayOrig,
+		const glm::vec4& rayDir,
+		const Vector4& pos,
+		const float size,
+		glm::vec3& destIntersection
+	) override {
 		auto normal = glm::vec3(0.0f, 0.0f, 1.0f);
 		auto point = glm::vec3(pos.x(), pos.y(), pos.z());
 		auto rayOrigin = glm::vec3(rayOrig);
 		auto rayDirection = glm::vec3(rayDir);
 
-		float halfSize = radius / 2.0f;
+		float halfSize = size / 2.0f;
 		glm::vec3 squareMin = point - glm::vec3(halfSize, halfSize, 0.0f);
 		glm::vec3 squareMax = point + glm::vec3(halfSize, halfSize, 0.0f);
 
@@ -118,11 +124,11 @@ public:
 		float planeDistance = -glm::dot(normal, point);
 		// Calculate the intersection point between the ray and the plane
 		float t = -(glm::dot(rayOrigin, normal) + planeDistance) / glm::dot(rayDirection, normal);
-		glm::vec3 intersectionPoint = rayOrigin + rayDirection * t;
+		destIntersection = rayOrigin + rayDirection * t;
 
 		// Step 3: Check if the intersection point lies within the bounds of the square
-		if (intersectionPoint.x >= squareMin.x && intersectionPoint.x <= squareMax.x &&
-			intersectionPoint.y >= squareMin.y && intersectionPoint.y <= squareMax.y)
+		if (destIntersection.x >= squareMin.x && destIntersection.x <= squareMax.x &&
+			destIntersection.y >= squareMin.y && destIntersection.y <= squareMax.y)
 		{
 			// The ray intersects with the square
 			return true;

@@ -112,18 +112,31 @@ void GamePlayScene::OnMessage(Message* msg)
 		if (isLeftClicked) {
 			const auto& r = game->GetRendererSystem()->GetRenderer();
 			const auto ray = r->CalculateMouseRay(mousePos.x, mousePos.y, game->GetWindowWidth(), game->GetWindowHeight());
-			const auto& orig = ray[0];
-			const auto& dir = ray[1];
+			const auto rayOrigin = glm::vec3(ray[0]);
+			const auto rayDirection = glm::vec3(ray[1]);
+			const auto normal = glm::vec3(0.0f, 0.0f, 1.0f);
 
-			SetMouseRay(glm::vec3(dir));
+			SetMouseRay(rayDirection);
 			// Get the cube position.
 			auto pos = _cube->GetPosition();
-			//pos.x(dir.x);
-			//pos.y(dir.y);
-			//pos.z(dir.z);
-			//_cube->SetPosition(pos);
+			auto gridCenter = glm::vec3(pos.x() + (VOXEL_WIDTH - 1) * _cube->size, pos.y() + (VOXEL_HEIGHT - 1) * _cube->size, 0);
+			auto gridSize = VOXEL_WIDTH * _cube->size;
 
-			if (r->IntersectMouseRay(orig, dir, pos, _cube->size)) {
+			float planeDistance = -glm::dot(normal, gridCenter);
+			// Check intersection with the larger square
+			float t = -(glm::dot(rayOrigin, normal) + planeDistance) / glm::dot(rayDirection, normal);
+			glm::vec3 intersectionPoint = rayOrigin + rayDirection * t;
+
+			float halfSize = gridSize / 2.0f;
+			glm::vec3 squareMin = gridCenter - glm::vec3(halfSize, halfSize, 0.0f);
+			glm::vec3 squareMax = gridCenter + glm::vec3(halfSize, halfSize, 0.0f);
+
+			// Step 3: Check if the intersection point lies within the bounds of the square
+			auto intersects = intersectionPoint.x >= squareMin.x && intersectionPoint.x <= squareMax.x &&
+				intersectionPoint.y >= squareMin.y && intersectionPoint.y <= squareMax.y;
+
+			// r->IntersectMouseRay(orig, dir, pos, _cube->size)
+			if (intersects) {
 				_cube->SetColor(Colour::Green());
 			}
 			else {
