@@ -3,7 +3,7 @@
 #define WIN32_LEAN_AND_MEAN // Required to prevent winsock/WinSock2 redifinition
 #include <D3Dcommon.h>
 
-#include "cube.h"
+#include "Cube.h"
 #include "CameraBehavior.h"
 #include "Game.h"
 #include "MouseInputMessage.h"
@@ -15,7 +15,7 @@
 // Structors
 /******************************************************************************************************************/
 
-GamePlayScene::GamePlayScene()
+GamePlayScene::GamePlayScene(): _lastMousePos()
 {
 
 }
@@ -49,8 +49,8 @@ void GamePlayScene::Initialise()
 
 	// Create the cube that will be rendered.
 	auto mesh = Game::TheGame->GetMesh("cube");
-	std::shared_ptr<Cube> cube = std::make_shared<Cube>(mesh, VOXEL_AREA);
-	cube->SetCanRotate(false);
+	_cube = std::make_shared<Cube>(mesh, VOXEL_AREA);
+	_cube->SetCanRotate(false);
 
 	// Set the cube to be a generator.
 	GeneratorBufferData base;
@@ -61,9 +61,9 @@ void GamePlayScene::Initialise()
 	base.IsInstanced = TRUE;
 	voxel->Fill(base);
 	//cube->SetColor(userColour);
-	cube->SetGeneratorData(voxel->GetVoxelData());
-	cube->SetShouldUpdateGenerator(true);
-	AddGameObject(cube);
+	_cube->SetGeneratorData(voxel->GetVoxelData());
+	_cube->SetShouldUpdateGenerator(true);
+	AddGameObject(_cube);
 
 	game->SetGameState(GameState::Playing);
 }
@@ -104,10 +104,39 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 void GamePlayScene::OnMessage(Message* msg)
 {
 	if (auto mouse = reinterpret_cast<MouseInputMessage*>(msg)) {
-		// Check mouse hit.
-		auto isLeftClicked = Game::TheGame->GetInputController()->GetMousePressed(MOUSE_BUTTON::LEFT);
-		if (isLeftClicked) {
+		auto& game = Game::TheGame;
+		auto mousePos = mouse->GetPosition();
+		SetMousePos(mousePos);
 
+		// Check mouse hit.
+		auto isLeftClicked = game->GetInputController()->GetMousePressed(MOUSE_BUTTON::LEFT);
+		if (isLeftClicked) {
+			auto r = game->GetRendererSystem()->GetRenderer();
+			auto ray = r->CalculateMouseRay(mousePos.x, mousePos.y, game->GetWindowWidth(), game->GetWindowHeight());
+			SetMouseRay(ray);
+			// Get the cube position.
+			auto pos = _cube->GetPosition();
+
+			return;
+			float minX = pos.x() - _cube->size / 2.0f;
+			float maxX = pos.x() + _cube->size / 2.0f;
+			float minY = pos.y() - _cube->size / 2.0f;
+			float maxY = pos.y() + _cube->size / 2.0f;
+			float minZ = pos.z() - _cube->size / 2.0f;
+			float maxZ = pos.z() + _cube->size / 2.0f;
+
+			// Check if the ray intersects with the plane of the front face of the cube
+			float t = (maxZ - pos.z()) / ray.z;
+			if (t < 0) {
+				return; // Ray is pointing away from the front face
+			}
+
+			auto rayOrigin = r->GetCameraPosition()[0];
+			float intersectionX = rayOrigin.x + t * ray.x;
+			float intersectionY = rayOrigin.y + t * ray.y;
+
+			auto isHit = (intersectionX >= minX && intersectionX <= maxX &&
+				intersectionY >= minY && intersectionY <= maxY);
 		}
 	}
 }
@@ -148,6 +177,11 @@ void GamePlayScene::Render(RenderSystem* renderer)
 	r->Space();
 	r->Space();
 	r->LabelText("User ID", ResourceController::Instance()->GetConfig()->id.c_str());
+
+	const std::string mouseLabel = "Mouse Pos: X:" + std::to_string(_lastMousePos.x) + ", Y:" + std::to_string(_lastMousePos.y);
+	r->Label(mouseLabel.c_str());
+	const std::string mouseRayLabel = "Mouse Pos: X:" + std::to_string(_lastMouseRay.x) + ", Y:" + std::to_string(_lastMouseRay.y);
+	r->Label(mouseRayLabel.c_str());
 }
 
 /******************************************************************************************************************/

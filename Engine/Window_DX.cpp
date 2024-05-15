@@ -22,7 +22,7 @@ Window_DX::Window_DX(int width, int height, HINSTANCE hInstance, int nCmdShow)
 	ZeroMemory(&wc, sizeof(WNDCLASSEX));
 
 	wc.cbSize = sizeof(WNDCLASSEX);
-	wc.style = CS_HREDRAW | CS_VREDRAW;
+	wc.style = CS_HREDRAW | CS_VREDRAW | CS_NOCLOSE;
 	wc.lpfnWndProc = Window_DX::WindowProc;
 	wc.hInstance = hInstance;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
@@ -31,16 +31,16 @@ Window_DX::Window_DX(int width, int height, HINSTANCE hInstance, int nCmdShow)
 	RegisterClassEx(&wc);
 
 	RECT wr = { 0, 0, _width, _height };
-	AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
+	AdjustWindowRectEx(&wr, WS_OVERLAPPEDWINDOW & ~WS_THICKFRAME, FALSE, 0);
 
 	auto appName = Game::TheGame->GetName();
 
-	_hWnd = CreateWindowEx(NULL,
+	_hWnd = CreateWindowEx(WS_EX_TOPMOST,
 		L"WindowClass",
 		std::wstring(appName.begin(), appName.end()).c_str(),
-		WS_OVERLAPPEDWINDOW,
-		0,
-		0,
+		WS_OVERLAPPEDWINDOW | WS_VISIBLE & ~WS_THICKFRAME,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
 		wr.right,
 		wr.bottom,
 		NULL,
@@ -49,6 +49,13 @@ Window_DX::Window_DX(int width, int height, HINSTANCE hInstance, int nCmdShow)
 		NULL);
 
 	ShowWindow(_hWnd, nCmdShow);
+
+	// Get the shown window dimension.
+	RECT clientRect;
+	GetClientRect(_hWnd, &clientRect);
+
+	_width = clientRect.right - clientRect.left;
+	_height = clientRect.bottom - clientRect.top;
 }
 
 /******************************************************************************************************************/

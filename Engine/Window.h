@@ -37,4 +37,3 @@ public:
 public:
 	virtual void Initialise() = 0;
 };
-

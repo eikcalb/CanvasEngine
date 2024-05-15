@@ -206,8 +206,15 @@ void Renderer_DX::Initialise(int width, int height)
 
 	// Initialise shaders
 	InitialiseShaders();
-	InitialiseHud();
 #pragma endregion  DirectX setup
+
+	D3D11_RASTERIZER_DESC rasterizerDesc = {};
+	//rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
+	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+	rasterizerDesc.CullMode = D3D11_CULL_BACK;
+	rasterizerDesc.FrontCounterClockwise = TRUE;
+	_device->CreateRasterizerState(&rasterizerDesc, &_rasterizerState);
+	_context->RSSetState(_rasterizerState);
 
 	_world = DirectX::XMMatrixIdentity();
 	// Initialize the view matrix
@@ -219,14 +226,8 @@ void Renderer_DX::Initialise(int width, int height)
 	_up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	_view = DirectX::XMMatrixLookAtLH(_eye, _at, _up);
 	_proj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, float(width) / (float)height, 0.1f, 100.0f);
-
-	D3D11_RASTERIZER_DESC rasterizerDesc = {};
-	//rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
-	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-	rasterizerDesc.CullMode = D3D11_CULL_BACK;
-	rasterizerDesc.FrontCounterClockwise = TRUE;
-	_device->CreateRasterizerState(&rasterizerDesc, &_rasterizerState);
-	_context->RSSetState(_rasterizerState);
+	
+	InitialiseHud();
 }
 
 /******************************************************************************************************************/

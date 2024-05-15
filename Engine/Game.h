@@ -76,6 +76,9 @@ public:
 	const std::string GetName() const { return _name; }
 	void SetName(const std::string name) { _name = name; }
 
+	int GetWindowWidth();
+	int GetWindowHeight();
+
 	const float GetFPS() const { return _fps; }
 	void SetFPS(float fps) { _fps = fps; }
 

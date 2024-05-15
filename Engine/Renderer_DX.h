@@ -75,21 +75,19 @@ public:
 		float x = (2.0f * x_) / width - 1.0f;
 		float y = 1.0f - (2.0f * y_) / height;
 
-		DirectX::XMFLOAT4X4 proj, view;
-		DirectX::XMStoreFloat4x4(&proj, _proj);
-		DirectX::XMStoreFloat4x4(&view, _view);
+		return glm::vec3(x, y, 0);
 
-		float vx = x * proj._11;
-		float vy = y * proj._22;
+		// Convert NDC to view space
+		//DirectX::XMMATRIX invProjView = DirectX::XMMatrixInverse(nullptr, _proj * _view * _world);
+		//DirectX::XMVECTOR rayOrigin = DirectX::XMVectorSet(x, y, 0.0f, 1.0f); // Near plane
+		//DirectX::XMVECTOR rayDirection = DirectX::XMVectorSet(x, y, 1.0f, 1.0f) - rayOrigin; // Far plane - Near plane
+		//rayOrigin = DirectX::XMVector3TransformCoord(rayOrigin, invProjView);
+		//rayDirection = DirectX::XMVector3TransformNormal(rayDirection, invProjView);
 
-		float invDet = 1.0f / (view._11 * view._22 - view._12 * view._21);
-		float nx = (view._22 * vx - view._12 * vy) * invDet;
-		float ny = (-view._21 * vx + view._11 * vy) * invDet;
+		//// Normalize ray direction
+		//rayDirection = DirectX::XMVector3Normalize(rayDirection);
 
-		DirectX::XMVECTOR rayDir = DirectX::XMVectorSet(nx, ny, -1.0f, 0.0f);
-		auto dir = DirectX::XMVector3Normalize(rayDir);
-
-		return glm::vec3(DirectX::XMVectorGetX(dir), DirectX::XMVectorGetY(dir), DirectX::XMVectorGetZ(dir));
+		//return glm::vec3(DirectX::XMVectorGetX(rayOrigin), DirectX::XMVectorGetY(rayOrigin), DirectX::XMVectorGetZ(rayOrigin));
 	}
 
 	virtual void ClearScreen() override;

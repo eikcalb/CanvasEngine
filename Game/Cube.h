@@ -15,6 +15,9 @@ protected:
 	unsigned short weight = 1;
 	bool canRotate = false;
 
+public:
+	const int size = 2;
+
 	// Structors
 public:
 	Cube(std::shared_ptr<Mesh> mesh, unsigned long count);

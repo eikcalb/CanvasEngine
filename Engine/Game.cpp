@@ -74,6 +74,10 @@ void Game::Initialise(std::shared_ptr<Window> w)
 	_networkController->Start();
 }
 
+int Game::GetWindowHeight() { return _window->_height; }
+
+int Game::GetWindowWidth() { return _window->_width; }
+
 std::shared_ptr<Mesh> Game::GetMesh(std::string name)
 {
 	// Found

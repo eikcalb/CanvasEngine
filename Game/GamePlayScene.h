@@ -7,14 +7,16 @@
 constexpr int WIDTH = 512;
 constexpr int HEIGHT = 512;
 
+class Cube;
+
 class GamePlayScene :
 	public Scene
 {
-	// Constants
-public:
-
 	// Data
-protected:
+private:
+	std::shared_ptr<Cube> _cube;
+	glm::vec2 _lastMousePos;
+	glm::vec3 _lastMouseRay;
 
 	// Structors
 public:
@@ -23,7 +25,17 @@ public:
 
 
 	// Gets/Sets
-public:
+private:
+	void SetMousePos(const glm::vec2& mp) {
+		_lastMousePos.x = mp.x;
+		_lastMousePos.y = mp.y;
+	}
+
+	void SetMouseRay(const glm::vec3& mr) {
+		_lastMouseRay.x = mr.x;
+		_lastMouseRay.y = mr.y;
+		_lastMouseRay.z = mr.y;
+	}
 
 	// Functions
 public:
