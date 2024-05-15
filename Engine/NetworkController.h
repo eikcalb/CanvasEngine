@@ -112,6 +112,8 @@ public:
 		communicationConfig = std::shared_ptr<CommunicationConfig>(commConfig);
 	}
 
+	std::shared_ptr<ConnectionStrategy> GetConnectionStrategy() { return connectionStrategy; }
+
 	void SetConnectionStrategy(ConnectionStrategy* connStrategy) {
 		connectionStrategy = std::shared_ptr<ConnectionStrategy>(connStrategy);
 	}

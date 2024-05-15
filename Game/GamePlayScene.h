@@ -74,7 +74,7 @@ public:
 
 	void UpdatePeers();
 	void HandleMessage(std::string peerID, const NetworkMessageContent& msg);
-	void SendInit(const NetworkMessageInfo* msg);
+	void SendInit(std::shared_ptr<Connection> msg);
 
 	// Reset the game
 	void Reset();

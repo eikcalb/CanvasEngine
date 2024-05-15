@@ -48,7 +48,7 @@ class Connection;
 /// may use a configuration file to connect with peers, while another might
 /// utilize UDP multicast for peer discovery and connectivity.
 /// </summary>
-class ConnectionStrategy : protected ObserverSubject {
+class ConnectionStrategy : public ObserverSubject {
 protected:
 	std::atomic<bool> started = false;
 	ConnectionValidator validator;

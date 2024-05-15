@@ -2,11 +2,12 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 #include "Message.h"
 #include "Observer.h"
 
-typedef std::map<std::string, std::vector<std::shared_ptr<Observer>> > MessageListenerMap;
+typedef std::unordered_map<std::string, std::vector<std::shared_ptr<Observer>>> MessageListenerMap;
 typedef std::map<std::string, std::vector<std::shared_ptr<Observer>> >::iterator MessageListenerMapIterator;
 typedef std::vector<std::shared_ptr<Observer>>::iterator ObserverListIterator;
 

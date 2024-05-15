@@ -56,6 +56,7 @@ void GamePlayScene::Initialise()
 	// Setup Listener.
 	game->GetInputController()->Observe(InputController::EVENT_MOUSE_INPUT, thisShared);
 	game->GetNetworkController()->Observe(NetworkController::EVENT_TYPE_NEW_MESSAGE, thisShared);
+	game->GetNetworkController()->GetConnectionStrategy()->Observe(ConnectionStrategy::EVENT_TYPE_NEW_CONNECTION, thisShared);
 
 	// Create the cube that will be rendered.
 	auto mesh = Game::TheGame->GetMesh("cube");
@@ -98,13 +99,13 @@ void GamePlayScene::HandleMessage(std::string peerID, const NetworkMessageConten
 	}
 }
 
-void GamePlayScene::SendInit(const NetworkMessageInfo* msg){
+void GamePlayScene::SendInit(std::shared_ptr<Connection> conn) {
 	const auto& colour = Game::TheGame->GetResourceController()->GetConfig()->colour;
 	std::string text = "INIT;1;"
 		+ std::to_string(colour.r()) + ","
 		+ std::to_string(colour.g()) + ","
 		+ std::to_string(colour.b());
-	Game::TheGame->GetNetworkController()->SendMessage(Utils::stringToBytes(text));
+	conn->Send(Utils::stringToBytes(text));
 }
 
 /******************************************************************************************************************/
@@ -235,6 +236,7 @@ void GamePlayScene::OnMessage(Message* msg)
 		auto networkMessage = reinterpret_cast<ConnectionMessage*>(msg);
 		const auto conn = networkMessage->GetConnection();
 		conn->Observe(Connection::EVENT_TYPE_CLOSED_CONNECTION, std::shared_ptr<GamePlayScene>(this));
+		SendInit(conn);
 #pragma endregion new connection
 	}
 	else if (type == Connection::EVENT_TYPE_CLOSED_CONNECTION) {

@@ -72,6 +72,7 @@ void Game::Initialise(std::shared_ptr<Window> w)
 	_networkController->SetCommunicationConfig(&cc);
 	_networkController->SetConnectionStrategy(cs);
 	_networkController->Start();
+	cs->Observe(ConnectionStrategy::EVENT_TYPE_NEW_CONNECTION, _networkController);
 	_inputController->Observe(InputController::EVENT_KEY_INPUT, _networkController);
 }
 
