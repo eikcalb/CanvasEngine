@@ -225,7 +225,7 @@ void Renderer_DX::Initialise(int width, int height)
 	_at = DirectX::XMVectorSet(cam[1].r, cam[1].g, cam[1].b, 0.0f);
 	_up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	_view = DirectX::XMMatrixLookAtLH(_eye, _at, _up);
-	_proj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, float(width) / (float)height, 0.1f, 100.0f);
+	_proj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, float(width) / (float)height, 0.1f, 1000.0f);
 	
 	InitialiseHud();
 }

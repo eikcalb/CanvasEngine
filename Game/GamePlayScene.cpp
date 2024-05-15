@@ -117,12 +117,18 @@ void GamePlayScene::OnMessage(Message* msg)
 
 			SetMouseRay(glm::vec3(dir));
 			// Get the cube position.
-			const auto pos = _cube->GetPosition();
+			auto pos = _cube->GetPosition();
+			//pos.x(dir.x);
+			//pos.y(dir.y);
+			//pos.z(dir.z);
+			//_cube->SetPosition(pos);
 
 			if (r->IntersectMouseRay(orig, dir, pos, _cube->size)) {
 				_cube->SetColor(Colour::Green());
 			}
-			
+			else {
+				_cube->SetColor(Colour::Blue());
+			}
 			return;
 			//auto rayOrigin = r->GetCameraPosition()[0];
 			//float intersectionX = rayOrigin.x + t * ray.x;
@@ -131,6 +137,7 @@ void GamePlayScene::OnMessage(Message* msg)
 			//auto isHit = (intersectionX >= minX && intersectionX <= maxX &&
 			//	intersectionY >= minY && intersectionY <= maxY);
 		}
+
 	}
 }
 

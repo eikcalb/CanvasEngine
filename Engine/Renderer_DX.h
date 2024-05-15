@@ -99,61 +99,36 @@ public:
 		glm::vec4 origGlm = glm::vec4(DirectX::XMVectorGetX(orig), DirectX::XMVectorGetY(orig), DirectX::XMVectorGetZ(orig), DirectX::XMVectorGetW(orig));
 		glm::vec4 dirGlm = glm::vec4(DirectX::XMVectorGetX(dest), DirectX::XMVectorGetY(dest), DirectX::XMVectorGetZ(dest), DirectX::XMVectorGetW(dest));
 
-		return glm::mat2x4(origGlm, dirGlm);
+		return glm::mat2x4(origGlm, glm::normalize(dirGlm));
+		//return glm::mat2x4(origGlm, dirGlm);
 	}
 
+	// https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection.html
 	virtual bool IntersectMouseRay(const glm::vec4& rayOrig, const glm::vec4& rayDir, const Vector4& pos, const float radius) override {
-		// Calculate the minimum and maximum X, Y, and Z coordinates of the cube
-		float minX = pos.x() - radius;
-		float maxX = pos.x() + radius;
-		float minY = pos.y() - radius;
-		float maxY = pos.y() + radius;
-		float minZ = pos.z() - radius;
-		float maxZ = pos.z() + radius;
+		auto normal = glm::vec3(0.0f, 0.0f, 1.0f);
+		auto point = glm::vec3(pos.x(), pos.y(), pos.z());
+		auto rayOrigin = glm::vec3(rayOrig);
+		auto rayDirection = glm::vec3(rayDir);
 
-		// Calculate intersections with each face of the cube
-		float tMin = -std::numeric_limits<float>::infinity();
-		float tMax = std::numeric_limits<float>::infinity();
+		float halfSize = radius / 2.0f;
+		glm::vec3 squareMin = point - glm::vec3(halfSize, halfSize, 0.0f);
+		glm::vec3 squareMax = point + glm::vec3(halfSize, halfSize, 0.0f);
 
-		for (int i = 0; i < 3; ++i) {
-			if (rayDir[i] != 0.0f) {
-				float t1 = (minX - rayOrig[i]) / rayDir[i];
-				float t2 = (maxX - rayOrig[i]) / rayDir[i];
+		// Calculate the distance from the origin to the plane
+		float planeDistance = -glm::dot(normal, point);
+		// Calculate the intersection point between the ray and the plane
+		float t = -(glm::dot(rayOrigin, normal) + planeDistance) / glm::dot(rayDirection, normal);
+		glm::vec3 intersectionPoint = rayOrigin + rayDirection * t;
 
-				tMin = std::max(tMin, std::min(t1, t2));
-				tMax = std::min(tMax, std::max(t1, t2));
-			}
+		// Step 3: Check if the intersection point lies within the bounds of the square
+		if (intersectionPoint.x >= squareMin.x && intersectionPoint.x <= squareMax.x &&
+			intersectionPoint.y >= squareMin.y && intersectionPoint.y <= squareMax.y)
+		{
+			// The ray intersects with the square
+			return true;
 		}
 
-		for (int i = 0; i < 3; ++i) {
-			if (rayDir[i] != 0.0f) {
-				float t1 = (minY - rayOrig[i]) / rayDir[i];
-				float t2 = (maxY - rayOrig[i]) / rayDir[i];
-
-				tMin = std::max(tMin, std::min(t1, t2));
-				tMax = std::min(tMax, std::max(t1, t2));
-			}
-		}
-
-		for (int i = 0; i < 3; ++i) {
-			if (rayDir[i] != 0.0f) {
-				float t1 = (minZ - rayOrig[i]) / rayDir[i];
-				float t2 = (maxZ - rayOrig[i]) / rayDir[i];
-
-				tMin = std::max(tMin, std::min(t1, t2));
-				tMax = std::min(tMax, std::max(t1, t2));
-			}
-		}
-
-		// Check if the ray intersects with the front face of the cube
-		if (tMin <= tMax) {
-			// Check if the intersection point is in front of the cube
-			//glm::vec4 intersectionPoint = rayOrig + rayDir * tMin;
-			//// Check the z index here for intersection.
-			//if (intersectionPoint.z > pos.z())
-				return true;
-		}
-
+		// No intersection
 		return false;
 	}
 
