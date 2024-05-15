@@ -70,24 +70,34 @@ public:
 		_view = DirectX::XMMatrixLookAtLH(_eye, _at, _up);
 	}
 
-	virtual glm::vec3 CalculateMouseRay(const int x_, const int y_, unsigned int width, unsigned int height) override {
-		// Convert mouse coordinates to NDC (-1 to 1)
-		float x = (2.0f * x_) / width - 1.0f;
-		float y = 1.0f - (2.0f * y_) / height;
+	// https://stackoverflow.com/questions/39376687/mouse-picking-with-ray-casting-in-directx
+	virtual glm::mat2x4 CalculateMouseRay(const int x, const int y, unsigned int width, unsigned int height) override {
+		auto orig = DirectX::XMVector3Unproject(DirectX::XMVectorSet(x, y, 0,1),
+			0,
+			0,
+			width,
+			height,
+			0,
+			1,
+			_proj,
+			_view,
+			_world);
 
-		return glm::vec3(x, y, 0);
+		auto dest = DirectX::XMVector3Unproject(DirectX::XMVectorSet(x, y, 1, 1),
+			0,
+			0,
+			width,
+			height,
+			0,
+			1,
+			_proj,
+			_view,
+			_world);
 
-		// Convert NDC to view space
-		//DirectX::XMMATRIX invProjView = DirectX::XMMatrixInverse(nullptr, _proj * _view * _world);
-		//DirectX::XMVECTOR rayOrigin = DirectX::XMVectorSet(x, y, 0.0f, 1.0f); // Near plane
-		//DirectX::XMVECTOR rayDirection = DirectX::XMVectorSet(x, y, 1.0f, 1.0f) - rayOrigin; // Far plane - Near plane
-		//rayOrigin = DirectX::XMVector3TransformCoord(rayOrigin, invProjView);
-		//rayDirection = DirectX::XMVector3TransformNormal(rayDirection, invProjView);
+		glm::vec4 origGlm = glm::vec4(DirectX::XMVectorGetX(orig), DirectX::XMVectorGetY(orig), DirectX::XMVectorGetZ(orig), DirectX::XMVectorGetW(orig));
+		glm::vec4 dirGlm = glm::vec4(DirectX::XMVectorGetX(dest), DirectX::XMVectorGetY(dest), DirectX::XMVectorGetZ(dest), DirectX::XMVectorGetW(dest));
 
-		//// Normalize ray direction
-		//rayDirection = DirectX::XMVector3Normalize(rayDirection);
-
-		//return glm::vec3(DirectX::XMVectorGetX(rayOrigin), DirectX::XMVectorGetY(rayOrigin), DirectX::XMVectorGetZ(rayOrigin));
+		return glm::mat2x4(origGlm, dirGlm);
 	}
 
 	virtual void ClearScreen() override;

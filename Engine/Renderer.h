@@ -51,7 +51,7 @@ public:
 
 	virtual void UpdateCamera() = 0;
 
-	virtual glm::vec3 CalculateMouseRay(const int x, const int y, unsigned int width, unsigned int height) = 0;
+	virtual glm::mat2x4 CalculateMouseRay(const int x, const int y, unsigned int width, unsigned int height) = 0;
 
 	// Functions
 public:

@@ -22,8 +22,7 @@ InputController::InputController(): ObserverSubject()
 	//}
 }
 
-// Get the ray direction in world space
-// https://www.braynzarsoft.net/viewtutorial/q16390-20-picking
+
 bool RayIntersectsFrontFaceOfCube(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, const glm::vec3& cubePosition, float cubeSize) {
 	// Compute the minimum and maximum X, Y, and Z values of the cube
 	float minX = cubePosition.x - cubeSize / 2.0f;
@@ -46,25 +45,6 @@ bool RayIntersectsFrontFaceOfCube(const glm::vec3& rayOrigin, const glm::vec3& r
 	// Check if the intersection point is within the bounds of the front face
 	return (intersectionX >= minX && intersectionX <= maxX &&
 		intersectionY >= minY && intersectionY <= maxY);
-}
-const glm::vec4 MouseRay(const glm::mat4& pViewInverse, const glm::mat4& pProjInverse, const float& width, const float& height)
-{
-	// Convert the screen coordinates to normalized device coordinates (NDC)
-	float ndcX = (2.0f * 0) / width - 1.0f;
-	float ndcY = 1.0f - (2.0f * 0) / height;
-
-	auto clipSpacePosition = glm::vec4(ndcX, ndcY, 0.0f, 1.0f);
-
-	//Multiply by inverse projection
-	glm::vec4 position = pProjInverse * clipSpacePosition;
-
-	// Convert view space position to world space
-	position = pViewInverse * position;
-
-	//Normalise to get direction of ray and return
-	auto ray = glm::normalize(position - glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-
-	return ray;
 }
 
 std::shared_ptr<InputController> InputController::Instance()

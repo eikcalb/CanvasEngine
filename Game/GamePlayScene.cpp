@@ -113,30 +113,30 @@ void GamePlayScene::OnMessage(Message* msg)
 		if (isLeftClicked) {
 			auto r = game->GetRendererSystem()->GetRenderer();
 			auto ray = r->CalculateMouseRay(mousePos.x, mousePos.y, game->GetWindowWidth(), game->GetWindowHeight());
-			SetMouseRay(ray);
+			SetMouseRay(glm::vec3(ray[1]));
 			// Get the cube position.
 			auto pos = _cube->GetPosition();
 
 			return;
-			float minX = pos.x() - _cube->size / 2.0f;
-			float maxX = pos.x() + _cube->size / 2.0f;
-			float minY = pos.y() - _cube->size / 2.0f;
-			float maxY = pos.y() + _cube->size / 2.0f;
-			float minZ = pos.z() - _cube->size / 2.0f;
-			float maxZ = pos.z() + _cube->size / 2.0f;
+			//float minX = pos.x() - _cube->size / 2.0f;
+			//float maxX = pos.x() + _cube->size / 2.0f;
+			//float minY = pos.y() - _cube->size / 2.0f;
+			//float maxY = pos.y() + _cube->size / 2.0f;
+			//float minZ = pos.z() - _cube->size / 2.0f;
+			//float maxZ = pos.z() + _cube->size / 2.0f;
 
-			// Check if the ray intersects with the plane of the front face of the cube
-			float t = (maxZ - pos.z()) / ray.z;
-			if (t < 0) {
-				return; // Ray is pointing away from the front face
-			}
+			//// Check if the ray intersects with the plane of the front face of the cube
+			//float t = (maxZ - pos.z()) / ray.z;
+			//if (t < 0) {
+			//	return; // Ray is pointing away from the front face
+			//}
 
-			auto rayOrigin = r->GetCameraPosition()[0];
-			float intersectionX = rayOrigin.x + t * ray.x;
-			float intersectionY = rayOrigin.y + t * ray.y;
+			//auto rayOrigin = r->GetCameraPosition()[0];
+			//float intersectionX = rayOrigin.x + t * ray.x;
+			//float intersectionY = rayOrigin.y + t * ray.y;
 
-			auto isHit = (intersectionX >= minX && intersectionX <= maxX &&
-				intersectionY >= minY && intersectionY <= maxY);
+			//auto isHit = (intersectionX >= minX && intersectionX <= maxX &&
+			//	intersectionY >= minY && intersectionY <= maxY);
 		}
 	}
 }
