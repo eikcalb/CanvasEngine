@@ -190,7 +190,7 @@ protected:
 		}
 
 		// Here we are not doing anything complicated. Instead, we are just converting
-		// the byte sequence to a vector. this vector will be the messaqge received and
+		// the byte sequence to a vector. This vector will be the message received and
 		// the application should not expect more messages.
 		//
 		// This is a simple implementation. If the intention is to confirm messages are

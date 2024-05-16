@@ -98,25 +98,29 @@ const std::vector<byte>& Connection::Receive() {
 			{
 				// Error or connection closed ungracefully.
 				OutputDebugString(L"Receive failed with ");
-				OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
+				OutputDebugString(std::to_wstring(errorCode).c_str());
 				Disconnect();
-				return result;
-				throw std::exception("Connection error with peer!");
+				done = true;
+				break;
+				// throw std::exception("Connection error with peer!");
 			}
 			else {
 				// Nothing left to read, but socket may still be active.
+				done = true;
+				break;
 			}
 		}
 		else if (receiveCount == 0)
 		{
 			// Connection closed by the peer.
 			OutputDebugString(L"Connection gracefully closed with peer.\r\n");
+			Disconnect();
 			done = true;
 			break;
 		}
 
 		sequenceCount++;
-		done = !ParseMessage(receiveCount, result);
+		done = ParseMessage(receiveCount, result);
 	} while (!done);
 
 	ZeroMemory(buffer, BUFFER_SIZE);
