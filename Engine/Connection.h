@@ -11,7 +11,7 @@
 #include "ObserverSubject.h"
 #include "types.h"
 
-constexpr u_short BUFFER_SIZE = 1024 * 80;
+constexpr u_long BUFFER_SIZE = 1024 * 80;
 constexpr u_short MAX_PEERS = 8;
 
 struct PeerDetails{
