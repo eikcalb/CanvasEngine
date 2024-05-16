@@ -137,6 +137,7 @@ public:
 
 	~Connection() {
 		Disconnect();
+		delete[] buffer;
 	}
 
 	inline const std::string GetID() const { return info->id + ":" + std::to_string(info->port); }
