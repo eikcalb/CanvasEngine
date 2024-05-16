@@ -44,7 +44,7 @@ private:
 	std::shared_ptr<ThreadController> mThreadController;
 	std::shared_ptr<ResourceController> mResourceController;
 
-	PeerMap*								peers;
+	PeerMap									peers;
 	std::queue<std::string>					messages;
 	std::queue<std::string>					backlog;
 
@@ -106,7 +106,7 @@ public:
 
 	const float GetActualFPS() const { return _actualfps; }
 
-	const PeerMap& GetPeerMap() const { return *peers; }
+	const PeerMap& GetPeerMap() const { return peers; }
 
 	void SetCommunicationConfig(CommunicationConfig* commConfig) {
 		communicationConfig = std::shared_ptr<CommunicationConfig>(commConfig);

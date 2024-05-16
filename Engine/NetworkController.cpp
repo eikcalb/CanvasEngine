@@ -18,7 +18,7 @@ NetworkController::NetworkController() :
 
 	isAlive = true;
 
-	peers->reserve(MAX_PEERS);
+	peers.reserve(MAX_PEERS);
 
 	// Initialize winsock dll
 	WSADATA wsaData;
@@ -43,7 +43,7 @@ void NetworkController::HandleIncomingMessages()
 
 		FD_ZERO(&readSockets);
 
-		for (const std::pair< std::string, std::shared_ptr<Connection>> peer : *peers) {
+		for (const  std::pair< std::string, std::shared_ptr<Connection>> peer : peers) {
 			// Populate the file descriptor list.
 			FD_SET(peer.second->GetSocket(), &readSockets);
 		}
@@ -82,7 +82,7 @@ void NetworkController::HandleIncomingMessages()
 			continue;
 		}
 
-		for (const auto& peer : *peers) {
+		for (const auto& peer : peers) {
 			Connection* conn = peer.second.get();
 
 			if (FD_ISSET(conn->GetSocket(), &readSockets)) {
@@ -219,7 +219,7 @@ void NetworkController::Start()
 
 int NetworkController::PeerCount()
 {
-	return peers->size();
+	return peers.size();
 }
 
 void NetworkController::OnMessage(Message* msg) {
@@ -247,7 +247,7 @@ void NetworkController::OnMessage(Message* msg) {
 			}
 
 			// Check if the peer already exists.
-			if (peers->count(peer->conn->GetID()) > 0) {
+			if (peers.count(peer->conn->GetID()) > 0) {
 				OutputDebugString(L"Connection already exists!\r\n");
 				peer->conn.reset();
 				return;
@@ -260,7 +260,7 @@ void NetworkController::OnMessage(Message* msg) {
 			// We add the new peer to our list of peers.
 			// TODO: use WSAEventSelect to reset a blocking select and listen to this new peer.
 			OutputDebugString(L"New connection received!\r\n");
-			peers->insert({ peer->conn->GetID(), peer->conn });
+			peers[peer->conn->GetID()] = peer->conn;
 			peer->conn->Observe(Connection::EVENT_TYPE_CLOSED_CONNECTION, std::shared_ptr<NetworkController>(this));
 		}
 	}
@@ -268,7 +268,7 @@ void NetworkController::OnMessage(Message* msg) {
 		std::lock_guard lock(peerMx);
 		auto networkMessage = reinterpret_cast<NetworkMessage*>(msg);
 		const std::string id = networkMessage->GetMessage()->peerID;
-		peers->erase(id);
+		peers.erase(id);
 	}
 	else if (msgType == InputController::EVENT_KEY_INPUT) {
 		const auto& keyMsg = reinterpret_cast<KeyPressMessage*>(msg);
