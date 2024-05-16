@@ -62,28 +62,31 @@ void NetworkController::HandleIncomingMessages()
 			throw std::runtime_error("Failed to read incoming message!");
 		}
 
-		for (auto& peer : GetPeerMap()) {
-			if (FD_ISSET(peer.second->GetSocket(), &readSockets)) {
-				mThreadController->AddTask([&] {
-					// Here, we will fetch the new message and add it to
-					// the message queue.
-					const auto& input = peer.second->Receive();
-					if (input.size() <= 0) {
-						//OutputDebugString(L"Received an empty message\r\n");
-						return;
-					}
+		{
+			std::lock_guard lock(peerMx);
+			for (const auto& peer : GetPeerMap()) {
+				if (FD_ISSET(peer.second->GetSocket(), &readSockets)) {
+					mThreadController->AddTask([&] {
+						// Here, we will fetch the new message and add it to
+						// the message queue.
+						const auto& input = peer.second->Receive();
+						if (input.size() <= 0) {
+							//OutputDebugString(L"Received an empty message\r\n");
+							return;
+						}
 
-					std::lock_guard lock(messageMx);
-					std::shared_ptr<NetworkMessageInfo> nmi = std::make_shared<NetworkMessageInfo>();
-					nmi->message = input;
-					nmi->peerID = peer.second->GetID();
+						std::lock_guard lock(messageMx);
+						std::shared_ptr<NetworkMessageInfo> nmi = std::make_shared<NetworkMessageInfo>();
+						nmi->message = input;
+						nmi->peerID = peer.second->GetID();
 
-					auto newMessage = std::make_shared<NetworkMessage>(nmi, EVENT_TYPE_NEW_MESSAGE);
-					messageQueue.push(newMessage);
-					},
-					TaskType::NETWORK,
-					"NC.HandleIncomingMessages receive message"
-				);
+						auto newMessage = std::make_shared<NetworkMessage>(nmi, EVENT_TYPE_NEW_MESSAGE);
+						messageQueue.push(newMessage);
+						},
+						TaskType::NETWORK,
+						"NC.HandleIncomingMessages receive message"
+					);
+				}
 			}
 		}
 
@@ -209,10 +212,10 @@ void NetworkController::OnMessage(Message* msg) {
 		}
 
 		{
+			std::lock_guard lock(peerMx);
 			ConnectionMessageInfo* peer = reinterpret_cast<ConnectionMessageInfo*>(connMsg->getData().get());
 			// We lock here to ensure that while reading the connected peer list,
 			// an update does not occur, thereby leading to inconsistent state.
-			std::lock_guard lock(peerMx);
 
 			if (PeerCount() > MAX_PEERS) {
 				OutputDebugString(L"Connection has reached capacity!\r\n");
@@ -239,6 +242,7 @@ void NetworkController::OnMessage(Message* msg) {
 		}
 	}
 	else if (msgType == Connection::EVENT_TYPE_CLOSED_CONNECTION) {
+		std::lock_guard lock(peerMx);
 		const auto& nMsg = reinterpret_cast<NetworkMessageInfo*>(msg);
 		peers.erase(nMsg->peerID);
 	}

@@ -104,7 +104,8 @@ void GamePlayScene::SendInit(std::shared_ptr<Connection> conn) {
 	std::string text = "INIT;1;"
 		+ std::to_string(colour.r()) + ","
 		+ std::to_string(colour.g()) + ","
-		+ std::to_string(colour.b());
+		+ std::to_string(colour.b())
+		+ std::to_string(colour.a());
 	conn->Send(Utils::stringToBytes(text));
 }
 
