@@ -3,6 +3,10 @@
 #include "Game.h"
 
 void CameraBehavior::Update(double deltaTime) {
+	if (!_owner->IsAlive()) {
+		return;
+	}
+
 	float updateTime = 100 * deltaTime;
 	const Game *game = Game::TheGame;
 	const auto& renderer = game->GetRendererSystem()->GetRenderer();

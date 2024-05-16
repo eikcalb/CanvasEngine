@@ -24,7 +24,6 @@ GameObject::GameObject(std::string type)
 
 GameObject::~GameObject()
 {
-	End();
 }
 
 /******************************************************************************************************************/
@@ -127,8 +126,7 @@ void GameObject::OnMessage(Message* msg)
 // Shutdown function -- called when object is destroyed (i.e., from destructor)
 void GameObject::End()
 {
-	// Clear behavior list
-	_behaviors.clear();
+
 }
 
 /******************************************************************************************************************/

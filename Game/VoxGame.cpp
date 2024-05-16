@@ -43,14 +43,8 @@ void VoxGame::Initialise()
 		i->second->CreateVBO(_renderer.get());
 	}
 
-	GetThreadController()->AddTask(
-		[&] {
-			_sceneController->PushScene(std::make_shared<GameMenuScene>());
-			//_sceneController->PushScene(std::make_shared<GamePlayScene>());
-		},
-		TaskType::GRAPHICS,
-		"Setup Scenes"
-	);
+	_sceneController->PushScene(std::make_shared<GameMenuScene>());
+	//_sceneController->PushScene(std::make_shared<GamePlayScene>());
 
 	_currentTime = Utils::GetTime();
 }

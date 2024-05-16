@@ -30,87 +30,105 @@ NetworkController::NetworkController() :
 	}
 }
 
-void NetworkController::HandleIncomingMessages(PeerMap* peerMap)
+void NetworkController::HandleIncomingMessages(PeerMap& peerMap)
 {
 	// Here we will select the peer sockets and read their data individually.
 	fd_set readSockets = {};
 
 	do {
-		if (PeerCount() <= 0) {
-			// OutputDebugString(L"No peer connected yet!\r\n");
-			continue;
-		}
+		try {
+			if (PeerCount() <= 0) {
+				// OutputDebugString(L"No peer connected yet!\r\n");
+				continue;
+			}
 
-		FD_ZERO(&readSockets);
+			FD_ZERO(&readSockets);
 
-		for (const auto peer : *peerMap) {
-			// Populate the file descriptor list.
-			FD_SET(peer.second->GetSocket(), &readSockets);
-		}
+			{
+				std::lock_guard<std::mutex> lk(peerMx);
+				for (const auto peerID : toDelete) {
+					peers.erase(peerID.first);
+				}
+				toDelete.clear();
+			}
 
-		int socketCount = select(-1, &readSockets, nullptr, nullptr, nullptr);
-		if (socketCount == SOCKET_ERROR)
-		{
-			int errorCode = WSAGetLastError();
-			OutputDebugString(L"Failed to run select(): ");
-			OutputDebugString(std::to_wstring(errorCode).c_str());
-			OutputDebugString(L"\r\n");
+			for (const auto peer : peerMap) {
+				// Populate the file descriptor list.
+				FD_SET(peer.second->GetSocket(), &readSockets);
+			}
 
-			// Check each socket in the readSockets set
-			for (const auto& peer : GetPeerMap()) {
-				if (FD_ISSET(peer.second->GetSocket(), &readSockets)) {
-					// Check if the socket is still valid
-					int error = 0;
-					socklen_t len = sizeof(error);
-					if (getsockopt(peer.second->GetSocket(), SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&error), &len) == 0) {
-						// The socket is still valid, but select failed for some other reason
-						continue;
-					}
-					else {
-						peer.second->Disconnect();
+			int socketCount = select(-1, &readSockets, nullptr, nullptr, nullptr);
+			if (socketCount == SOCKET_ERROR)
+			{
+				int errorCode = WSAGetLastError();
+				OutputDebugString(L"Failed to run select(): ");
+				OutputDebugString(std::to_wstring(errorCode).c_str());
+				OutputDebugString(L"\r\n");
+
+				// Check each socket in the readSockets set
+				for (const auto& peer : GetPeerMap()) {
+					if (FD_ISSET(peer.second->GetSocket(), &readSockets)) {
+						// Check if the socket is still valid
+						int error = 0;
+						socklen_t len = sizeof(error);
+						if (getsockopt(peer.second->GetSocket(), SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&error), &len) == 0) {
+							// The socket is still valid, but select failed for some other reason
+							continue;
+						}
+						else {
+							peer.second->Disconnect();
+						}
 					}
 				}
+
+				// If the listening socket failed to read, it is probably
+				// a problem of the underlying socket and it should be
+				// handled by the application.
+				// Further processing of the loop or future loops would make
+				// no sense.
+				// However, this tends to indicate that a socket might be dead,
+				// but we are yet to receive an event for it.
+				continue;
 			}
 
-			// If the listening socket failed to read, it is probably
-			// a problem of the underlying socket and it should be
-			// handled by the application.
-			// Further processing of the loop or future loops would make
-			// no sense.
-			// However, this tends to indicate that a socket might be dead,
-			// but we are yet to receive an event for it.
-			continue;
+			if (peerMap.size() <= 0) {
+				continue;
+			}
+
+			for (const auto peer : peerMap) {
+				Connection* conn = peer.second.get();
+
+				if (FD_ISSET(conn->GetSocket(), &readSockets)) {
+					mThreadController->AddTask([&] {
+						// Here, we will fetch the new message and add it to
+						// the message queue.
+						if (!conn) {
+							return;
+						}
+
+						const auto& input = conn->Receive();
+						if (input.size() <= 0) {
+							//OutputDebugString(L"Received an empty message\r\n");
+							return;
+						}
+
+						std::lock_guard lock(messageMx);
+						std::shared_ptr<NetworkMessageInfo> nmi = std::make_shared<NetworkMessageInfo>();
+						nmi->message = input;
+						nmi->peerID = conn->GetID();
+
+						auto newMessage = std::make_shared<NetworkMessage>(nmi, EVENT_TYPE_NEW_MESSAGE);
+						messageQueue.push(newMessage);
+						},
+						TaskType::NETWORK,
+						"NC.HandleIncomingMessages receive message"
+					);
+				}
+			}
 		}
-
-		for (const auto peer : *peerMap) {
-			Connection* conn = peer.second.get();
-
-			if (FD_ISSET(conn->GetSocket(), &readSockets)) {
-				mThreadController->AddTask([&] {
-					// Here, we will fetch the new message and add it to
-					// the message queue.
-					if (!conn) {
-						return;
-					}
-
-					const auto& input = conn->Receive();
-					if (input.size() <= 0) {
-						//OutputDebugString(L"Received an empty message\r\n");
-						return;
-					}
-
-					std::lock_guard lock(messageMx);
-					std::shared_ptr<NetworkMessageInfo> nmi = std::make_shared<NetworkMessageInfo>();
-					nmi->message = input;
-					nmi->peerID = conn->GetID();
-
-					auto newMessage = std::make_shared<NetworkMessage>(nmi, EVENT_TYPE_NEW_MESSAGE);
-					messageQueue.push(newMessage);
-					},
-					TaskType::NETWORK,
-					"NC.HandleIncomingMessages receive message"
-				);
-			}
+		catch (std::exception& e) {
+			// Errors might happen. Ignore them.
+			OutputDebugString(L"Failed to run select(): ");
 		}
 
 	} while (isAlive);
@@ -204,9 +222,8 @@ void NetworkController::Start()
 		);
 	}
 
-	PeerMap* peerMapPtr = &peers;
-	mThreadController->AddTask([&, peerMapPtr] {
-		HandleIncomingMessages(peerMapPtr );
+	mThreadController->AddTask([&] {
+		HandleIncomingMessages(peers);
 		},
 		TaskType::NETWORK, "NC.Start:Handle incoming messages!"
 	);
@@ -268,8 +285,7 @@ void NetworkController::OnMessage(Message* msg) {
 	else if (msgType == Connection::EVENT_TYPE_CLOSED_CONNECTION) {
 		std::lock_guard lock(peerMx);
 		auto networkMessage = reinterpret_cast<NetworkMessage*>(msg);
-		const std::string id = networkMessage->GetMessage()->peerID;
-		peers.erase(id);
+		toDelete[networkMessage->GetMessage()->peerID] = true;
 	}
 	else if (msgType == InputController::EVENT_KEY_INPUT) {
 		const auto& keyMsg = reinterpret_cast<KeyPressMessage*>(msg);

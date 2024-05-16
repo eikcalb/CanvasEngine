@@ -16,7 +16,7 @@ class GameObject;
 /// </summary>
 class Behavior: public Observer
 {
-private:
+protected:
 	std::string _tag;
 	std::shared_ptr<GameObject> _owner;
 public:

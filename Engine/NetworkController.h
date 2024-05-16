@@ -47,6 +47,7 @@ private:
 	PeerMap									peers;
 	std::queue<std::string>					messages;
 	std::queue<std::string>					backlog;
+	std::unordered_map<std::string, bool>	toDelete;
 
 
 	std::shared_ptr<CommunicationConfig> communicationConfig;
@@ -65,7 +66,7 @@ private:
 	//Private constructor for singleton pattern
 	NetworkController();
 
-	void HandleIncomingMessages(PeerMap* peerMap);
+	void HandleIncomingMessages(PeerMap& peerMap);
 	/// <summary>
 	/// In order to prevent continuously waiting on messages for input and output,
 	/// we will utilize a single persistent thread that will only create tasks for

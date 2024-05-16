@@ -82,7 +82,7 @@ void Connection::Disconnect() {
 	);
 	BroadcastMessage(msg);
 	ClearAllListeners();
-	info.reset();
+	//info.reset();
 }
 
 const std::vector<byte>& Connection::Receive() {

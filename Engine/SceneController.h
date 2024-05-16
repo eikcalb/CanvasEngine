@@ -15,7 +15,8 @@ public:
 
 	// Data
 protected:
-	std::stack<std::shared_ptr<Scene>>	_scenes;
+	int									_currentScene;
+	std::vector<std::shared_ptr<Scene>>	_scenes;
 	std::mutex							_sceneMutex;
 
 	// Structors
@@ -30,8 +31,8 @@ public:
 	SceneController& operator=(SceneController const&) = delete;
 
 	std::shared_ptr<Scene> GetCurrentScene()	const {
-		if (!_scenes.empty() && _scenes.size() > 0) {
-			return _scenes.top();
+		if (!_scenes.empty() && _scenes.size() > 0 && _currentScene <= _scenes.size() && _currentScene > 0) {
+			return _scenes[_currentScene - 1];
 		}
 		else {
 			return NULL;
@@ -59,7 +60,10 @@ public:
 	/// Pop the top scene. If no scenes remain, we should quit.
 	void PopScene() {
 		std::lock_guard<std::mutex> lk(_sceneMutex);
-		_scenes.pop();
+		_currentScene--;
+		if (_currentScene <= 0) {
+			_scenes.clear();
+		}
 	}
 
 	/// Push a new scene

@@ -19,13 +19,27 @@
 
 GamePlayScene::GamePlayScene() : _lastMousePos()
 {
+	auto game = reinterpret_cast<VoxGame*>(Game::TheGame);
+	auto thisShared = std::shared_ptr<GamePlayScene>(this);
 
+	// Setup Listener.
+	game->GetInputController()->Observe(InputController::EVENT_MOUSE_INPUT, thisShared);
+	game->GetNetworkController()->Observe(NetworkController::EVENT_TYPE_NEW_MESSAGE, thisShared);
+	game->GetNetworkController()->GetConnectionStrategy()->Observe(ConnectionStrategy::EVENT_TYPE_NEW_CONNECTION, thisShared);
 }
 
 /******************************************************************************************************************/
 
 GamePlayScene::~GamePlayScene()
 {
+	//if (Game::TheGame) {
+	//	auto thisShared = std::shared_ptr<GamePlayScene>(this);
+	//	VoxGame* game = reinterpret_cast<VoxGame*>(Game::TheGame);
+
+	//	game->GetInputController()->UnObserve(InputController::EVENT_MOUSE_INPUT, thisShared);
+	//	//game->GetNetworkController()->UnObserve(NetworkController::EVENT_TYPE_NEW_MESSAGE, thisShared);
+	//	//game->GetNetworkController()->GetConnectionStrategy()->UnObserve(ConnectionStrategy::EVENT_TYPE_NEW_CONNECTION, thisShared);
+	//}
 }
 
 /******************************************************************************************************************/
@@ -36,11 +50,8 @@ void GamePlayScene::Start() {
 
 }
 void GamePlayScene::End() {
-	//if (Game::TheGame) {
-	//	//auto thisShared = std::shared_ptr<GamePlayScene>(this);
-	//	//VoxGame* game = (VoxGame*)Game::TheGame.get();
-	//	//game->GetInputController()->UnObserve(InputController::EVENT_MOUSE_INPUT, thisShared);
-	//}
+
+	SetAlive(false);
 }
 
 void GamePlayScene::Initialise()
@@ -52,11 +63,6 @@ void GamePlayScene::Initialise()
 	// Setup Camera controls.
 	std::shared_ptr<CameraBehavior> camBehavior = std::make_shared<CameraBehavior>(thisShared);
 	AddBehavior(camBehavior);
-
-	// Setup Listener.
-	game->GetInputController()->Observe(InputController::EVENT_MOUSE_INPUT, thisShared);
-	game->GetNetworkController()->Observe(NetworkController::EVENT_TYPE_NEW_MESSAGE, thisShared);
-	game->GetNetworkController()->GetConnectionStrategy()->Observe(ConnectionStrategy::EVENT_TYPE_NEW_CONNECTION, thisShared);
 
 	// Create the cube that will be rendered.
 	auto mesh = Game::TheGame->GetMesh("cube");
@@ -77,6 +83,8 @@ void GamePlayScene::Initialise()
 	AddGameObject(_cube);
 
 	game->SetGameState(GameState::Playing);
+
+	SetAlive(true);
 }
 
 void GamePlayScene::UpdatePeers() {

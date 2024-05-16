@@ -8,6 +8,7 @@
 
 SceneController::SceneController()
 {
+	_scenes.resize(2);
 }
 
 /******************************************************************************************************************/
@@ -96,8 +97,14 @@ void SceneController::PushScene(std::shared_ptr<Scene> s)
 {
 	std::lock_guard<std::mutex> lk(_sceneMutex);
 
-	s->End();
-	_scenes.push(s);
+	auto currentScene = GetCurrentScene();
+	if (currentScene)
+	{
+		currentScene->End();
+	}
+	//s->End();
+	_currentScene++;
+	_scenes[_currentScene - 1] = s;
 	Game::TheGame->GetRendererSystem()->GetRenderer()->ResetCameraPosition();
 	s->Reset();
 	s->Initialise();
