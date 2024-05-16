@@ -62,14 +62,14 @@ void NetworkController::HandleIncomingMessages()
 			throw std::runtime_error("Failed to read incoming message!");
 		}
 
-		for (auto peer : GetPeerMap()) {
+		for (auto& peer : GetPeerMap()) {
 			if (FD_ISSET(peer.second->GetSocket(), &readSockets)) {
 				mThreadController->AddTask([&] {
 					// Here, we will fetch the new message and add it to
 					// the message queue.
 					const auto& input = peer.second->Receive();
 					if (input.size() <= 0) {
-						OutputDebugString(L"Received an empty message\r\n");
+						//OutputDebugString(L"Received an empty message\r\n");
 						return;
 					}
 
