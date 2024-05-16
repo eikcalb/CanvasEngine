@@ -60,7 +60,7 @@ private:
 	IncomingMessagesQueue messageQueue;
 	OutgoingMessagesQueue sendQueue;
 	std::atomic_bool isAlive = false;
-	std::atomic_uint _fps = 30;
+	std::atomic_uint _fps = 20;
 	std::atomic_uint _actualfps = 0;
 
 private:
