@@ -66,7 +66,7 @@ void Connection::Disconnect() {
 
 	auto shutdownResult = shutdown(socket, SD_BOTH);
 	if (shutdownResult == SOCKET_ERROR) {
-		OutputDebugString(L"Failed to shutdown socket.");
+		OutputDebugString(L"Failed to shutdown socket.\r\n");
 	}
 
 	closesocket(socket);
@@ -110,7 +110,7 @@ const std::vector<byte>& Connection::Receive() {
 		else if (receiveCount == 0)
 		{
 			// Connection closed by the peer.
-			OutputDebugString(L"Connection gracefully closed with peer.");
+			OutputDebugString(L"Connection gracefully closed with peer.\r\n");
 			done = true;
 			break;
 		}

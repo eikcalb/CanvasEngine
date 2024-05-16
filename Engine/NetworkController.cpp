@@ -24,8 +24,8 @@ NetworkController::NetworkController() :
 	WORD winsockVersion = MAKEWORD(2, 2);
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != NO_ERROR)
 	{
-		OutputDebugString(L"Failed to initialize Winsock!");
-		OutputDebugString(L"Nothing network-relatred will work for this application!");
+		OutputDebugString(L"Failed to initialize Winsock!\r\n");
+		OutputDebugString(L"Nothing network-relatred will work for this application!\r\n");
 	}
 }
 
@@ -52,6 +52,8 @@ void NetworkController::HandleIncomingMessages()
 		{
 			OutputDebugString(L"Failed to run select()");
 			OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
+			OutputDebugString(L"\r\n");
+
 			// If the listening socket failed to read, it is probably
 			// a problem of the underlying socket and it should be
 			// handled by the application.
@@ -67,7 +69,7 @@ void NetworkController::HandleIncomingMessages()
 					// the message queue.
 					const auto& input = peer.second->Receive();
 					if (input.size() <= 0) {
-						OutputDebugString(L"Received an empty message");
+						OutputDebugString(L"Received an empty message\r\n");
 						return;
 					}
 
@@ -103,7 +105,7 @@ void NetworkController::ProcessMessages() {
 				mThreadController->AddTask([&] {
 					std::lock_guard lock(sendMx);
 
-					OutputDebugString(L"Sending message to peers!");
+					OutputDebugString(L"Sending message to peers!\r\n");
 
 					while (!sendQueue.empty()) {
 						const auto& message = sendQueue.front();
@@ -113,7 +115,7 @@ void NetworkController::ProcessMessages() {
 						sendQueue.pop();
 					}
 
-					OutputDebugString(L"Send succeeded!");
+					OutputDebugString(L"Send succeeded!\r\n");
 					},
 					TaskType::NETWORK,
 					"NC.ProcessMessages:Handle outgoing messages!"
@@ -124,7 +126,7 @@ void NetworkController::ProcessMessages() {
 				mThreadController->AddTask([&] {
 					std::lock_guard lock(messageMx);
 
-					OutputDebugString(L"Reading messages from peers!");
+					OutputDebugString(L"Reading messages from peers!\r\n");
 
 					while (!messageQueue.empty()) {
 						auto& message = messageQueue.front();
@@ -144,11 +146,11 @@ void NetworkController::ProcessMessages() {
 
 void NetworkController::SendMessage(const std::vector<byte> message)
 {
-	OutputDebugString(L"Sending message to peers!");
+	OutputDebugString(L"Sending message to peers!\r\n");
 	for (auto& peerEntry : GetPeerMap()) {
 		peerEntry.second->Send(message);
 	}
-	OutputDebugString(L"Send succeeded!");
+	OutputDebugString(L"Send succeeded!\r\n");
 }
 
 void NetworkController::Start()
@@ -167,7 +169,7 @@ void NetworkController::Start()
 	// trigger the peer connections to read data.
 	// @PersistentThreadCost = 4
 	if (communicationConfig->promiscuous) {
-		OutputDebugString(L"Running in promiscuous mode!");
+		OutputDebugString(L"Running in promiscuous mode!\r\n");
 
 		mThreadController->AddTask([&] {
 			connectionStrategy->Start();
@@ -202,7 +204,7 @@ void NetworkController::OnMessage(Message* msg) {
 		// to our peer list.
 		const auto& connMsg = reinterpret_cast<ConnectionMessage*>(msg);
 		if (!connMsg) {
-			OutputDebugString(L"Invalid peer connection received!");
+			OutputDebugString(L"Invalid peer connection received!\r\n");
 			return;
 		}
 
@@ -213,14 +215,14 @@ void NetworkController::OnMessage(Message* msg) {
 			std::lock_guard lock(peerMx);
 
 			if (PeerCount() > MAX_PEERS) {
-				OutputDebugString(L"Connection has reached capacity!");
+				OutputDebugString(L"Connection has reached capacity!\r\n");
 				peer->conn.reset();
 				return;
 			}
 
 			// Check if the peer already exists.
 			if (peers.count(peer->conn->GetID()) > 0) {
-				OutputDebugString(L"Connection already exists!");
+				OutputDebugString(L"Connection already exists!\r\n");
 				peer->conn.reset();
 				return;
 			}
@@ -231,7 +233,7 @@ void NetworkController::OnMessage(Message* msg) {
 
 			// We add the new peer to our list of peers.
 			// TODO: use WSAEventSelect to reset a blocking select and listen to this new peer.
-			OutputDebugString(L"New connection received!");
+			OutputDebugString(L"New connection received!\r\n");
 			peers[peer->conn->GetID()] = peer->conn;
 			peer->conn->Observe(Connection::EVENT_TYPE_CLOSED_CONNECTION, std::shared_ptr<NetworkController>(this));
 		}

@@ -79,7 +79,7 @@ public:
 	{
 		isAlive = false;
 
-		OutputDebugString(L"Network Terminated!");
+		OutputDebugString(L"Network Terminated!\r\n");
 
 		WSACleanup();
 	}
