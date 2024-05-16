@@ -160,7 +160,7 @@ public:
 	/// scenario, the implementer should return `true` when done and is a signal to allow the
 	/// application exit the `Receive` loop.
 	/// </summary>
-	virtual const std::vector<byte>& Receive();
+	virtual const std::vector<byte> Receive();
 	/// <summary>
 	/// Sends a message to the connection. This is a fire and forget implementation.
 	/// Errors will be communicated, but this connection will not handle the errors

@@ -85,7 +85,7 @@ void Connection::Disconnect() {
 	//info.reset();
 }
 
-const std::vector<byte>& Connection::Receive() {
+const std::vector<byte> Connection::Receive() {
 	bool done = false;
 
 	std::vector<byte> result{};

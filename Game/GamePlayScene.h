@@ -6,6 +6,7 @@
 
 #include "NetworkController.h"
 #include "NetworkMessage.h"
+#include <Utils.h>
 
 constexpr int WIDTH = 512;
 constexpr int HEIGHT = 512;
@@ -16,6 +17,8 @@ struct PeerData {
 	Colour colour;
 	unsigned long mass;
 	long lastSequenceID;
+	long x;
+	long y;
 };
 
 class GamePlayScene :
@@ -51,6 +54,7 @@ private:
 		_lastMouseRay.z = mr.y;
 	}
 
+
 	// Functions
 public:
 
@@ -72,9 +76,12 @@ public:
 
 	virtual void OnMessage(Message* msg) override;
 
-	void UpdatePeers();
+	long UpdatePeers();
 	void HandleMessage(std::string peerID, const NetworkMessageContent& msg);
 	void SendInit(std::shared_ptr<Connection> msg);
+
+	void SendDraw(unsigned int x, unsigned int y);
+	void SendIntegrity(unsigned int on);
 
 	// Reset the game
 	void Reset();

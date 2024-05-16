@@ -34,7 +34,11 @@ protected:
 		try {
 			const auto msgListeners = listeners[msg->GetMessageType()];
 			for (auto& listener : msgListeners) {
-				listener->OnMessage(msg);
+				try {
+					listener->OnMessage(msg);
+				}
+				catch (std::exception& e) {
+				}
 			}
 		}
 		catch (std::exception& e) {

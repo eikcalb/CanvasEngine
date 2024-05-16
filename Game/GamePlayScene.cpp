@@ -94,18 +94,37 @@ void GamePlayScene::UpdatePeers() {
 }
 
 void GamePlayScene::HandleMessage(std::string peerID, const NetworkMessageContent& msg) {
+	auto game = reinterpret_cast<VoxGame*>(Game::TheGame);
+	auto voxel = game->GetVoxelCanvas();
+
 	if (msg.type == MessageType::INIT) {
-		peerDataMap[peerID] = {
-			Colour(msg.content),
-			0, // initial mass is zero as the mass will be calculated when we do an integrity test.
-			msg.sequence
-		};
+		PeerData pd{};
+		pd.colour = Colour(msg.content);
+		pd.mass = 0; // initial mass is zero as the mass will be calculated when we do an integrity test.
+		pd.lastSequenceID = msg.sequence;
+
+		peerDataMap[peerID] = pd;
 	}
 	else if (msg.type == MessageType::DRAW) {
 		// New update from peer. Handlw the draw on canvas.
 	}
 	else if (msg.type == MessageType::INTEGRITY) {
 		// Send my mass to the requestor.
+		auto current = voxel->GetVoxelData();
+
+		const auto state = std::atoi(msg.content.c_str());
+
+		if (state == 1) {
+			// Integrity request. Respond with mass.
+			long response = 0;
+				for (auto i = 0; i < VOXEL_AREA; i++) {
+					if (current[i]._pad0 = 0) {
+
+					}
+				}
+				Game::TheGame->SetGameState(GameState::Validating);
+				SendIntegrity(0);
+		}
 	}
 }
 
@@ -119,6 +138,33 @@ void GamePlayScene::SendInit(std::shared_ptr<Connection> conn) {
 	conn->Send(Utils::stringToBytes(text));
 }
 
+void GamePlayScene::SendDraw(unsigned int x, unsigned int y) {
+	auto game = reinterpret_cast<VoxGame*>(Game::TheGame);
+	const auto& rootMap = game->GetNetworkController()->GetPeerMap();
+
+	std::string text = "DRAW;0;"
+		+ std::to_string(x) + ","
+		+ std::to_string(y);
+
+	// Send to all.
+	for (auto& p : peerDataMap) {
+		std::shared_ptr<Connection> peer = rootMap.at(p.first);
+		peer->Send(Utils::stringToBytes(text));
+	}
+}
+
+void GamePlayScene::SendIntegrity(unsigned int on) {
+	// Integrity check.
+	auto game = reinterpret_cast<VoxGame*>(Game::TheGame);
+	const auto& rootMap = game->GetNetworkController()->GetPeerMap();
+
+	std::string text = "INTEGRITY;0;" + std::to_string(on);
+	// Send to all.
+	for (auto& p : peerDataMap) {
+		std::shared_ptr<Connection> peer = rootMap.at(p.first);
+		peer->Send(Utils::stringToBytes(text));
+	}
+}
 /******************************************************************************************************************/
 
 void GamePlayScene::OnKeyboard(int key, bool down)
@@ -145,24 +191,26 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 		break;
 	case KEYS::M: {
 		// Integrity check.
-			auto game = reinterpret_cast<VoxGame*>(Game::TheGame);
-			auto voxel = game->GetVoxelCanvas();
-			auto current = voxel->GetVoxelData();
+		auto game = reinterpret_cast<VoxGame*>(Game::TheGame);
+		auto voxel = game->GetVoxelCanvas();
+		auto current = voxel->GetVoxelData();
 
 		if (Game::TheGame->GetGameState() == GameState::Validating) {
 			for (auto i = 0; i < VOXEL_AREA; i++) {
 				current[i].IsIntegrityCheck = FALSE;
 			}
 			Game::TheGame->SetGameState(GameState::Playing);
+			SendIntegrity(0);
 		}
 		else if (Game::TheGame->GetGameState() == GameState::Playing) {
 			for (auto i = 0; i < VOXEL_AREA; i++) {
 				current[i].IsIntegrityCheck = TRUE;
 			}
 			Game::TheGame->SetGameState(GameState::Validating);
+			SendIntegrity(1);
 		}
 	}
-		break;
+				break;
 	case KEYS::U:
 	{
 		const auto fps = Game::TheGame->GetFPS();
@@ -201,7 +249,7 @@ void GamePlayScene::OnMessage(Message* msg)
 	const auto& type = msg->GetMessageType();
 	if (type == InputController::EVENT_MOUSE_INPUT)
 	{
-#pragma region keyboard
+#pragma region mouse
 		auto mouse = reinterpret_cast<MouseInputMessage*>(msg);
 		const auto game = Game::TheGame;
 		auto mousePos = mouse->GetPosition();
@@ -219,39 +267,57 @@ void GamePlayScene::OnMessage(Message* msg)
 			SetMouseRay(rayDirection);
 			// Get the cube position.
 			auto pos = _cube->GetPosition();
-			auto gridCenter = glm::vec3(pos.x() + (VOXEL_WIDTH - 1) * _cube->size, pos.y() + (VOXEL_HEIGHT - 1) * _cube->size, 0);
+			auto gridCenter = glm::vec3(-pos.x() + ((VOXEL_WIDTH / 2) - 1) * _cube->size, -pos.y() + ((VOXEL_HEIGHT / 2) - 1) * _cube->size, 0);
 			auto gridSize = VOXEL_WIDTH * _cube->size;
 
-			float planeDistance = -glm::dot(normal, gridCenter);
-			// Check intersection with the larger square
-			float t = -(glm::dot(rayOrigin, normal) + planeDistance) / glm::dot(rayDirection, normal);
-			glm::vec3 intersectionPoint = rayOrigin + rayDirection * t;
+			// Calculate the position of the mouse relative to the center of the square
+			int relativeX = mousePos.x - gridCenter.x;
+			int relativeY = mousePos.y - gridCenter.y;
 
-			float halfSize = gridSize / 2.0f;
-			glm::vec3 squareMin = gridCenter - glm::vec3(halfSize, halfSize, 0.0f);
-			glm::vec3 squareMax = gridCenter + glm::vec3(halfSize, halfSize, 0.0f);
+			// Convert the relative mouse position to grid coordinates
+			int gridX = (relativeX + gridSize / 2) / 2;
+			int gridY = (relativeY + gridSize / 2) / 2;
 
-			// Step 3: Check if the intersection point lies within the bounds of the square
-			auto intersects = intersectionPoint.x >= squareMin.x && intersectionPoint.x <= squareMax.x &&
-				intersectionPoint.y >= squareMin.y && intersectionPoint.y <= squareMax.y;
+			// Calculate the subsquare indices
+			int subSquareX = gridX % gridSize;
+			int subSquareY = gridY % gridSize;
+			auto game = reinterpret_cast<VoxGame*>(Game::TheGame);
+			auto voxel = game->GetVoxelCanvas();
+			auto& target = voxel->GetAt(subSquareX, subSquareY);
+			target.IsTransparent = TRUE;
+			voxel->UpdateAt(subSquareX, subSquareY, target);
+			return;
+
+			//float planeDistance = -glm::dot(normal, gridCenter);
+			//// Check intersection with the larger square
+			//float t = -(glm::dot(rayOrigin, normal) + planeDistance) / glm::dot(rayDirection, normal);
+			//glm::vec3 intersectionPoint = rayOrigin + rayDirection * t;
+
+			//float halfSize = gridSize / 2.0f;
+			//glm::vec3 squareMin = gridCenter - glm::vec3(halfSize, halfSize, 0.0f);
+			//glm::vec3 squareMax = gridCenter + glm::vec3(halfSize, halfSize, 0.0f);
+
+			//// Step 3: Check if the intersection point lies within the bounds of the square
+			//auto intersects = intersectionPoint.x >= squareMin.x && intersectionPoint.x <= squareMax.x &&
+			//	intersectionPoint.y >= squareMin.y && intersectionPoint.y <= squareMax.y;
 
 			// r->IntersectMouseRay(orig, dir, pos, _cube->size)
 			// If there is a hit, we will update the peers and reset update counter.
-			if (intersects) {
-				_cube->SetColor(Colour::Green());
-			}
-			else {
-				_cube->SetColor(Colour::Blue());
-			}
-			return;
-			//auto rayOrigin = r->GetCameraPosition()[0];
-			//float intersectionX = rayOrigin.x + t * ray.x;
-			//float intersectionY = rayOrigin.y + t * ray.y;
+			//if (intersects) {
+			//	_cube->SetColor(Colour::Green());
+			//}
+			//else {
+			//	_cube->SetColor(Colour::Blue());
+			//}
+			//return;
+		//auto rayOrigin = r->GetCameraPosition()[0];
+		//float intersectionX = rayOrigin.x + t * ray.x;
+		//float intersectionY = rayOrigin.y + t * ray.y;
 
-			//auto isHit = (intersectionX >= minX && intersectionX <= maxX &&
-			//	intersectionY >= minY && intersectionY <= maxY);
+		//auto isHit = (intersectionX >= minX && intersectionX <= maxX &&
+		//	intersectionY >= minY && intersectionY <= maxY);
 		}
-#pragma endregion keyboard
+#pragma endregion mouse
 	}
 	else if (type == ConnectionStrategy::EVENT_TYPE_NEW_CONNECTION) {
 #pragma region new connection
@@ -354,6 +420,20 @@ void GamePlayScene::Render(RenderSystem* renderer)
 void GamePlayScene::Reset()
 {
 	__super::Reset();
+	auto game = reinterpret_cast<VoxGame*>(Game::TheGame);
+	auto voxel = game->GetVoxelCanvas();
+	auto current = voxel->GetVoxelData();
+	auto& userColour = game->GetResourceController()->GetConfig()->colour;
+	auto glUC = glm::vec4(userColour.r(), userColour.g(), userColour.b(), userColour.a());
+
+	for (auto i = 0; i < VOXEL_AREA; i++) {
+		current[i].Colour = glUC;
+		current[i].IsIntegrityCheck = FALSE;
+	}
+
+	if (Game::TheGame->GetGameState() == GameState::Validating) {
+		Game::TheGame->SetGameState(GameState::Playing);
+	}
 
 	for (int i = 0; i < (int)_gameObjects.size(); i++)
 	{

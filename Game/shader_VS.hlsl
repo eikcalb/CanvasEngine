@@ -1,5 +1,6 @@
 #define WIDTH 512;
 #define HEIGHT 512;
+
 #pragma enable_d3d11_debug_symbols
 
 struct VOut
@@ -54,7 +55,8 @@ VOut main(float4 position : POSITION, float4 colour : COLOR, uint instanceID : S
 		output.colour = float4(0.4f, 0.4f, 0.4f, 1.0f);
 	}
 	else if(ib.IsTransparent) {
-		output.colour = float4(0.0f, 0.0f, 0.0f, 0.0f);
+		//output.position.y = -512 * 512 * 2;
+		 output.colour = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	}
 
 	return output;
