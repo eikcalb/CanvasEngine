@@ -37,7 +37,6 @@ public:
 			return NULL;
 		}
 	}
-	std::shared_ptr<Game> GetGame() const;
 
 	// Functions
 public:

@@ -11,11 +11,6 @@ class Game;
 // Handles window setup and input
 class Window
 {
-	// Constants and statics
-public:
-	// Singleton (sort of)
-	static std::shared_ptr<Window>	TheWindow;
-
 	// Data
 public:
 	std::shared_ptr<Renderer>	_renderer;

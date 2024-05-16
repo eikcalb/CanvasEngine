@@ -22,7 +22,7 @@ Window_DX::Window_DX(int width, int height, HINSTANCE hInstance, int nCmdShow)
 	ZeroMemory(&wc, sizeof(WNDCLASSEX));
 
 	wc.cbSize = sizeof(WNDCLASSEX);
-	wc.style = CS_HREDRAW | CS_VREDRAW | CS_NOCLOSE;
+	wc.style = CS_HREDRAW | CS_VREDRAW;// | CS_NOCLOSE;
 	wc.lpfnWndProc = Window_DX::WindowProc;
 	wc.hInstance = hInstance;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
@@ -128,33 +128,6 @@ void Window_DX::Initialise()
 	// Initialise DirectX
 	_renderer = std::make_shared<Renderer_DX>(_hWnd);
 	_renderer->Initialise(_width, _height);
-
-	// Setup Game
-	Game::TheGame->Initialise(std::shared_ptr<Window>(this));
-
-	MSG msg;
-	while (!Game::TheGame->GetQuitFlag())
-	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-
-			if (msg.message == WM_QUIT) {
-				Game::TheGame->SetQuitFlag(true);
-				break;
-			}
-		}
-		else {
-			try {
-				Game::TheGame->Run();
-			}
-			catch (std::exception& ex) {
-				std::cout << ex.what() << std::endl;
-				exit(1);
-			}
-		}
-	}
 
 	// Clean up DirectX
 	//_renderer->Destroy();

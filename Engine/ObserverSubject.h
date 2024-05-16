@@ -38,7 +38,6 @@ protected:
 	}
 
 	~ObserverSubject() {
-		listeners.clear();
 	}
 
 public:

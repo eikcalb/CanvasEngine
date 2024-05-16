@@ -20,21 +20,22 @@ Renderer_DX::Renderer_DX(HWND hWnd):
 
 Renderer_DX::~Renderer_DX()
 {
-	delete _swapchain;		// the pointer to the swap chain interface
-	delete _device;			// the pointer to our Direct3D device interface
-	delete _context;		// the pointer to our Direct3D device context
-	delete _backbuffer;		// the pointer to our back buffer
-	delete _layout;			// the pointer to the input layout
-	delete _vertexShader;	// the pointer to the vertex shader
-	delete _pixelShader;	// the pointer to the pixel shader
-	delete _constantBuffer;
+	Destroy();
+	//delete _swapchain;		// the pointer to the swap chain interface
+	//delete _device;			// the pointer to our Direct3D device interface
+	//delete _context;		// the pointer to our Direct3D device context
+	//delete _backbuffer;		// the pointer to our back buffer
+	//delete _layout;			// the pointer to the input layout
+	//delete _vertexShader;	// the pointer to the vertex shader
+	//delete _pixelShader;	// the pointer to the pixel shader
+	//delete _constantBuffer;
 
-	delete _indexBuffer;
-	delete _constantBuffer;
-	delete _rasterizerState;
+	//delete _indexBuffer;
+	//delete _constantBuffer;
+	//delete _rasterizerState;
 
-	delete _depthStencil;
-	delete _depthStencilView;
+	//delete _depthStencil;
+	//delete _depthStencilView;
 }
 
 /******************************************************************************************************************/
@@ -61,9 +62,9 @@ void Renderer_DX::Destroy()
 	_rasterizerState->Release();
 	_context->Release();
 
-	if (_indexBuffer) {
-		_indexBuffer->Release();
-	}
+	//if (_indexBuffer) {
+	//	_indexBuffer->Release();
+	//}
 
 	if (_depthStencil) {
 		_depthStencil->Release();

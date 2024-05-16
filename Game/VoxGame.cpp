@@ -14,15 +14,16 @@ VoxGame::VoxGame() : Game("Voxel Game")
 
 VoxGame::~VoxGame()
 {
+	_sceneController.reset();
 	delete _voxel;
 }
 
 /******************************************************************************************************************/
 
-void VoxGame::Initialise(std::shared_ptr<Window> w)
+void VoxGame::Initialise()
 {
 	// Initialise parent
-	Game::Initialise(w);
+	Game::Initialise();
 
 	//////////////
 	// Setup Meshes

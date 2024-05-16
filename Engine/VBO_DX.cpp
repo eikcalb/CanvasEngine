@@ -15,8 +15,12 @@ VBO_DX::VBO_DX()
 
 VBO_DX::~VBO_DX()
 {
-	_idx->Release();
-	_vbo->Release();
+	if (_idx) {
+		_idx->Release();
+	}
+	if (_vbo) {
+		_vbo->Release();
+	}
 	if (_ins) {
 		_ins->Release();
 	}

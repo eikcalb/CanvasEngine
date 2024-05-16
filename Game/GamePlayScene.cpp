@@ -45,7 +45,7 @@ void GamePlayScene::End() {
 
 void GamePlayScene::Initialise()
 {
-	VoxGame* game = (VoxGame*)Game::TheGame.get();
+	auto game = reinterpret_cast<VoxGame*>(Game::TheGame);
 	auto voxel = game->GetVoxelCanvas();
 	auto thisShared = std::shared_ptr<GamePlayScene>(this);
 
@@ -182,7 +182,7 @@ void GamePlayScene::OnMessage(Message* msg)
 	{
 #pragma region keyboard
 		auto mouse = reinterpret_cast<MouseInputMessage*>(msg);
-		auto& game = Game::TheGame;
+		const auto game = Game::TheGame;
 		auto mousePos = mouse->GetPosition();
 		SetMousePos(mousePos);
 
@@ -258,7 +258,7 @@ void GamePlayScene::OnMessage(Message* msg)
 /// Update current scene
 void GamePlayScene::Update(double deltaTime)
 {
-	auto& game = Game::TheGame;
+	const auto game = Game::TheGame;
 	const GameState gameState = game->GetGameState();
 	if (gameState == GameState::Paused) {
 		return;
@@ -333,7 +333,7 @@ void GamePlayScene::Reset()
 		_gameObjects[i]->Reset();
 	}
 
-	auto _voxel = ((VoxGame*)Game::TheGame.get())->GetVoxelCanvas();
+	auto _voxel = (reinterpret_cast<VoxGame*>(Game::TheGame))->GetVoxelCanvas();
 	if (_voxel) {
 		_voxel->Reset();
 	}

@@ -4,7 +4,7 @@
 
 void CameraBehavior::Update(double deltaTime) {
 	float updateTime = 100 * deltaTime;
-	auto& game = Game::TheGame;
+	const Game *game = Game::TheGame;
 	const auto& renderer = game->GetRendererSystem()->GetRenderer();
 	auto camPos = renderer->GetCameraPosition();
 	auto ic = game->GetInputController();

@@ -28,5 +28,5 @@ bool Task::IsDone()
 
 void Task::CleanUpTask()
 {
-	delete this;
+	//delete this;
 }

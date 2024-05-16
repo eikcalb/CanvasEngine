@@ -62,31 +62,28 @@ void NetworkController::HandleIncomingMessages()
 			throw std::runtime_error("Failed to read incoming message!");
 		}
 
-		{
-			std::lock_guard lock(peerMx);
-			for (const auto& peer : GetPeerMap()) {
-				if (FD_ISSET(peer.second->GetSocket(), &readSockets)) {
-					mThreadController->AddTask([&] {
-						// Here, we will fetch the new message and add it to
-						// the message queue.
-						const auto& input = peer.second->Receive();
-						if (input.size() <= 0) {
-							//OutputDebugString(L"Received an empty message\r\n");
-							return;
-						}
+		for (const auto& peer : GetPeerMap()) {
+			if (FD_ISSET(peer.second->GetSocket(), &readSockets)) {
+				mThreadController->AddTask([&] {
+					// Here, we will fetch the new message and add it to
+					// the message queue.
+					const auto& input = peer.second->Receive();
+					if (input.size() <= 0) {
+						//OutputDebugString(L"Received an empty message\r\n");
+						return;
+					}
 
-						std::lock_guard lock(messageMx);
-						std::shared_ptr<NetworkMessageInfo> nmi = std::make_shared<NetworkMessageInfo>();
-						nmi->message = input;
-						nmi->peerID = peer.second->GetID();
+					std::lock_guard lock(messageMx);
+					std::shared_ptr<NetworkMessageInfo> nmi = std::make_shared<NetworkMessageInfo>();
+					nmi->message = input;
+					nmi->peerID = peer.second->GetID();
 
-						auto newMessage = std::make_shared<NetworkMessage>(nmi, EVENT_TYPE_NEW_MESSAGE);
-						messageQueue.push(newMessage);
-						},
-						TaskType::NETWORK,
-						"NC.HandleIncomingMessages receive message"
-					);
-				}
+					auto newMessage = std::make_shared<NetworkMessage>(nmi, EVENT_TYPE_NEW_MESSAGE);
+					messageQueue.push(newMessage);
+					},
+					TaskType::NETWORK,
+					"NC.HandleIncomingMessages receive message"
+				);
 			}
 		}
 
@@ -101,7 +98,7 @@ void NetworkController::ProcessMessages() {
 	double start = Utils::GetTime();
 	do {
 		auto now = Utils::GetTime();
-		auto dt =  now - start;
+		auto dt = now - start;
 
 		if (dt >= 1.0 / _fps) {
 			if (sendQueue.size() > 0) {

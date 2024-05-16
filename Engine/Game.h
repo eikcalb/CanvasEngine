@@ -41,7 +41,7 @@ enum class GameState
 class Game : ObserverSubject
 {
 public:
-	static std::shared_ptr<Game> TheGame;
+	static Game* TheGame;
 
 protected:
 	std::string							_name;
@@ -113,7 +113,7 @@ public:
 	std::vector<std::shared_ptr<GameObject>>& GetGameObjects() { return _sceneController->GetGameObjects(); }
 
 	// Initialise game
-	virtual void Initialise(std::shared_ptr<Window> w);
+	virtual void Initialise();
 
 	// Keyboard input
 	virtual void OnKeyboard(int key, bool down);

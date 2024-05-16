@@ -20,10 +20,6 @@ SceneController::~SceneController()
 // Functions
 /******************************************************************************************************************/
 
-std::shared_ptr<Game> SceneController::GetGame() const { return Game::TheGame; }
-
-/******************************************************************************************************************/
-
 void SceneController::AddGameObject(std::shared_ptr<GameObject> obj)
 {
 	auto currentScene = GetCurrentScene();

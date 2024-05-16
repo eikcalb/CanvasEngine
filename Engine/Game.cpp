@@ -7,7 +7,7 @@
 #include "NetworkController.h"
 #include "TCPConnection.h"
 
-std::shared_ptr<Game> Game::TheGame = nullptr;
+Game* Game::TheGame = nullptr;
 
 /******************************************************************************************************************/
 
@@ -18,7 +18,7 @@ Game::Game()
 
 	SetGameState(GameState::MainMenu);
 
-	TheGame = std::shared_ptr<Game>(this);
+	TheGame = this;
 
 	_renderSystem = std::make_shared<RenderSystem>();
 
@@ -36,6 +36,13 @@ Game::Game()
 
 Game::~Game()
 {
+	_threadController.reset();
+	_renderSystem.reset();
+	_window.reset();
+	_networkController.reset();
+	_sceneController.reset();
+	_inputController.reset();
+	_resourceController.reset();
 	// TODO: Need to fix this memory leak preventing smooth cleanup on shutdown
 
 	//for (MeshMapIterator i = _meshes.begin();
@@ -44,14 +51,14 @@ Game::~Game()
 	//{
 	//	i->second.reset();
 	//}
+	TheGame = nullptr;
 }
 
 /******************************************************************************************************************/
 
-void Game::Initialise(std::shared_ptr<Window> w)
+void Game::Initialise()
 {
-	_window = w;
-	_renderer = w->GetRenderer();
+	_renderer = _window->GetRenderer();
 	_renderSystem->SetRenderer(_renderer);
 
 	// Initialize network.
