@@ -241,8 +241,8 @@ void GamePlayScene::OnMessage(Message* msg)
 #pragma endregion new connection
 	}
 	else if (type == Connection::EVENT_TYPE_CLOSED_CONNECTION) {
-		const auto& nMsg = reinterpret_cast<NetworkMessageInfo*>(msg);
-		peerDataMap.erase(nMsg->peerID);
+		const auto& nMsg = reinterpret_cast<NetworkMessage*>(msg);
+		peerDataMap.erase(nMsg->GetMessage()->peerID);
 	}
 	else if (type == NetworkController::EVENT_TYPE_NEW_MESSAGE) {
 #pragma region new message

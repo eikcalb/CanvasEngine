@@ -50,16 +50,35 @@ void NetworkController::HandleIncomingMessages()
 		int socketCount = select(-1, &readSockets, nullptr, nullptr, nullptr);
 		if (socketCount == SOCKET_ERROR)
 		{
-			OutputDebugString(L"Failed to run select()");
-			OutputDebugString(std::to_wstring(WSAGetLastError()).c_str());
+			int errorCode = WSAGetLastError();
+			OutputDebugString(L"Failed to run select(): ");
+			OutputDebugString(std::to_wstring(errorCode).c_str());
 			OutputDebugString(L"\r\n");
+
+			// Check each socket in the readSockets set
+			for (const auto& peer : GetPeerMap()) {
+				if (FD_ISSET(peer.second->GetSocket(), &readSockets)) {
+					// Check if the socket is still valid
+					int error = 0;
+					socklen_t len = sizeof(error);
+					if (getsockopt(peer.second->GetSocket(), SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&error), &len) == 0) {
+						// The socket is still valid, but select failed for some other reason
+						continue;
+					}
+					else {
+						peer.second->Disconnect();
+					}
+				}
+			}
 
 			// If the listening socket failed to read, it is probably
 			// a problem of the underlying socket and it should be
 			// handled by the application.
 			// Further processing of the loop or future loops would make
 			// no sense.
-			throw std::runtime_error("Failed to read incoming message!");
+			// However, this tends to indicate that a socket might be dead,
+			// but we are yet to receive an event for it.
+			continue;
 		}
 
 		for (const auto& peer : GetPeerMap()) {
