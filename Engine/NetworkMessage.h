@@ -25,7 +25,6 @@ struct NetworkMessageContent {
 
 class NetworkMessage : public Message
 {
-protected:
 public:
 	NetworkMessage(std::shared_ptr<NetworkMessageInfo> details, std::string type)
 		: Message(details, type)

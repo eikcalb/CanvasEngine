@@ -1,5 +1,6 @@
 #include "NetworkController.h"
 
+#include "NetworkMessage.h"
 #include "KeyPressMessage.h"
 #include "Utils.h"
 
@@ -259,8 +260,9 @@ void NetworkController::OnMessage(Message* msg) {
 	}
 	else if (msgType == Connection::EVENT_TYPE_CLOSED_CONNECTION) {
 		std::lock_guard lock(peerMx);
-		const auto& nMsg = reinterpret_cast<NetworkMessageInfo*>(msg);
-		peers.erase(nMsg->peerID);
+		auto networkMessage = reinterpret_cast<NetworkMessage*>(msg);
+		auto id = networkMessage->GetMessage()->peerID;
+		peers.erase(id);
 	}
 	else if (msgType == InputController::EVENT_KEY_INPUT) {
 		const auto& keyMsg = reinterpret_cast<KeyPressMessage*>(msg);
