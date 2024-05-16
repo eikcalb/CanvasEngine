@@ -310,13 +310,13 @@ void GamePlayScene::Render(RenderSystem* renderer)
 
 	const std::string mouseLabel = "Mouse Pos: X:" + std::to_string(_lastMousePos.x) + ", Y:" + std::to_string(_lastMousePos.y);
 	r->Label(mouseLabel.c_str());
-	//const std::string mouseRayLabel = "Mouse Last Ray: X:" + std::to_string(_lastMouseRay.x) + ", Y:" + std::to_string(_lastMouseRay.y);
-	//r->Label(mouseRayLabel.c_str());
+	const std::string mouseRayLabel = "Mouse Last Ray: X:" + std::to_string(_lastMouseRay.x) + ", Y:" + std::to_string(_lastMouseRay.y);
+	r->Label(mouseRayLabel.c_str());
 
 	r->Space();
 	r->Space();
-	const std::string mouseRayLabel = "Player Count: " + std::to_string(Game::TheGame->GetNetworkController()->PeerCount() + 1);
-	r->Label(mouseRayLabel.c_str());
+	const std::string playerCountLabel = "Player Count: " + std::to_string(Game::TheGame->GetNetworkController()->PeerCount() + 1);
+	r->Label(playerCountLabel.c_str());
 	//The total mass of voxels on the current PC
 	//The actual mass of voxels across all PCs
 	//The starting mass of voxels across all PCs
