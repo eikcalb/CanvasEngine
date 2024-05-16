@@ -63,6 +63,9 @@ private:
 	std::atomic_uint _fps = 30;
 	std::atomic_uint _actualfps = 0;
 
+private:
+	bool started;
+
 	//Private constructor for singleton pattern
 	NetworkController();
 

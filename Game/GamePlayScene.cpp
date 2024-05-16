@@ -26,6 +26,8 @@ GamePlayScene::GamePlayScene() : _lastMousePos()
 	game->GetInputController()->Observe(InputController::EVENT_MOUSE_INPUT, thisShared);
 	game->GetNetworkController()->Observe(NetworkController::EVENT_TYPE_NEW_MESSAGE, thisShared);
 	game->GetNetworkController()->GetConnectionStrategy()->Observe(ConnectionStrategy::EVENT_TYPE_NEW_CONNECTION, thisShared);
+
+	game->GetNetworkController()->Start();
 }
 
 /******************************************************************************************************************/

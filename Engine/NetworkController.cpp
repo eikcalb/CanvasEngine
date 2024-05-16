@@ -199,6 +199,12 @@ void NetworkController::SendMessage(const std::vector<byte> message)
 
 void NetworkController::Start()
 {
+	if (started) {
+		return;
+	}
+
+	started = true;
+
 	// Start the  network controller by connecting to peers and listening
 	// for messages.
 	// @PersistentThreadCost = 1
