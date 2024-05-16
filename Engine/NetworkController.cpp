@@ -205,7 +205,7 @@ void NetworkController::Start()
 	}
 
 	PeerMap* peerMapPtr = &peers;
-	mThreadController->AddTask([&] {
+	mThreadController->AddTask([&, peerMapPtr] {
 		HandleIncomingMessages(peerMapPtr );
 		},
 		TaskType::NETWORK, "NC.Start:Handle incoming messages!"

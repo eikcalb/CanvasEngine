@@ -45,8 +45,8 @@ void VoxGame::Initialise()
 
 	GetThreadController()->AddTask(
 		[&] {
-			//_sceneController->PushScene(std::make_shared<GameMenuScene>());
-			_sceneController->PushScene(std::make_shared<GamePlayScene>());
+			_sceneController->PushScene(std::make_shared<GameMenuScene>());
+			//_sceneController->PushScene(std::make_shared<GamePlayScene>());
 		},
 		TaskType::GRAPHICS,
 		"Setup Scenes"
