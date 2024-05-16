@@ -41,8 +41,8 @@ VOut main(float4 position : POSITION, float4 colour : COLOR, uint instanceID : S
 	float heightRatio = instanceID / WIDTH;
 	uint y = floor(heightRatio);
 	uint x = instanceID % WIDTH;
-	position.x += x * 2;
-	position.y += y * 2;
+	position.x += x;
+	position.y += y;
 	
 
 	output.position = mul( position, World );
