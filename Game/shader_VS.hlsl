@@ -48,7 +48,14 @@ VOut main(float4 position : POSITION, float4 colour : COLOR, uint instanceID : S
 	output.position = mul( position, World );
 	output.position = mul( output.position, View );
 	output.position = mul( output.position, Projection );
-	output.colour = colour + ib.Colour;
+	output.colour =  ib.Colour;
+
+	if (ib.IsIntegrityCheck) {
+		output.colour = float4(0.4f, 0.4f, 0.4f, 1.0f);
+	}
+	else if(ib.IsTransparent) {
+		output.colour = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	}
 
 	return output;
 }

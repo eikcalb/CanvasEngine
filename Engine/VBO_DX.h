@@ -21,6 +21,8 @@ protected:
 
 	ID3D11ShaderResourceView* _srv;
 
+	unsigned int _stride;
+
 	// Structors
 public:
 	VBO_DX();

@@ -86,6 +86,7 @@ void VBO_DX::Create(
 	if (stride <= 0) {
 		return;
 	}
+	_stride = stride;
 
 	D3D11_BUFFER_DESC instanceBufferDesc{};
 	ZeroMemory(&instanceBufferDesc, sizeof(D3D11_BUFFER_DESC));
@@ -146,8 +147,25 @@ void VBO_DX::Draw(Renderer* renderer, const std::shared_ptr<VBOInstanceData> ins
 		// a constant buffer cannot be more than 64kb, hence it is limited for the purpose of a
 		// generator. Instead, we will utilize a structured buffer.
 		if (instanceData->shouldUpdate) {
+			ID3D11Resource* res;
+			_srv->GetResource(&res);
+			D3D11_MAPPED_SUBRESOURCE mappedResource;
+			HRESULT hr = rendererDX->GetContext()->Map(res, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+			if (FAILED(hr))
+			{
+				// Handle error
+				return;
+			}
+
+			// Step 3: Copy data into the mapped memory
+			memcpy(mappedResource.pData, instanceData->data, _stride * count);
+
+			// Step 4: Unmap the resource
+			rendererDX->GetContext()->Unmap(res, 0);
+			res->Release();
+
 			// TODO: Doesn't seem to work. Perhaps try using mapped resource instead!!!!!
-			rendererDX->GetContext()->UpdateSubresource(_ins, 0, nullptr, instanceData->data, 0, 0);
+			//rendererDX->GetContext()->UpdateSubresource(_ins, 0, nullptr, instanceData->data, 0, 0);
 			// After updating the shader resource, it is automatically set to pause update until
 			// the application up[dates it again.
 			//instanceData->shouldUpdate = false;

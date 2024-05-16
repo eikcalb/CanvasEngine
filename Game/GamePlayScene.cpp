@@ -79,7 +79,7 @@ void GamePlayScene::Initialise()
 	base.IsTransparent = FALSE;
 	base.IsIntegrityCheck = FALSE;
 	voxel->Fill(base);
-	_cube->SetColor(userColour);
+	//_cube->SetColor(userColour);
 	_cube->SetGeneratorData(voxel->GetVoxelData());
 	_cube->SetShouldUpdateGenerator(true);
 	AddGameObject(_cube);
@@ -143,14 +143,25 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 	case KEYS::Escape: // Escape
 		SceneController::Instance()->PopScene();
 		break;
-	case KEYS::M:
+	case KEYS::M: {
 		// Integrity check.
+			auto game = reinterpret_cast<VoxGame*>(Game::TheGame);
+			auto voxel = game->GetVoxelCanvas();
+			auto current = voxel->GetVoxelData();
+
 		if (Game::TheGame->GetGameState() == GameState::Validating) {
+			for (auto i = 0; i < VOXEL_AREA; i++) {
+				current[i].IsIntegrityCheck = FALSE;
+			}
 			Game::TheGame->SetGameState(GameState::Playing);
 		}
 		else if (Game::TheGame->GetGameState() == GameState::Playing) {
+			for (auto i = 0; i < VOXEL_AREA; i++) {
+				current[i].IsIntegrityCheck = TRUE;
+			}
 			Game::TheGame->SetGameState(GameState::Validating);
 		}
+	}
 		break;
 	case KEYS::U:
 	{
@@ -270,7 +281,7 @@ void GamePlayScene::Update(double deltaTime)
 {
 	const auto game = Game::TheGame;
 	const GameState gameState = game->GetGameState();
-	if (gameState == GameState::Paused) {
+	if (gameState == GameState::Paused || gameState == GameState::Validating) {
 		return;
 	}
 
@@ -320,8 +331,14 @@ void GamePlayScene::Render(RenderSystem* renderer)
 	const std::string playerCountLabel = "Player Count: " + std::to_string(Game::TheGame->GetNetworkController()->PeerCount() + 1);
 	r->Label(playerCountLabel.c_str());
 	//The total mass of voxels on the current PC
+	const std::string voxMassLabel = "Total Mass: " + std::to_string(VOXEL_AREA);
+	r->Label(voxMassLabel.c_str());
 	//The actual mass of voxels across all PCs
+	const std::string voxMassAllLabel = "Total Mass All: " + std::to_string(VOXEL_AREA * (Game::TheGame->GetNetworkController()->PeerCount() + 1));
+	r->Label(voxMassAllLabel.c_str());
 	//The starting mass of voxels across all PCs
+	const std::string voxMassAllStartLabel = "Total Mass All Start: " + std::to_string(VOXEL_AREA * (Game::TheGame->GetNetworkController()->PeerCount() + 1));
+	r->Label(voxMassAllStartLabel.c_str());
 	const std::string fpsTargetLabel = "Graphics Target FPS: " + std::to_string(Game::TheGame->GetFPS());
 	r->Label(fpsTargetLabel.c_str());
 	const std::string fpsActualLabel = "Graphics Actual FPS: " + std::to_string(Game::TheGame->GetActualFPS());
