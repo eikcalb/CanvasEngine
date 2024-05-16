@@ -1,6 +1,7 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN // Required to prevent winsock/WinSock2 redifinition
 
+#include <chrono>
 #include <string>
 #include <windows.h>
 
@@ -41,12 +42,10 @@ namespace Utils {
 		return message;
 	}
 
-	static inline double GetTime()
-	{
-		LARGE_INTEGER frequency, currentTime;
-		QueryPerformanceFrequency(&frequency);
-		QueryPerformanceCounter(&currentTime);
-		return double(currentTime.QuadPart) / double(frequency.QuadPart);
+	static inline double GetTime() {
+		auto now = std::chrono::high_resolution_clock::now();
+		auto duration = now.time_since_epoch();
+		return std::chrono::duration_cast<std::chrono::duration<double>>(duration).count();
 	}
 
 	static inline std::vector<byte> stringToBytes(const std::string& str) {

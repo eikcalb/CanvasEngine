@@ -31,9 +31,13 @@ protected:
 
 	// Message handler (called when message occurs)
 	void BroadcastMessage(Message* msg) {
-		const auto msgListeners = listeners[msg->GetMessageType()];
-		for (auto& listener : msgListeners) {
-			listener->OnMessage(msg);
+		try {
+			const auto msgListeners = listeners[msg->GetMessageType()];
+			for (auto& listener : msgListeners) {
+				listener->OnMessage(msg);
+			}
+		}
+		catch (std::exception& e) {
 		}
 	}
 

@@ -30,6 +30,7 @@ GameMenuScene::~GameMenuScene()
 
 void GameMenuScene::Initialise()
 {
+
 	std::shared_ptr<CameraBehavior> camBehavior = std::make_shared<CameraBehavior>(std::shared_ptr<GameMenuScene>(this));
 	AddBehavior(camBehavior);
 
@@ -37,6 +38,8 @@ void GameMenuScene::Initialise()
 	std::shared_ptr<Line> line = std::make_shared<Line>(lineMesh);
 	line->SetCanRotate(true);
 	AddGameObject(line);
+
+	Game::TheGame->GetRendererSystem()->GetRenderer()->SetCameraPosition(glm::mat2x3(glm::vec3(0.0f, 0.0f, -5.0f), glm::vec3(0.0f, 0.0f, 0.0f)));
 
 
 	// Start all objects to set them up
