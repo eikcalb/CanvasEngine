@@ -101,8 +101,9 @@ void VoxGame::Run()
 		if (_sceneController->GetCurrentScene() == NULL)
 		{
 			OutputDebugString(L"Cannot run the application when no scene is set!\r\n");
-			SetQuitFlag(true);
 			return;
+			/*SetQuitFlag(true);
+			return;*/
 		}
 
 		// Draw
