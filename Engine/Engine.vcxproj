@@ -176,13 +176,10 @@
     <ClCompile Include="NetworkMessage.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Renderer_DX.cpp" />
-    <ClCompile Include="Renderer_GL.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="ResourceController.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneController.cpp" />
-    <ClCompile Include="ShaderObject_GL.cpp" />
-    <ClCompile Include="ShaderProgram_GL.cpp" />
     <ClCompile Include="types.h" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="Task.cpp" />
@@ -191,11 +188,9 @@
     <ClCompile Include="ThreadController.cpp" />
     <ClCompile Include="VBO.cpp" />
     <ClCompile Include="VBO_DX.cpp" />
-    <ClCompile Include="VBO_GL.cpp" />
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Window_DX.cpp" />
-    <ClCompile Include="Window_GL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Includes\imgui\imconfig.h" />
@@ -217,7 +212,6 @@
     <ClInclude Include="ConnectionMessage.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="ShaderObject_GL.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="TCPConnection.h" />
     <ClInclude Include="Utils.h" />
@@ -235,24 +229,20 @@
     <ClInclude Include="ObserverSubject.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Renderer_DX.h" />
-    <ClInclude Include="Renderer_GL.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceController.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneController.h" />
-    <ClInclude Include="ShaderProgram_GL.h" />
     <ClInclude Include="Task.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="ThreadController.h" />
     <ClInclude Include="VBO.h" />
     <ClInclude Include="VBO_DX.h" />
-    <ClInclude Include="VBO_GL.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="Window_DX.h" />
-    <ClInclude Include="Window_GL.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc" />

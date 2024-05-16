@@ -26,13 +26,10 @@ C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\NetworkController.
 C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\NetworkMessage.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\NetworkMessage.obj
 C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Renderer.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\Renderer.obj
 C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Renderer_DX.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\Renderer_DX.obj
-C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Renderer_GL.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\Renderer_GL.obj
 C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\RenderSystem.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\RenderSystem.obj
 C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\ResourceController.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\ResourceController.obj
 C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Scene.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\Scene.obj
 C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\SceneController.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\SceneController.obj
-C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\ShaderObject_GL.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\ShaderObject_GL.obj
-C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\ShaderProgram_GL.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\ShaderProgram_GL.obj
 C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\types.h;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\types.h.obj
 C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\System.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\System.obj
 C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Task.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\Task.obj
@@ -41,8 +38,6 @@ C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Thread.cpp;C:\User
 C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\ThreadController.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\ThreadController.obj
 C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\VBO.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\VBO.obj
 C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\VBO_DX.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\VBO_DX.obj
-C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\VBO_GL.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\VBO_GL.obj
 C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Vector4.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\Vector4.obj
 C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Window.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\Window.obj
 C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Window_DX.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\Window_DX.obj
-C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Window_GL.cpp;C:\Users\690846\source\repos\700105-2223-lab-i-eikcalb\Engine\Debug - DirectX\Window_GL.obj

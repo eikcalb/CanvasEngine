@@ -65,7 +65,7 @@ private:
 	//Private constructor for singleton pattern
 	NetworkController();
 
-	void HandleIncomingMessages();
+	void HandleIncomingMessages(PeerMap* peerMap);
 	/// <summary>
 	/// In order to prevent continuously waiting on messages for input and output,
 	/// we will utilize a single persistent thread that will only create tasks for

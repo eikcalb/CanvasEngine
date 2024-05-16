@@ -30,7 +30,7 @@ NetworkController::NetworkController() :
 	}
 }
 
-void NetworkController::HandleIncomingMessages()
+void NetworkController::HandleIncomingMessages(PeerMap* peerMap)
 {
 	// Here we will select the peer sockets and read their data individually.
 	fd_set readSockets = {};
@@ -43,7 +43,7 @@ void NetworkController::HandleIncomingMessages()
 
 		FD_ZERO(&readSockets);
 
-		for (const  std::pair< std::string, std::shared_ptr<Connection>> peer : peers) {
+		for (const auto peer : *peerMap) {
 			// Populate the file descriptor list.
 			FD_SET(peer.second->GetSocket(), &readSockets);
 		}
@@ -82,7 +82,7 @@ void NetworkController::HandleIncomingMessages()
 			continue;
 		}
 
-		for (const auto& peer : peers) {
+		for (const auto peer : *peerMap) {
 			Connection* conn = peer.second.get();
 
 			if (FD_ISSET(conn->GetSocket(), &readSockets)) {
@@ -204,8 +204,9 @@ void NetworkController::Start()
 		);
 	}
 
+	PeerMap* peerMapPtr = &peers;
 	mThreadController->AddTask([&] {
-		HandleIncomingMessages();
+		HandleIncomingMessages(peerMapPtr );
 		},
 		TaskType::NETWORK, "NC.Start:Handle incoming messages!"
 	);

@@ -15,12 +15,6 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderProgram_GL.cpp">
-      <Filter>OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer_GL.cpp">
-      <Filter>OpenGL</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer_DX.cpp">
       <Filter>DirectX</Filter>
     </ClCompile>
@@ -30,9 +24,6 @@
     <ClCompile Include="Window_DX.cpp">
       <Filter>DirectX</Filter>
     </ClCompile>
-    <ClCompile Include="VBO_GL.cpp">
-      <Filter>OpenGL</Filter>
-    </ClCompile>
     <ClCompile Include="VBO.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -41,9 +32,6 @@
     </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="Window_GL.cpp">
-      <Filter>OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="RenderSystem.cpp">
       <Filter>Systems</Filter>
@@ -136,9 +124,6 @@
     <ClCompile Include="..\Includes\imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderObject_GL.cpp">
-      <Filter>OpenGL</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -156,12 +141,6 @@
     <ClInclude Include="Renderer.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderProgram_GL.h">
-      <Filter>OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer_GL.h">
-      <Filter>OpenGL</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer_DX.h">
       <Filter>DirectX</Filter>
     </ClInclude>
@@ -170,9 +149,6 @@
     </ClInclude>
     <ClInclude Include="Window_DX.h">
       <Filter>DirectX</Filter>
-    </ClInclude>
-    <ClInclude Include="VBO_GL.h">
-      <Filter>OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="VBO.h">
       <Filter>Common</Filter>
@@ -185,9 +161,6 @@
     </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Window_GL.h">
-      <Filter>OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="RenderSystem.h">
       <Filter>Systems</Filter>
@@ -293,16 +266,10 @@
     <ClInclude Include="..\Includes\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderObject_GL.h">
-      <Filter>OpenGL</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Messages">
       <UniqueIdentifier>{944181a1-37a3-43be-86fa-aa66aa2d1e7a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL">
-      <UniqueIdentifier>{b3571d1c-7331-4697-9f7f-d6a5ef3692dc}</UniqueIdentifier>
     </Filter>
     <Filter Include="DirectX">
       <UniqueIdentifier>{907ab25c-19cc-4267-855f-dbfc639cc3b5}</UniqueIdentifier>
