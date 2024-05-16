@@ -6,7 +6,8 @@
 
 #include "NetworkController.h"
 #include "NetworkMessage.h"
-#include <Utils.h>
+#include "Voxel.h"
+#include "Utils.h"
 
 constexpr int WIDTH = 512;
 constexpr int HEIGHT = 512;
@@ -15,10 +16,9 @@ class Cube;
 
 struct PeerData {
 	Colour colour;
-	unsigned long mass;
 	long lastSequenceID;
-	long x;
-	long y;
+	unsigned int mass[VOXEL_AREA];
+	bool integrityPending;
 };
 
 class GamePlayScene :
@@ -30,6 +30,7 @@ private:
 	glm::vec2 _lastMousePos;
 	glm::vec3 _lastMouseRay;
 	int _messageSendFreq;
+	int _pendingIntegrityCount;
 
 	// This will store the player information during the game.
 	// For a start, we will fill in the initialization info.
@@ -76,12 +77,15 @@ public:
 
 	virtual void OnMessage(Message* msg) override;
 
-	long UpdatePeers();
+	std::string UpdatePeers();
 	void HandleMessage(std::string peerID, const NetworkMessageContent& msg);
 	void SendInit(std::shared_ptr<Connection> msg);
 
 	void SendDraw(unsigned int x, unsigned int y);
 	void SendIntegrity(unsigned int on);
+	void SendIntegrity(std::string peerID, std::string);
+
+	void GetPaint(unsigned int x, unsigned int y);
 
 	// Reset the game
 	void Reset();

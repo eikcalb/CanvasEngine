@@ -89,8 +89,22 @@ void GamePlayScene::Initialise()
 	SetAlive(true);
 }
 
-void GamePlayScene::UpdatePeers() {
-	// Sends current grid status to peers.
+std::string GamePlayScene::UpdatePeers() {
+	// Calculates cube mass;
+	auto game = reinterpret_cast<VoxGame*>(Game::TheGame);
+	auto voxel = game->GetVoxelCanvas();
+	auto current = voxel->GetVoxelData();
+	std::string result;
+
+	for (auto i = 0; i < VOXEL_AREA; i++) {
+		result += std::to_string(current[i]._pad0);
+	}
+
+	return result;
+}
+
+void GamePlayScene::GetPaint(unsigned int x, unsigned int y) {
+
 }
 
 void GamePlayScene::HandleMessage(std::string peerID, const NetworkMessageContent& msg) {
@@ -100,30 +114,69 @@ void GamePlayScene::HandleMessage(std::string peerID, const NetworkMessageConten
 	if (msg.type == MessageType::INIT) {
 		PeerData pd{};
 		pd.colour = Colour(msg.content);
-		pd.mass = 0; // initial mass is zero as the mass will be calculated when we do an integrity test.
 		pd.lastSequenceID = msg.sequence;
 
 		peerDataMap[peerID] = pd;
 	}
 	else if (msg.type == MessageType::DRAW) {
 		// New update from peer. Handlw the draw on canvas.
+		std::vector<std::string> tokens = Utils::splitString(msg.content, ',');
+		// We've been robbed??
+		auto voxel = game->GetVoxelCanvas();
+		auto& target = voxel->GetAt(std::atoi(tokens[0].c_str()), std::atoi(tokens[1].c_str()));
+
+		auto p = peerDataMap[peerID];
+		target.Colour.r = p.colour.r();
+		target.Colour.g = p.colour.g();
+		target.Colour.b = p.colour.b();
+		target.IsTransparent = TRUE;
+		voxel->UpdateAt(std::atoi(tokens[0].c_str()), std::atoi(tokens[1].c_str()), target);
 	}
 	else if (msg.type == MessageType::INTEGRITY) {
 		// Send my mass to the requestor.
 		auto current = voxel->GetVoxelData();
 
 		const auto state = std::atoi(msg.content.c_str());
+		if (msg.sequence == 1) {
+			// This is a response.
+			auto p = peerDataMap[peerID];
+			p.integrityPending = false;
+			VoxelCanvas::ParseMassString(msg.content, p.mass);
 
-		if (state == 1) {
-			// Integrity request. Respond with mass.
-			long response = 0;
+			// Check if all peers have sent info.
+			_pendingIntegrityCount--;
+			if (_pendingIntegrityCount <= 0) {
+				// Mix and match the coloring. Probably best to refactor these
+				// into a separate function.
 				for (auto i = 0; i < VOXEL_AREA; i++) {
-					if (current[i]._pad0 = 0) {
+					// Compute mass for each point.
+					long mass = current[i]._pad0;
+					for (const auto& p1 : peerDataMap) {
+						mass += p1.second.mass[i];
+					}
+
+					current[i].IsIntegrityCheck = TRUE;
+					if (mass > peerDataMap.size()) {
+						current[i].IsIntegrityCheck = FALSE;
+						current[i].Colour = glm::vec4(1, 0, 0, 0);
 
 					}
+					else if (mass < peerDataMap.size()) {
+						current[i].IsIntegrityCheck = FALSE;
+						current[i].Colour = glm::vec4(0, 0, 1, 0);
+					}
 				}
-				Game::TheGame->SetGameState(GameState::Validating);
-				SendIntegrity(0);
+			}
+		}
+		else if (state == 1) {
+			// Integrity request. Respond with mass.
+			auto response = UpdatePeers();
+			Game::TheGame->SetGameState(GameState::Validating);
+			SendIntegrity(peerID, response);
+		}
+		else if (state == 0) {
+			// Integrity request complete.
+			Game::TheGame->SetGameState(GameState::Playing);
 		}
 	}
 }
@@ -163,7 +216,17 @@ void GamePlayScene::SendIntegrity(unsigned int on) {
 	for (auto& p : peerDataMap) {
 		std::shared_ptr<Connection> peer = rootMap.at(p.first);
 		peer->Send(Utils::stringToBytes(text));
+		p.second.integrityPending = true;
 	}
+}
+
+void GamePlayScene::SendIntegrity(std::string peerID, std::string response) {
+	// Integrity check response.
+	auto game = reinterpret_cast<VoxGame*>(Game::TheGame);
+	const auto& rootMap = game->GetNetworkController()->GetPeerMap();
+
+	std::string text = "INTEGRITY;1;" + response;
+	rootMap.at(peerID)->Send(Utils::stringToBytes(text));
 }
 /******************************************************************************************************************/
 
@@ -201,6 +264,7 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 			}
 			Game::TheGame->SetGameState(GameState::Playing);
 			SendIntegrity(0);
+			_pendingIntegrityCount = 0;
 		}
 		else if (Game::TheGame->GetGameState() == GameState::Playing) {
 			for (auto i = 0; i < VOXEL_AREA; i++) {
@@ -208,6 +272,7 @@ void GamePlayScene::OnKeyboard(int key, bool down)
 			}
 			Game::TheGame->SetGameState(GameState::Validating);
 			SendIntegrity(1);
+			_pendingIntegrityCount = peerDataMap.size();
 		}
 	}
 				break;
@@ -250,6 +315,10 @@ void GamePlayScene::OnMessage(Message* msg)
 	if (type == InputController::EVENT_MOUSE_INPUT)
 	{
 #pragma region mouse
+		if (Game::TheGame->GetGameState() == GameState::Validating || Game::TheGame->GetGameState() == GameState::Paused) {
+			return;
+		}
+
 		auto mouse = reinterpret_cast<MouseInputMessage*>(msg);
 		const auto game = Game::TheGame;
 		auto mousePos = mouse->GetPosition();
@@ -275,8 +344,8 @@ void GamePlayScene::OnMessage(Message* msg)
 			int relativeY = mousePos.y - gridCenter.y;
 
 			// Convert the relative mouse position to grid coordinates
-			int gridX = (relativeX + gridSize / 2) / 2;
-			int gridY = (relativeY + gridSize / 2) / 2;
+			int gridX = ((relativeX + gridSize / 2) / 2);
+			int gridY = ((relativeY + gridSize / 2) / 2);
 
 			// Calculate the subsquare indices
 			int subSquareX = gridX % gridSize;
@@ -284,8 +353,10 @@ void GamePlayScene::OnMessage(Message* msg)
 			auto game = reinterpret_cast<VoxGame*>(Game::TheGame);
 			auto voxel = game->GetVoxelCanvas();
 			auto& target = voxel->GetAt(subSquareX, subSquareY);
+
 			target.IsTransparent = TRUE;
 			voxel->UpdateAt(subSquareX, subSquareY, target);
+			SendDraw(subSquareX, subSquareY);
 			return;
 
 			//float planeDistance = -glm::dot(normal, gridCenter);
@@ -330,6 +401,9 @@ void GamePlayScene::OnMessage(Message* msg)
 	else if (type == Connection::EVENT_TYPE_CLOSED_CONNECTION) {
 		const auto& nMsg = reinterpret_cast<NetworkMessage*>(msg);
 		peerDataMap.erase(nMsg->GetMessage()->peerID);
+		if (_pendingIntegrityCount > 0) {
+			_pendingIntegrityCount--;
+		}
 	}
 	else if (type == NetworkController::EVENT_TYPE_NEW_MESSAGE) {
 #pragma region new message

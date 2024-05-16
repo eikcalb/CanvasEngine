@@ -52,4 +52,17 @@ namespace Utils {
 		std::vector<byte> bytes(str.begin(), str.end());
 		return bytes;
 	}
+
+	static inline std::vector<std::string> splitString(const std::string& input, char delimiter) {
+		std::vector<std::string> tokens;
+		std::stringstream ss(input);
+		std::string token;
+
+		while (std::getline(ss, token, delimiter)) {
+			tokens.push_back(token);
+		}
+
+		return tokens;
+	}
+
 };

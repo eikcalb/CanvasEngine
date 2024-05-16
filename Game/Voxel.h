@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <mutex>
 #include <vector>
+#include <sstream>
 #include <Windows.h>
 
 // GLM
@@ -88,6 +89,17 @@ public:
 		//	voxelGrid[i]->SetPosition(Vector4(x, y));
 		//}
 	};
+
+	static void ParseMassString(const std::string& massString, unsigned int massGrid[VOXEL_AREA]) {
+		std::stringstream ss(massString);
+		std::string token;
+		int row = 0;
+
+		while (std::getline(ss, token, ',')) {
+			massGrid[row] = std::stoi(token);
+			row++;
+		}
+	}
 
 private:
 	GeneratorBufferData	voxelGrid[VOXEL_AREA];
